@@ -29,7 +29,8 @@
         "lint:changed": "biome check --changed",
         "lint:staged": "biome check --staged",
         "lint:fix": "biome check --fix",
-        "typecheck": "tsc --project tsconfig.json --noEmit"
+        "typecheck": "tsc --project tsconfig.json --noEmit",
+        "prepare": "husky"
     },
     "dependencies": {
         "react": "^18.3.1",
@@ -46,6 +47,7 @@
         "@vitest/ui": "^1.6.0",
         "autoprefixer": "^10.4.20",
         "happy-dom": "^12.10.3",
+        "husky": "^9.1.5",
         "postcss": "^8.4.45",
         "tailwindcss": "^3.4.10",
         "typescript": "^5.5.4",
