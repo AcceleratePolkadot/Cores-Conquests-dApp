@@ -1,18 +1,24 @@
 {
-  "name": "reactjs-vite-tailwindcss-boilerplate",
-  "description": "This is a boilerplate build with Vite, React 18, TypeScript, Vitest, Testing Library, TailwindCSS 3, Eslint and Prettier.",
+  "name": "cores-conquests-dapp",
+  "description": "Example dApp for the Accelerate Polkadot guide 'Cores & Conquests'",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "author": {
-    "name": "João Paulo Moraes",
-    "email": "joaopaulomoraes@outlook.com",
-    "url": "https://github.com/joaopaulomoraes"
+    "name": "Aaron Bassett",
+    "email": "aaron@acceleratepolkadot.com",
+    "url": "http://acceleratepolkadot.com/"
+  },
+  "homepage": "http://acceleratepolkadot.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AcceleratePolkadot/Cores-and-Conquests.git"
   },
   "bugs": {
-    "url": "https://github.com/joaopaulomoraes/reactjs-vite-tailwindcss-boilerplate/issues",
-    "email": "joaopaulomoraes@outlook.com"
+    "url": "https://github.com/AcceleratePolkadot/Cores-and-Conquests/issues",
+    "email": "aaron@acceleratepolkadot.com"
   },
+  "license": "FSL-1.1-MIT",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
