@@ -2,6 +2,8 @@ import logo from "@/assets/logo.svg"; // Adjust the import path as needed
 import Extensions from "@/components/Extensions";
 import type React from "react";
 
+import Accounts from "@/components/Accounts";
+
 const Home: React.FC = () => {
   return (
     <div className="flex h-screen bg-gray-100">
@@ -12,6 +14,7 @@ const Home: React.FC = () => {
         </div>
         <nav className="mt-5">
           <Extensions />
+          <Accounts />
         </nav>
       </div>
 
