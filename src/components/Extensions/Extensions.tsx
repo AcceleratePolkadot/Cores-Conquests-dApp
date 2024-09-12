@@ -2,11 +2,13 @@ import extensions from "@w3ux/extension-assets";
 import { type ExtensionArrayListItem, ExtensionIcons } from "@w3ux/extension-assets/util";
 import { useExtensionAccounts, useExtensions } from "@w3ux/react-connect-kit";
 import { localStorageOrDefault } from "@w3ux/utils";
+import clsx from "clsx";
+import { Dropdown } from "flowbite-react";
 import type React from "react";
-import type { ExtensionProps } from "./types";
-
 import { FaCircleMinus, FaCirclePlus, FaCircleXmark } from "react-icons/fa6";
+import { HiViewGrid } from "react-icons/hi";
 import { IoLinkSharp } from "react-icons/io5";
+import type { ExtensionProps } from "./types";
 
 const Extensions: React.FC = () => {
   const { extensionInstalled } = useExtensions();
@@ -20,17 +22,36 @@ const Extensions: React.FC = () => {
     }))
     .filter((extension) => extension.category === "web-extension") as ExtensionArrayListItem[];
 
+  const installedExtensions = webExtensions.filter((webExtension) =>
+    extensionInstalled(webExtension.id),
+  );
+
   return (
-    <ul className="divide-y divide-gray-100 px-4">
-      {webExtensions.map(
-        (webExtension) =>
-          extensionInstalled(webExtension.id) && (
-            <li key={webExtension.id} className="flex items-center justify-between gap-x-6 py-5">
-              <Extension extension={webExtension} />
-            </li>
-          ),
-      )}
-    </ul>
+    <Dropdown
+      arrowIcon={false}
+      dismissOnClick={false}
+      inline
+      label={
+        <span className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+          <span className="sr-only">Wallet Extensions</span>
+          <HiViewGrid className="text-2xl text-gray-500 dark:text-gray-400" />
+        </span>
+      }
+    >
+      {installedExtensions.map((webExtension, index) => {
+        return (
+          <Dropdown.Item
+            key={webExtension.id}
+            className={clsx({
+              "rounded-b-lg": index === installedExtensions.length - 1,
+              "rounded-t-lg": index === 0,
+            })}
+          >
+            <Extension extension={webExtension} />
+          </Dropdown.Item>
+        );
+      })}
+    </Dropdown>
   );
 };
 
@@ -43,23 +64,41 @@ export const ExtensionStatusButton = ({
   switch (status) {
     case "connected":
       icon = (
-        <>
-          <FaCircleMinus />
-        </>
+        <button
+          type="button"
+          className="rounded-md bg-red-500 px-1 py-1.5 text-white text-xs hover:bg-red-700"
+        >
+          <div className="flex items-center space-x-1">
+            <FaCircleMinus />
+            <span className="inline-flex flex-shrink-0">Disconnect</span>
+          </div>
+        </button>
       );
       break;
     case "not_authenticated":
       icon = (
-        <>
-          <FaCircleXmark />
-        </>
+        <button
+          type="button"
+          className="rounded-md bg-gray-500 px-1 py-1.5 text-white text-xs hover:bg-gray-700"
+        >
+          <div className="flex items-center space-x-1">
+            <FaCircleXmark />
+            <span className="inline-flex flex-shrink-0">Not authenticated</span>
+          </div>
+        </button>
       );
       break;
     default:
       icon = (
-        <>
-          <FaCirclePlus />
-        </>
+        <button
+          type="button"
+          className="rounded-md bg-green-500 px-1 py-1.5 text-white text-xs hover:bg-green-700"
+        >
+          <div className="flex items-center space-x-1">
+            <FaCirclePlus />
+            <span className="inline-flex flex-shrink-0">Connect</span>
+          </div>
+        </button>
       );
   }
 
@@ -76,7 +115,6 @@ export const Extension = ({ extension }: ExtensionProps) => {
 
   const { id, title, website } = extension;
 
-  const isInstalled = extensionInstalled(id);
   const canConnect = extensionCanConnect(id);
   const connected = extensionsStatus[id] === "connected";
 
@@ -106,35 +144,35 @@ export const Extension = ({ extension }: ExtensionProps) => {
   };
 
   return (
-    <>
-      <div className="flex min-w-0 gap-x-4">
-        <span className="h-12 w-12 flex-none">
-          <Icon />
-        </span>
-
-        <div className="min-w-0 flex-auto">
-          <div className="flex items-center space-x-3">
-            <h3 className="font-semibold text-gray-900 text-sm leading-6">{title}</h3>
-            {connected && (
-              <span className="inline-flex flex-shrink-0 items-center text-sm">
-                <IoLinkSharp />
-              </span>
-            )}
-          </div>
-          <p className="mt-1 truncate text-gray-500 text-xs leading-5">
-            <a href={`https://${websiteUrl}`} target="_blank" rel="noreferrer">
-              {websiteText}
-            </a>
-          </p>
-        </div>
+    <div className="flex w-full items-center space-x-4">
+      <div className="h-12 w-12 flex-none">
+        <Icon />
       </div>
-      {isInstalled && (
+
+      <div className="flex-auto content-left">
+        <div className="flex items-center space-x-3">
+          <p className="font-semibold text-sm leading-6">{title}</p>
+          {connected && (
+            <span className="inline-flex flex-shrink-0 items-center text-sm">
+              <IoLinkSharp />
+            </span>
+          )}
+        </div>
+
+        <p className="mt-1 text-left text-xs">
+          <a href={`https://${websiteUrl}`} target="_blank" rel="noreferrer">
+            {websiteText}
+          </a>
+        </p>
+      </div>
+
+      <div className="flex-none">
         <ExtensionStatusButton
           status={extensionsStatus[id]}
           handleToggleConnection={handleToggleConnection}
         />
-      )}
-    </>
+      </div>
+    </div>
   );
 };
 
