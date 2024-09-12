@@ -1,20 +1,24 @@
 import Home from "@/pages/Home";
-import { ExtensionAccountsProvider, ExtensionsProvider } from "@w3ux/react-connect-kit";
 import type React from "react";
 import { Suspense } from "react";
+import { Route, Routes } from "react-router";
+import { BrowserRouter } from "react-router-dom";
+import FlowbiteWrapper from "./components/flowbite-wrapper";
 
-import { AccountsProvider } from "@/contexts/Accounts";
+import Providers from "@/Providers";
 
 const App: React.FC = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <ExtensionsProvider>
-        <ExtensionAccountsProvider network="polkadot" dappName="Cores and Conquests">
-          <AccountsProvider>
-            <Home />
-          </AccountsProvider>
-        </ExtensionAccountsProvider>
-      </ExtensionsProvider>
+      <Providers>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<FlowbiteWrapper />}>
+              <Route path="/" element={<Home />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </Providers>
     </Suspense>
   );
 };
