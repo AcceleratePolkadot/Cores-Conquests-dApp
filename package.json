@@ -36,8 +36,10 @@
     "@polkadot/api": "12.4.2",
     "@w3ux/extension-assets": "^0.3.1",
     "@w3ux/react-connect-kit": "^1.4.4",
+    "@w3ux/react-polkicon": "^1.2.0",
     "@w3ux/utils": "^0.4.0",
     "clsx": "^2.1.1",
+    "flowbite-react": "^0.10.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.3.0"
