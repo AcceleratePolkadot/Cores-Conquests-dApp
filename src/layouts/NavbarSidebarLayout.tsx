@@ -1,5 +1,5 @@
 import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/sidebar";
+import Sidebar from "@/components/Sidebar";
 import { SidebarProvider, useSidebarContext } from "@/contexts/SidebarContext";
 import clsx from "clsx";
 import { Footer } from "flowbite-react";
