@@ -23,9 +23,7 @@ const Sidebar: FC = () => {
         <div className="flex h-full flex-col justify-between py-2">
           <div>
             <FlowbiteSidebar.Items>
-              <FlowbiteSidebar.ItemGroup>
-                <Rosters />
-              </FlowbiteSidebar.ItemGroup>
+              <Rosters />
             </FlowbiteSidebar.Items>
           </div>
         </div>

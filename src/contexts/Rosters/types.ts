@@ -30,6 +30,7 @@ export interface RostersContextType {
   rosters: Roster[];
   activeRoster: Roster | undefined;
   setActiveRoster: (rosterId: Roster) => void;
+  getRoster: (rosterId: RosterId) => Roster | undefined;
   foundedBy: (account: AccountId) => Roster[];
   memberOf: (account: AccountId) => Roster[];
   rosterEventSubscriptions: EventSubscriptions;

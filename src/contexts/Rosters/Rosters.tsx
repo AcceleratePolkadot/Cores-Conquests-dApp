@@ -1,7 +1,7 @@
 import { useBlocApiClient } from "@/contexts/BlocApiClient";
 import type React from "react";
 import { type ReactNode, createContext, useContext, useEffect, useMemo, useState } from "react";
-import type { AccountId, EventSubscriptions, Roster, RostersContextType } from "./types";
+import type { AccountId, EventSubscriptions, Roster, RosterId, RostersContextType } from "./types";
 
 const RostersContext = createContext<RostersContextType | undefined>(undefined);
 
@@ -46,6 +46,10 @@ export const RostersProvider: React.FC<{ children: ReactNode }> = ({ children })
     setRosters(allRosters.map((roster) => roster.value));
   };
 
+  const getRoster = (rosterId: RosterId) => {
+    return rosters.find((roster) => roster.id === rosterId);
+  };
+
   const foundedBy = (account: AccountId) => {
     return rosters.filter((roster) => roster.founder === account);
   };
@@ -60,6 +64,7 @@ export const RostersProvider: React.FC<{ children: ReactNode }> = ({ children })
         rosters,
         activeRoster,
         setActiveRoster,
+        getRoster,
         foundedBy,
         memberOf,
         rosterEventSubscriptions,
