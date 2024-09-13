@@ -1,6 +1,6 @@
+import { Polkicon } from "@/components/Polkicon";
 import { useAccounts } from "@/contexts/Accounts";
 import type { ImportedAccount } from "@w3ux/react-connect-kit/types";
-import { Polkicon } from "@w3ux/react-polkicon";
 import clsx from "clsx";
 import { Dropdown } from "flowbite-react";
 import type React from "react";

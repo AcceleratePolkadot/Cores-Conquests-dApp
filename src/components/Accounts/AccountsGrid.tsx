@@ -1,6 +1,6 @@
+import { Polkicon } from "@/components/Polkicon";
 import { useAccounts } from "@/contexts/Accounts";
 import type { ImportedAccount } from "@w3ux/react-connect-kit/types";
-import { Polkicon } from "@w3ux/react-polkicon";
 import type React from "react";
 
 const AccountsGrid: React.FC = () => {
