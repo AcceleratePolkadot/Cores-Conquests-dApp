@@ -1,7 +1,9 @@
+import { useAccounts } from "@/contexts/Accounts";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { useWebExtensions } from "@/contexts/WebExtensions";
 import useDelayedRender from "@/hooks/useDelayedRender";
 import ConnectExtensions from "@/layouts/ConnectExtensions";
+import SelectAccount from "@/layouts/SelectAccount";
 import clsx from "clsx";
 import type React from "react";
 
@@ -9,6 +11,7 @@ const MainContent: React.FC<React.PropsWithChildren> = ({ children }) => {
   const delayedRender = useDelayedRender(500);
   const { isOpenOnSmallScreens: isSidebarOpen } = useSidebarContext();
   const { connectedWebExtensions } = useWebExtensions();
+  const { activeAccount } = useAccounts();
 
   return (
     <main
@@ -19,8 +22,10 @@ const MainContent: React.FC<React.PropsWithChildren> = ({ children }) => {
     >
       {connectedWebExtensions.length === 0 ? (
         delayedRender(() => <ConnectExtensions />)
-      ) : (
+      ) : activeAccount ? (
         <>{children}</>
+      ) : (
+        <SelectAccount />
       )}
     </main>
   );
