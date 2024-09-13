@@ -5,7 +5,7 @@ import type { FC } from "react";
 import { HiMenuAlt1, HiX } from "react-icons/hi";
 
 import Accounts from "@/components/Accounts";
-import Extensions from "@/components/Extensions";
+import { ExtensionsDropdown } from "@/components/Extensions";
 
 const Navbar: FC = () => {
   const { isOpenOnSmallScreens, isPageWithSidebar, setOpenOnSmallScreens } = useSidebarContext();
@@ -43,7 +43,7 @@ const Navbar: FC = () => {
           <div className="flex items-center lg:gap-3">
             <div className="flex items-center">
               <DarkThemeToggle />
-              <Extensions />
+              <ExtensionsDropdown />
               <Accounts />
             </div>
           </div>
