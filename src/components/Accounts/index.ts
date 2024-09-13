@@ -1,3 +1,3 @@
-import Accounts from "./Accounts";
+import AccountsDropdown from "./AccountsDropdown";
 
-export default Accounts;
+export { AccountsDropdown };

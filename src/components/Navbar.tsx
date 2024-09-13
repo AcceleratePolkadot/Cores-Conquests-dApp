@@ -4,7 +4,7 @@ import { DarkThemeToggle, Navbar as FowbiteNavbar } from "flowbite-react";
 import type { FC } from "react";
 import { HiMenuAlt1, HiX } from "react-icons/hi";
 
-import Accounts from "@/components/Accounts";
+import { AccountsDropdown } from "@/components/Accounts";
 import { ExtensionsDropdown } from "@/components/Extensions";
 
 const Navbar: FC = () => {
@@ -44,7 +44,7 @@ const Navbar: FC = () => {
             <div className="flex items-center">
               <DarkThemeToggle />
               <ExtensionsDropdown />
-              <Accounts />
+              <AccountsDropdown />
             </div>
           </div>
         </div>

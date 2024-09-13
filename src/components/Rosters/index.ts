@@ -1,3 +1,3 @@
-import Rosters from "./Rosters";
+import RostersSidebar from "./RostersSidebar";
 
-export default Rosters;
+export { RostersSidebar };

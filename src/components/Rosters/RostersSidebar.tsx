@@ -11,7 +11,7 @@ import { MdHorizontalRule } from "react-icons/md";
 import { useNominations } from "@/contexts/Nominations";
 import { useRosters } from "@/contexts/Rosters";
 
-const Rosters: React.FC = () => {
+const RostersSidebar: React.FC = () => {
   const { foundedBy, memberOf, activeRoster, setActiveRoster, getRoster } = useRosters();
   const { activeAccount } = useAccounts();
   const { approvedForNominee, pendingForNominee } = useNominations();
@@ -119,4 +119,4 @@ const RosterGroup: React.FC<{
   );
 };
 
-export default Rosters;
+export default RostersSidebar;

@@ -6,7 +6,7 @@ import { Dropdown } from "flowbite-react";
 import type React from "react";
 import { FaUserSlash } from "react-icons/fa6";
 
-const Accounts: React.FC = () => {
+const AccountsDropdown: React.FC = () => {
   const { getAccounts, activeAccount, setActiveAccount } = useAccounts();
   const accounts = getAccounts();
 
@@ -92,4 +92,4 @@ const Accounts: React.FC = () => {
   );
 };
 
-export default Accounts;
+export default AccountsDropdown;

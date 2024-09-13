@@ -5,7 +5,7 @@ import type { FC } from "react";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import isSmallScreen from "@/helpers/is-small-screen";
 
-import Rosters from "@/components/Rosters";
+import { RostersSidebar } from "@/components/Rosters";
 
 const Sidebar: FC = () => {
   const { isOpenOnSmallScreens: isSidebarOpenOnSmallScreens } = useSidebarContext();
@@ -23,7 +23,7 @@ const Sidebar: FC = () => {
         <div className="flex h-full flex-col justify-between py-2">
           <div>
             <FlowbiteSidebar.Items>
-              <Rosters />
+              <RostersSidebar />
             </FlowbiteSidebar.Items>
           </div>
         </div>
