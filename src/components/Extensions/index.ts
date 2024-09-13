@@ -1,3 +1,4 @@
-import Extensions from "./Extensions";
+import ExtensionsDropdown from "./ExtensionsDropdown";
+import ExtensionsGrid from "./ExtensionsGrid";
 
-export default Extensions;
+export { ExtensionsDropdown, ExtensionsGrid };

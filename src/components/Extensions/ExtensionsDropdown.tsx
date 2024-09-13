@@ -5,9 +5,9 @@ import type React from "react";
 import { FaCircleMinus, FaCirclePlus, FaCircleXmark } from "react-icons/fa6";
 import { HiViewGrid } from "react-icons/hi";
 import { HiMiniWallet } from "react-icons/hi2";
-import type { ExtensionProps } from "./types";
+import type { ExtensionsDropdownItemProps } from "./types";
 
-const Extensions: React.FC = () => {
+const ExtensionsDropdown: React.FC = () => {
   const { installedWebExtensions } = useWebExtensions();
 
   return (
@@ -31,7 +31,7 @@ const Extensions: React.FC = () => {
 
       {installedWebExtensions.map((webExtension, index) => {
         return (
-          <Extension
+          <ExtensionsDropdownItem
             key={webExtension.id}
             extension={webExtension}
             index={index}
@@ -78,7 +78,11 @@ export const ExtensionStatusIcon = ({ status }: { status: string }) => {
   return icon;
 };
 
-export const Extension = ({ extension, index, installedExtensionsLength }: ExtensionProps) => {
+export const ExtensionsDropdownItem = ({
+  extension,
+  index,
+  installedExtensionsLength,
+}: ExtensionsDropdownItemProps) => {
   const {
     webExtensionStatus,
     webExtensionCanConnect,
@@ -141,4 +145,4 @@ export const Extension = ({ extension, index, installedExtensionsLength }: Exten
   );
 };
 
-export default Extensions;
+export default ExtensionsDropdown;
