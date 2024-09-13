@@ -1,7 +1,4 @@
-import extensions from "@w3ux/extension-assets";
-import { type ExtensionArrayListItem, ExtensionIcons } from "@w3ux/extension-assets/util";
-import { useExtensionAccounts, useExtensions } from "@w3ux/react-connect-kit";
-import { localStorageOrDefault } from "@w3ux/utils";
+import { useWebExtensions } from "@/contexts/WebExtensions";
 import clsx from "clsx";
 import { Dropdown, Tooltip } from "flowbite-react";
 import type React from "react";
@@ -11,20 +8,7 @@ import { HiMiniWallet } from "react-icons/hi2";
 import type { ExtensionProps } from "./types";
 
 const Extensions: React.FC = () => {
-  const { extensionInstalled } = useExtensions();
-  const UNSUPPORTED_EXTENSIONS = ["metamask-polkadot-snap", "polkagate-snap"];
-
-  const webExtensions = Object.entries(extensions)
-    .filter(([key]) => !UNSUPPORTED_EXTENSIONS.includes(key))
-    .map(([key, value]) => ({
-      id: key,
-      ...value,
-    }))
-    .filter((extension) => extension.category === "web-extension") as ExtensionArrayListItem[];
-
-  const installedExtensions = webExtensions.filter((webExtension) =>
-    extensionInstalled(webExtension.id),
-  );
+  const { installedWebExtensions } = useWebExtensions();
 
   return (
     <Dropdown
@@ -45,13 +29,13 @@ const Extensions: React.FC = () => {
         </span>
       </Dropdown.Header>
 
-      {installedExtensions.map((webExtension, index) => {
+      {installedWebExtensions.map((webExtension, index) => {
         return (
           <Extension
             key={webExtension.id}
             extension={webExtension}
             index={index}
-            installedExtensionsLength={installedExtensions.length}
+            installedExtensionsLength={installedWebExtensions.length}
           />
         );
       })}
@@ -95,15 +79,21 @@ export const ExtensionStatusIcon = ({ status }: { status: string }) => {
 };
 
 export const Extension = ({ extension, index, installedExtensionsLength }: ExtensionProps) => {
-  const { extensionsStatus, extensionCanConnect, extensionInstalled } = useExtensions();
-  const { connectExtensionAccounts } = useExtensionAccounts();
+  const {
+    webExtensionStatus,
+    webExtensionCanConnect,
+    webExtensionConnected,
+    webExtensionIcon,
+    connectWebExtension,
+    disconnectWebExtension,
+  } = useWebExtensions();
 
   const { id, title, website } = extension;
 
-  const canConnect = extensionCanConnect(id);
-  const connected = extensionsStatus[id] === "connected";
-
-  const Icon = ExtensionIcons[id];
+  const canConnect = webExtensionCanConnect(id);
+  const connected = webExtensionConnected(id);
+  const status = webExtensionStatus(id);
+  const Icon = webExtensionIcon(id);
 
   const websiteText = typeof website === "string" ? website : website.text;
   const websiteUrl = typeof website === "string" ? website : website.url;
@@ -112,19 +102,12 @@ export const Extension = ({ extension, index, installedExtensionsLength }: Exten
   const handleToggleConnection = async () => {
     if (!connected) {
       if (canConnect) {
-        await connectExtensionAccounts(id);
+        await connectWebExtension(id);
       } else {
         alert("Unable to connect to the extension.");
       }
     } else {
-      if (confirm("Are you sure you want to disconnect from this extension?")) {
-        const updatedActiveExtensions = (
-          localStorageOrDefault("active_extensions", [], true) as string[]
-        ).filter((ext: string) => ext !== id);
-
-        localStorage.setItem("active_extensions", JSON.stringify(updatedActiveExtensions));
-        location.reload();
-      }
+      disconnectWebExtension(id);
     }
   };
 
@@ -144,7 +127,7 @@ export const Extension = ({ extension, index, installedExtensionsLength }: Exten
         <div className="flex-auto content-left">
           <div className="flex items-center space-x-3">
             <p className="font-semibold text-sm leading-6">{title}</p>
-            <ExtensionStatusIcon status={extensionsStatus[id]} />
+            <ExtensionStatusIcon status={status} />
           </div>
 
           <p className="mt-1 text-left text-xs">
