@@ -38,6 +38,11 @@ const RostersSidebar: React.FC = () => {
           .map((nomination) => getRoster(nomination.roster))
           .filter((roster) => roster !== undefined),
       );
+    } else {
+      setFoundedRosters([]);
+      setJoinedRosters([]);
+      setApprovedForRosters([]);
+      setPendingForRosters([]);
     }
   }, [activeAccount, foundedBy, memberOf, approvedForNominee, pendingForNominee, getRoster]);
 
