@@ -3,11 +3,11 @@ import { type ExtensionArrayListItem, ExtensionIcons } from "@w3ux/extension-ass
 import { useExtensionAccounts, useExtensions } from "@w3ux/react-connect-kit";
 import { localStorageOrDefault } from "@w3ux/utils";
 import clsx from "clsx";
-import { Dropdown } from "flowbite-react";
+import { Dropdown, Tooltip } from "flowbite-react";
 import type React from "react";
 import { FaCircleMinus, FaCirclePlus, FaCircleXmark } from "react-icons/fa6";
 import { HiViewGrid } from "react-icons/hi";
-import { IoLinkSharp } from "react-icons/io5";
+import { HiMiniWallet } from "react-icons/hi2";
 import type { ExtensionProps } from "./types";
 
 const Extensions: React.FC = () => {
@@ -33,83 +33,68 @@ const Extensions: React.FC = () => {
       inline
       label={
         <span className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-          <span className="sr-only">Wallet Extensions</span>
+          <span className="sr-only">Web3 Wallet Extensions</span>
           <HiViewGrid className="text-2xl text-gray-500 dark:text-gray-400" />
         </span>
       }
     >
+      <Dropdown.Header className="text-center">
+        <span className="inline-flex items-baseline">
+          <HiMiniWallet className="mx-2 h-5 w-5 self-center rounded-full" />
+          <span className="font-semibold text-lg">Extensions</span>
+        </span>
+      </Dropdown.Header>
+
       {installedExtensions.map((webExtension, index) => {
         return (
-          <Dropdown.Item
+          <Extension
             key={webExtension.id}
-            className={clsx({
-              "rounded-b-lg": index === installedExtensions.length - 1,
-              "rounded-t-lg": index === 0,
-            })}
-          >
-            <Extension extension={webExtension} />
-          </Dropdown.Item>
+            extension={webExtension}
+            index={index}
+            installedExtensionsLength={installedExtensions.length}
+          />
         );
       })}
     </Dropdown>
   );
 };
 
-export const ExtensionStatusButton = ({
-  status,
-  handleToggleConnection,
-}: { status: string; handleToggleConnection: () => void }) => {
+export const ExtensionStatusIcon = ({ status }: { status: string }) => {
   let icon: React.ReactNode;
 
   switch (status) {
     case "connected":
       icon = (
-        <button
-          type="button"
-          className="rounded-md bg-red-500 px-1 py-1.5 text-white text-xs hover:bg-red-700"
-        >
-          <div className="flex items-center space-x-1">
-            <FaCircleMinus />
-            <span className="inline-flex flex-shrink-0">Disconnect</span>
-          </div>
-        </button>
+        <Tooltip content="Connected" placement="right" animation="duration-500">
+          <span className="text-green-500">
+            <FaCirclePlus />
+          </span>
+        </Tooltip>
       );
       break;
     case "not_authenticated":
       icon = (
-        <button
-          type="button"
-          className="rounded-md bg-gray-500 px-1 py-1.5 text-white text-xs hover:bg-gray-700"
-        >
-          <div className="flex items-center space-x-1">
+        <Tooltip content="Not Authenticated" placement="right" animation="duration-500">
+          <span className="text-gray-600">
             <FaCircleXmark />
-            <span className="inline-flex flex-shrink-0">Not authenticated</span>
-          </div>
-        </button>
+          </span>
+        </Tooltip>
       );
       break;
     default:
       icon = (
-        <button
-          type="button"
-          className="rounded-md bg-green-500 px-1 py-1.5 text-white text-xs hover:bg-green-700"
-        >
-          <div className="flex items-center space-x-1">
-            <FaCirclePlus />
-            <span className="inline-flex flex-shrink-0">Connect</span>
-          </div>
-        </button>
+        <Tooltip content="Disconnected" placement="right" animation="duration-500">
+          <span className="text-red-700">
+            <FaCircleMinus />
+          </span>
+        </Tooltip>
       );
   }
 
-  return (
-    <button type="button" onClick={() => handleToggleConnection()}>
-      {icon}
-    </button>
-  );
+  return icon;
 };
 
-export const Extension = ({ extension }: ExtensionProps) => {
+export const Extension = ({ extension, index, installedExtensionsLength }: ExtensionProps) => {
   const { extensionsStatus, extensionCanConnect, extensionInstalled } = useExtensions();
   const { connectExtensionAccounts } = useExtensionAccounts();
 
@@ -144,35 +129,32 @@ export const Extension = ({ extension }: ExtensionProps) => {
   };
 
   return (
-    <div className="flex w-full items-center space-x-4">
-      <div className="h-12 w-12 flex-none">
-        <Icon />
-      </div>
-
-      <div className="flex-auto content-left">
-        <div className="flex items-center space-x-3">
-          <p className="font-semibold text-sm leading-6">{title}</p>
-          {connected && (
-            <span className="inline-flex flex-shrink-0 items-center text-sm">
-              <IoLinkSharp />
-            </span>
-          )}
+    <Dropdown.Item
+      key={extension.id}
+      onClick={handleToggleConnection}
+      className={clsx({
+        "rounded-b-lg": index === installedExtensionsLength - 1,
+      })}
+    >
+      <div className="flex w-full items-center space-x-4">
+        <div className="h-12 w-12 flex-none">
+          <Icon />
         </div>
 
-        <p className="mt-1 text-left text-xs">
-          <a href={`https://${websiteUrl}`} target="_blank" rel="noreferrer">
-            {websiteText}
-          </a>
-        </p>
-      </div>
+        <div className="flex-auto content-left">
+          <div className="flex items-center space-x-3">
+            <p className="font-semibold text-sm leading-6">{title}</p>
+            <ExtensionStatusIcon status={extensionsStatus[id]} />
+          </div>
 
-      <div className="flex-none">
-        <ExtensionStatusButton
-          status={extensionsStatus[id]}
-          handleToggleConnection={handleToggleConnection}
-        />
+          <p className="mt-1 text-left text-xs">
+            <a href={`https://${websiteUrl}`} target="_blank" rel="noreferrer">
+              {websiteText}
+            </a>
+          </p>
+        </div>
       </div>
-    </div>
+    </Dropdown.Item>
   );
 };
 
