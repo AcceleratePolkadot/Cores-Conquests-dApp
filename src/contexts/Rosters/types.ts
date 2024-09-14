@@ -29,7 +29,7 @@ export type EventSubscriptions = {
 export interface RostersContextType {
   rosters: Roster[];
   activeRoster: Roster | undefined;
-  setActiveRoster: (rosterId: Roster) => void;
+  setActiveRoster: (roster: Roster) => void;
   getRoster: (rosterId: RosterId) => Roster | undefined;
   foundedBy: (account: AccountId) => Roster[];
   memberOf: (account: AccountId) => Roster[];

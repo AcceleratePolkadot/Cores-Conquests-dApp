@@ -47,7 +47,7 @@ export const RostersProvider: React.FC<{ children: ReactNode }> = ({ children })
   };
 
   const getRoster = (rosterId: RosterId) => {
-    return rosters.find((roster) => roster.id === rosterId);
+    return rosters.find((roster) => roster.id.asHex() === rosterId.asHex());
   };
 
   const foundedBy = (account: AccountId) => {
