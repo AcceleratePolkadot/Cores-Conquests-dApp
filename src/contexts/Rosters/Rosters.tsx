@@ -1,8 +1,16 @@
+import { useAccounts } from "@/contexts/Accounts";
 import { useBlocApiClient } from "@/contexts/BlocApiClient";
 import type React from "react";
-import { type ReactNode, createContext, useContext, useEffect, useMemo, useState } from "react";
+import {
+  type ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { AccountId, EventSubscriptions, Roster, RosterId, RostersContextType } from "./types";
-
 const RostersContext = createContext<RostersContextType | undefined>(undefined);
 
 export const useRosters = () => {
@@ -15,8 +23,11 @@ export const useRosters = () => {
 
 export const RostersProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { blocApi } = useBlocApiClient();
+  const { activeAccount } = useAccounts();
   const [rosters, setRosters] = useState<Roster[]>([]);
   const [activeRoster, setActiveRoster] = useState<Roster | undefined>(undefined);
+
+  const currentActiveAccount = useRef(activeAccount);
 
   const rosterEventSubscriptions: EventSubscriptions = useMemo(
     () => ({
@@ -36,6 +47,14 @@ export const RostersProvider: React.FC<{ children: ReactNode }> = ({ children })
       blocApi.event.Roster.RosterStatusChanged,
     ],
   );
+
+  useEffect(() => {
+    // Reset active roster if the active account changes
+    if (!activeAccount || activeAccount.address !== currentActiveAccount.current?.address) {
+      setActiveRoster(undefined);
+      currentActiveAccount.current = activeAccount;
+    }
+  }, [activeAccount]);
 
   useEffect(() => {
     refreshRosters();
