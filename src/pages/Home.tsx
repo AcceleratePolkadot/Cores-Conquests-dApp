@@ -6,21 +6,12 @@ import { useState } from "react";
 import { FaDribbble, FaFacebookF, FaGithub, FaTwitter } from "react-icons/fa";
 import { HiCloudUpload, HiDesktopComputer, HiDeviceMobile } from "react-icons/hi";
 
-import { RostersList } from "@/components/Rosters";
+import RostersContent from "@/layouts/RostersContent";
 
 const Home: FC = () => (
   <NavbarSidebarLayout>
     <>
-      <div className="grid grid-cols-1 gap-y-6 px-4 pt-6 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
-        <div className="col-span-full">
-          <h1 className="font-semibold text-gray-900 text-xl sm:text-2xl dark:text-white">
-            User settings
-          </h1>
-        </div>
-        <div className="col-span-full">
-          <RostersList />
-        </div>
-      </div>
+      <RostersContent />
     </>
   </NavbarSidebarLayout>
 );
