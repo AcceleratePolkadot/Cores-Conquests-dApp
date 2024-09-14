@@ -3,14 +3,20 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import { generateIdenteapot } from "./identeapots";
 
+import clsx from "clsx";
+
 import type { RosterId } from "@/contexts/Rosters/types";
 
 interface RosticonProps {
   rosterId: RosterId;
+  rounded?: boolean;
+  copy?: boolean;
 }
 
 const Rosticon: React.FC<RosticonProps & React.HTMLAttributes<HTMLImageElement>> = ({
   rosterId,
+  rounded = true,
+  copy = false,
   ...props
 }) => {
   const { computedMode } = useThemeMode();
@@ -38,9 +44,49 @@ const Rosticon: React.FC<RosticonProps & React.HTMLAttributes<HTMLImageElement>>
   return (
     <>
       {icon !== undefined && (
-        <img src={icon} {...props} alt={`Icon for Roster ${rosterId.asHex()}`} />
+        <CopyWrapper copy={copy} rosterId={rosterId}>
+          <img
+            src={icon}
+            {...props}
+            alt={`Icon for Roster ${rosterId.asHex()}`}
+            className={clsx(props.className, { "rounded-full": rounded })}
+          />
+        </CopyWrapper>
       )}
     </>
+  );
+};
+
+const CopyWrapper: React.FC<{
+  copy: boolean;
+  rosterId: RosterId;
+  children: React.ReactNode;
+}> = ({ copy, rosterId, children }) => {
+  const [copySuccess, setCopySuccess] = useState(true);
+
+  useEffect(() => {
+    if (copy && !copySuccess) {
+      setTimeout(() => {
+        setCopySuccess(true);
+      }, 200);
+    }
+  }, [copy, copySuccess]);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(rosterId.asHex());
+    setCopySuccess(false);
+  };
+
+  return copy ? (
+    <button
+      type="button"
+      onClick={handleCopy}
+      className={clsx(!copySuccess ? "cursor-none" : "cursor-copy")}
+    >
+      {children}
+    </button>
+  ) : (
+    <>{children}</>
   );
 };
 
