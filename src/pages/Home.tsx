@@ -1,49 +1,25 @@
 import NavbarSidebarLayout from "@/layouts/NavbarSidebarLayout";
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { Breadcrumb, Button, Card, Label, Select, TextInput, ToggleSwitch } from "flowbite-react";
+import { Button, Card, Label, Select, TextInput, ToggleSwitch } from "flowbite-react";
 import type { FC } from "react";
 import { useState } from "react";
 import { FaDribbble, FaFacebookF, FaGithub, FaTwitter } from "react-icons/fa";
-import { HiCloudUpload, HiDesktopComputer, HiDeviceMobile, HiHome } from "react-icons/hi";
+import { HiCloudUpload, HiDesktopComputer, HiDeviceMobile } from "react-icons/hi";
+
+import { RostersList } from "@/components/Rosters";
 
 const Home: FC = () => (
   <NavbarSidebarLayout>
     <>
       <div className="grid grid-cols-1 gap-y-6 px-4 pt-6 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
         <div className="col-span-full">
-          <Breadcrumb className="mb-4">
-            <Breadcrumb.Item href="#placeholder">
-              <div className="flex items-center gap-x-3">
-                <HiHome className="text-xl" />
-                <span className="dark:text-white">Home</span>
-              </div>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item href="/users/list">Users</Breadcrumb.Item>
-            <Breadcrumb.Item>Settings</Breadcrumb.Item>
-          </Breadcrumb>
           <h1 className="font-semibold text-gray-900 text-xl sm:text-2xl dark:text-white">
             User settings
           </h1>
         </div>
-        <div className="col-span-full xl:col-auto">
-          <div className="grid grid-cols-1 gap-y-4">
-            <UserProfileCard />
-            <LanguageTimeCard />
-            <SocialAccountsCard />
-            <OtherAccountsCard />
-          </div>
+        <div className="col-span-full">
+          <RostersList />
         </div>
-        <div className="col-span-2">
-          <div className="grid grid-cols-1 gap-y-4">
-            <GeneralInformationCard />
-            <PasswordInformationCard />
-            <SessionsCard />
-          </div>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 gap-y-6 px-4 pt-4 xl:grid-cols-2 xl:gap-4">
-        <AlertsNotificationsCard />
-        <EmailNotificationsCard />
       </div>
     </>
   </NavbarSidebarLayout>

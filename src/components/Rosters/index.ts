@@ -1,3 +1,4 @@
+import RostersList from "./RostersList";
 import RostersSidebar from "./RostersSidebar";
 
-export { RostersSidebar };
+export { RostersList, RostersSidebar };

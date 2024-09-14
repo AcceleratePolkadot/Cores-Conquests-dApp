@@ -12,9 +12,9 @@ import { useNominations } from "@/contexts/Nominations";
 import { useRosters } from "@/contexts/Rosters";
 
 const RostersSidebar: React.FC = () => {
-  const { foundedBy, memberOf, activeRoster, setActiveRoster, getRoster } = useRosters();
+  const { foundedBy, memberOf, activeRoster, setActiveRoster, getRoster, rosters } = useRosters();
   const { activeAccount } = useAccounts();
-  const { approvedForNominee, pendingForNominee } = useNominations();
+  const { approvedForNominee, pendingForNominee, forNominee } = useNominations();
   const [foundedRosters, setFoundedRosters] = useState<Roster[]>([]);
   const [joinedRosters, setJoinedRosters] = useState<Roster[]>([]);
   const [approvedForRosters, setApprovedForRosters] = useState<Roster[]>([]);
@@ -110,6 +110,7 @@ const RosterGroup: React.FC<{
       {rosters.map((roster) => (
         <Sidebar.Item
           key={roster.id.asHex()}
+          active={roster === activeRoster}
           onClick={() => handleRosterClick(roster)}
           className={
             roster === activeRoster
