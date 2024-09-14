@@ -1,4 +1,4 @@
-import { Polkicon } from "@/components/Polkicon";
+import { Polkicon } from "@/components/identicons";
 import { useAccounts } from "@/contexts/Accounts";
 import type { ImportedAccount } from "@w3ux/react-connect-kit/types";
 import type React from "react";
