@@ -3,6 +3,7 @@ import { useRosters } from "@/contexts/Rosters";
 import { Card } from "flowbite-react";
 import type React from "react";
 
+import { MembersList } from "@/components/Members";
 import RosterDetail from "@/components/Rosters/RosterDetail";
 
 const RostersContent: React.FC = () => {
@@ -41,7 +42,7 @@ const RostersContent: React.FC = () => {
 
             <div className="col-span-full xl:col-span-3 2xl:col-span-3">
               <Card>
-                <h3 className="mb-1 font-bold text-2xl text-gray-900 dark:text-white">Members</h3>
+                <MembersList />
               </Card>
             </div>
 
