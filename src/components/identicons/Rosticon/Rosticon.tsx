@@ -1,3 +1,4 @@
+import { useNotifications } from "@/contexts/Notifications";
 import { useThemeMode } from "flowbite-react";
 import type React from "react";
 import { useEffect, useState } from "react";
@@ -62,6 +63,7 @@ const CopyWrapper: React.FC<{
   rosterId: RosterId;
   children: React.ReactNode;
 }> = ({ copy, rosterId, children }) => {
+  const { showNotification } = useNotifications();
   const [copySuccess, setCopySuccess] = useState(true);
 
   useEffect(() => {
@@ -74,6 +76,12 @@ const CopyWrapper: React.FC<{
 
   const handleCopy = () => {
     navigator.clipboard.writeText(rosterId.asHex());
+    showNotification({
+      message: "Copied to clipboard",
+      options: {
+        variant: "success",
+      },
+    });
     setCopySuccess(false);
   };
 
