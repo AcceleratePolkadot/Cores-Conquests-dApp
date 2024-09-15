@@ -83,7 +83,7 @@ const RostersList: React.FC = () => {
                     className="hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     <Table.Cell className="flex items-center space-x-6 whitespace-nowrap p-4 lg:mr-0">
-                      <Rosticon rosterId={roster.id} className="h-10 w-10 rounded-full" />
+                      <Rosticon rosterId={roster.id} className="h-10 w-10" />
                       <div className="font-normal text-gray-500 text-sm dark:text-gray-400">
                         <div className="font-semibold text-base text-gray-900 dark:text-white">
                           {roster.title.asText()}
