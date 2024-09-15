@@ -1,4 +1,7 @@
 import type { ImportedAccount } from "@w3ux/react-connect-kit/types";
+import type { SS58String } from "polkadot-api";
+
+export type AccountId = SS58String;
 
 export interface AccountsContextInterface {
   activeAccount: ImportedAccount | undefined;

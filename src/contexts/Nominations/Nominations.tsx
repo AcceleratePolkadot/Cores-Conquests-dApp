@@ -1,6 +1,7 @@
+import type { AccountId } from "@/contexts/Accounts/types";
 import { useBlocApiClient } from "@/contexts/BlocApiClient";
 import { useRosters } from "@/contexts/Rosters";
-import type { AccountId, RosterId } from "@/contexts/Rosters/types";
+import type { RosterId } from "@/contexts/Rosters/types";
 import type React from "react";
 import { type ReactNode, createContext, useContext, useEffect, useMemo, useState } from "react";
 import type { EventSubscriptions, Nomination, NominationsContextType } from "./types";

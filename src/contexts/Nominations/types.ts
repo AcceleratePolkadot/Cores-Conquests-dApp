@@ -1,4 +1,5 @@
-import type { AccountId, BlockNumber, RosterId } from "@/contexts/Rosters/types";
+import type { AccountId } from "@/contexts/Accounts/types";
+import type { BlockNumber, RosterId } from "@/contexts/Rosters/types";
 import type { Enum } from "polkadot-api";
 import type { Subscription } from "rxjs";
 
