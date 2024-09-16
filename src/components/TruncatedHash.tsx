@@ -3,7 +3,7 @@ import clsx from "clsx";
 import type React from "react";
 import { useEffect, useState } from "react";
 
-import { ellipsisFn } from "@w3ux/utils";
+import { ellipsisFn, removeHexPrefix } from "@w3ux/utils";
 
 interface TruncatedHashProps {
   hash: string;
@@ -15,7 +15,7 @@ const TruncatedHash: React.FC<TruncatedHashProps> = ({ hash, chars = 6, copy = t
   const [copySuccess, setCopySuccess] = useState(false);
   const { showNotification } = useNotifications();
 
-  const truncatedHash = ellipsisFn(hash, chars, "center");
+  const truncatedHash = ellipsisFn(removeHexPrefix(hash), chars, "center");
 
   useEffect(() => {
     if (copySuccess) {
