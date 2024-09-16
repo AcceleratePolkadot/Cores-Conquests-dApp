@@ -20,37 +20,31 @@ export const useBalances = () => {
 export const BalancesProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { blocApi } = useBlocApiClient();
   const { activeAccount } = useAccounts();
+  const activeAccountAddress = useRef<AccountId | undefined>(activeAccount?.address);
   const [activeAccountBalance, setActiveAccountBalance] = useState<Balance | undefined>(undefined);
-  const activeAccountBalanceSubscription = useRef<Subscription | undefined>(undefined);
   const [balancesSubscriptions, setBalancesSubscriptions] = useState<
     Record<AccountId, Subscription>
   >({});
   const [balances, setBalances] = useState<Balances>({});
 
   useEffect(() => {
-    const createActiveAccountBalanceSubscription = async () => {
-      if (activeAccount) {
-        // If there is an active subscription, unsubscribe from it first
-        if (activeAccountBalanceSubscription.current) {
-          activeAccountBalanceSubscription.current.unsubscribe();
-        }
+    if (activeAccount) {
+      watchBalance(activeAccount.address);
+      activeAccountAddress.current = activeAccount.address;
+    } else if (activeAccountAddress.current) {
+      const accountId = activeAccountAddress.current;
+      activeAccountAddress.current = undefined;
+      unwatchBalance(accountId);
+    }
+  }, [activeAccount]);
 
-        // Create a new subscription for the active account.
-        activeAccountBalanceSubscription.current = blocApi.query.System.Account.watchValue(
-          activeAccount.address,
-        ).subscribe((systemAccount: SystemAccount) => {
-          setActiveAccountBalance({
-            free: stringToBigNumber(systemAccount.data.free.toString()),
-            reserved: stringToBigNumber(systemAccount.data.reserved.toString()),
-            frozen: stringToBigNumber(systemAccount.data.frozen.toString()),
-          });
-        });
-      }
-    };
-    createActiveAccountBalanceSubscription();
-  }, [activeAccount, blocApi.query.System.Account.watchValue]);
+  useEffect(() => {
+    if (activeAccount && balances[activeAccount.address]) {
+      setActiveAccountBalance(balances[activeAccount.address]);
+    }
+  }, [activeAccount, balances]);
 
-  const watchBalance = async (accountId: AccountId) => {
+  const watchBalance = (accountId: AccountId) => {
     if (balancesSubscriptions[accountId]) return; // Subscription already exists
 
     const subscription = blocApi.query.System.Account.watchValue(accountId).subscribe(
@@ -73,23 +67,28 @@ export const BalancesProvider: React.FC<{ children: ReactNode }> = ({ children }
   };
 
   const unwatchBalance = (accountId: AccountId) => {
+    // Don't unwatch the current active account
+    if (activeAccountAddress.current === accountId) {
+      return;
+    }
+
     if (balancesSubscriptions[accountId]) {
       balancesSubscriptions[accountId].unsubscribe();
-      setBalancesSubscriptions((prevSubscriptions) => ({
-        ...prevSubscriptions,
-        [accountId]: undefined,
-      }));
-      setBalances((prevBalances) => ({
-        ...prevBalances,
-        [accountId]: undefined,
-      }));
+      setBalancesSubscriptions((prevSubscriptions) => {
+        const newSubscriptions = { ...prevSubscriptions };
+        delete newSubscriptions[accountId];
+        return newSubscriptions;
+      });
+      setBalances((prevBalances) => {
+        const newBalances = { ...prevBalances };
+        delete newBalances[accountId];
+        return newBalances;
+      });
     }
   };
 
-  const watchBalances = async (accountIds: AccountId[]) => {
-    for (const accountId of accountIds) {
-      await watchBalance(accountId);
-    }
+  const watchBalances = (accountIds: AccountId[]) => {
+    accountIds.forEach(watchBalance);
   };
 
   const unwatchBalances = (accountIds: AccountId[]) => {
@@ -100,34 +99,11 @@ export const BalancesProvider: React.FC<{ children: ReactNode }> = ({ children }
     Object.keys(balancesSubscriptions).forEach(unwatchBalance);
   };
 
-  const getBalance = async (accountId: AccountId): Promise<Balance> => {
-    const systemAccount: SystemAccount = await blocApi.query.System.Account.getValue(accountId);
-    const free = systemAccount.data.free.toString();
-    const reserved = systemAccount.data.reserved.toString();
-    const frozen = systemAccount.data.frozen.toString();
-
-    return {
-      free: stringToBigNumber(free),
-      reserved: stringToBigNumber(reserved),
-      frozen: stringToBigNumber(frozen),
-    };
-  };
-
-  const getBalances = async (accountIds: AccountId[]): Promise<Balances> => {
-    const balances: Balances = {};
-    for (const accountId of accountIds) {
-      balances[accountId] = await getBalance(accountId);
-    }
-    return balances;
-  };
-
   return (
     <BalancesContext.Provider
       value={{
         activeAccountBalance,
         balances, // values of the watched balances
-        getBalance,
-        getBalances,
         watchBalance,
         watchBalances,
         unwatchBalance,

@@ -15,10 +15,8 @@ export type Balances = Record<AccountId, Balance>;
 export interface BalancesContextType {
   activeAccountBalance: Balance | undefined;
   balances: Balances;
-  getBalance: (address: AccountId) => Promise<Balance>;
-  getBalances: (addresses: AccountId[]) => Promise<Balances>;
-  watchBalance: (address: AccountId) => Promise<void>;
-  watchBalances: (addresses: AccountId[]) => Promise<void>;
+  watchBalance: (address: AccountId) => void;
+  watchBalances: (addresses: AccountId[]) => void;
   unwatchBalance: (address: AccountId) => void;
   unwatchBalances: (addresses: AccountId[]) => void;
   unwatchAllBalances: () => void;
