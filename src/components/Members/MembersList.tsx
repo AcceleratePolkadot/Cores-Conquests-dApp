@@ -5,11 +5,14 @@ import Table from "@/components/Table";
 import TruncatedHash from "@/components/TruncatedHash";
 import { Polkicon } from "@/components/identicons";
 import { useAccounts } from "@/contexts/Accounts";
+import { useBalances } from "@/contexts/Balances";
+import type { Balance } from "@/contexts/Balances/types";
 import { useNominations } from "@/contexts/Nominations";
 import { useRosters } from "@/contexts/Rosters";
+import useBalanceFormatter from "@/hooks/useBalanceFormatter";
 import { Card, Table as FlowbiteTable } from "flowbite-react";
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaTrashCan } from "react-icons/fa6";
 
 import type { Member } from "./types";
@@ -18,7 +21,9 @@ const MembersList: React.FC = () => {
   const { activeRoster } = useRosters();
   const { getAccount } = useAccounts();
   const { byNominator } = useNominations();
-  const [members, setMembers] = useState<Member[]>([]);
+  const { balances, watchBalances, unwatchBalances } = useBalances();
+  const [members, _setMembers] = useState<Member[]>([]);
+  const memberListRef = useRef<Member[]>([]);
   const [filteredMembers, setFilterMembers] = useState<Member[]>([]);
   const [currentItems, setCurrentItems] = useState<Member[]>([]);
   const [searchValue, setSearchValue] = useState<string>("");
@@ -53,6 +58,21 @@ const MembersList: React.FC = () => {
     setSearchValue("");
   };
 
+  const setMembers = (members: Member[]) => {
+    // If members is not empty unwatch balances of members that are not in the new members list
+    if (memberListRef.current.length > 0) {
+      const membersToUnwatch = memberListRef.current.filter(
+        (member) => !members.some((newMember) => newMember.address === member.address),
+      );
+      unwatchBalances(membersToUnwatch.map((member) => member.address));
+    }
+    // Watch balances for new members
+    watchBalances(members.map((member) => member.address));
+
+    memberListRef.current = members;
+    _setMembers(members);
+  };
+
   return (
     activeRoster && (
       <Card>
@@ -77,6 +97,9 @@ const MembersList: React.FC = () => {
               <Table<Member> paginateItems={filteredMembers} setCurrentItems={setCurrentItems}>
                 <Table.Head>
                   <FlowbiteTable.HeadCell>Account Id</FlowbiteTable.HeadCell>
+                  <FlowbiteTable.HeadCell>Free</FlowbiteTable.HeadCell>
+                  <FlowbiteTable.HeadCell>Reserved</FlowbiteTable.HeadCell>
+                  <FlowbiteTable.HeadCell>Total</FlowbiteTable.HeadCell>
                   <FlowbiteTable.HeadCell>Nominating</FlowbiteTable.HeadCell>
                   <FlowbiteTable.HeadCell>
                     <span className="sr-only">Actions</span>
@@ -89,6 +112,7 @@ const MembersList: React.FC = () => {
                       <th scope="row" className="max-w-28 overflow-hidden text-ellipsis">
                         <TruncatedHash hash={member.address} />
                       </th>
+                      <MemberBalanceCells balance={balances[member.address]} />
                       <FlowbiteTable.Cell>
                         <div className="-space-x-2 flex">
                           {byNominator(member.address).map((nomination) => (
@@ -113,6 +137,26 @@ const MembersList: React.FC = () => {
         </section>
       </Card>
     )
+  );
+};
+
+const MemberBalanceCells: React.FC<{ balance: Balance | undefined }> = ({ balance }) => {
+  const { balanceFormatter } = useBalanceFormatter();
+
+  return balance ? (
+    <>
+      <FlowbiteTable.Cell>{balanceFormatter(balance.free)}</FlowbiteTable.Cell>
+      <FlowbiteTable.Cell>{balanceFormatter(balance.reserved)}</FlowbiteTable.Cell>
+      <FlowbiteTable.Cell>
+        {balanceFormatter(balance.free.plus(balance.reserved))}
+      </FlowbiteTable.Cell>
+    </>
+  ) : (
+    <>
+      <FlowbiteTable.Cell>-</FlowbiteTable.Cell>
+      <FlowbiteTable.Cell>-</FlowbiteTable.Cell>
+      <FlowbiteTable.Cell>-</FlowbiteTable.Cell>
+    </>
   );
 };
 
