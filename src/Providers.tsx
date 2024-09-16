@@ -1,4 +1,5 @@
 import { AccountsProvider } from "@/contexts/Accounts";
+import { BalancesProvider } from "@/contexts/Balances";
 import { BlocApiClientProvider } from "@/contexts/BlocApiClient";
 import { ChainPropertiesProvider } from "@/contexts/ChainProperties";
 import { NominationsProvider } from "@/contexts/Nominations";
@@ -23,9 +24,11 @@ const Providers: React.FC<ProvidersProps> = ({ children }) => {
               <AccountsProvider>
                 <BlocApiClientProvider>
                   <ChainPropertiesProvider>
-                    <RostersProvider>
-                      <NominationsProvider>{children}</NominationsProvider>
-                    </RostersProvider>
+                    <BalancesProvider>
+                      <RostersProvider>
+                        <NominationsProvider>{children}</NominationsProvider>
+                      </RostersProvider>
+                    </BalancesProvider>
                   </ChainPropertiesProvider>
                 </BlocApiClientProvider>
               </AccountsProvider>

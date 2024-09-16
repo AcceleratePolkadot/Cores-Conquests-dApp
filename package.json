@@ -39,10 +39,12 @@
   "dependencies": {
     "@polkadot-api/descriptors": "file:.papi/descriptors",
     "@polkadot/api": "12.4.2",
+    "@polkadot/util": "^13.0.2",
     "@w3ux/extension-assets": "^0.3.1",
     "@w3ux/react-connect-kit": "^1.4.4",
     "@w3ux/react-polkicon": "^1.2.0",
     "@w3ux/utils": "^0.4.0",
+    "bignumber.js": "^9.1.2",
     "clsx": "^2.1.1",
     "flowbite-react": "^0.10.1",
     "notistack": "^3.0.1",
