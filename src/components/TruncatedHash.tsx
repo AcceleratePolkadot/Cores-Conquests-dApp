@@ -3,23 +3,19 @@ import clsx from "clsx";
 import type React from "react";
 import { useEffect, useState } from "react";
 
+import { ellipsisFn } from "@w3ux/utils";
+
 interface TruncatedHashProps {
   hash: string;
-  leadingChars?: number;
-  endingChars?: number;
+  chars?: number;
   copy?: boolean;
 }
 
-const TruncatedHash: React.FC<TruncatedHashProps> = ({
-  hash,
-  leadingChars = 6,
-  endingChars = 4,
-  copy = true,
-}) => {
+const TruncatedHash: React.FC<TruncatedHashProps> = ({ hash, chars = 6, copy = true }) => {
   const [copySuccess, setCopySuccess] = useState(false);
   const { showNotification } = useNotifications();
 
-  const truncatedHash = `${hash.slice(0, leadingChars)}...${hash.slice(-endingChars)}`;
+  const truncatedHash = ellipsisFn(hash, chars, "center");
 
   useEffect(() => {
     if (copySuccess) {
