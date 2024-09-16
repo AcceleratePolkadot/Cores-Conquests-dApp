@@ -1,11 +1,11 @@
-import type { FC } from "react";
-import { FaCheck } from "react-icons/fa";
-import { GiCrossedBones, GiHeartPlus } from "react-icons/gi";
-
 import TruncatedHash from "@/components/TruncatedHash";
 import { Polkicon, Rosticon } from "@/components/identicons";
+import { toApTitleCase } from "@/helpers/typography";
 import { Button, Card, Tooltip } from "flowbite-react";
+import type { FC } from "react";
+import { FaCheck } from "react-icons/fa";
 import { FaCirclePlus } from "react-icons/fa6";
+import { GiCrossedBones, GiHeartPlus } from "react-icons/gi";
 
 import { useAccounts } from "@/contexts/Accounts";
 import { useRosters } from "@/contexts/Rosters";
@@ -27,9 +27,11 @@ const RosterDetail: FC = () => {
     activeRoster && (
       <Card>
         <div className="flex items-center gap-x-4 border-gray-200 border-b pb-2 dark:border-gray-700 dark:text-white">
-          <Rosticon rosterId={activeRoster.id} className="h-10 w-10" copy={true} />
+          <Rosticon rosterId={activeRoster.id} className="h-10 w-10 flex-none" copy={true} />
 
-          <h2 className="truncate font-bold text-2xl">{activeRoster.title.asText()}</h2>
+          <h2 className="flex-1 truncate font-bold text-2xl">
+            {toApTitleCase(activeRoster.title.asText())}
+          </h2>
           <div className="relative ml-auto">
             <Tooltip content="Add Nomination" placement="right">
               <Button gradientDuoTone="pinkToOrange" size="xs">

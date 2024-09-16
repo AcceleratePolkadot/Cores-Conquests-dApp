@@ -1,5 +1,6 @@
 import { useAccounts } from "@/contexts/Accounts";
 import type { Roster } from "@/contexts/Rosters/types";
+import { toApTitleCase } from "@/helpers/typography";
 import { Sidebar } from "flowbite-react";
 import type React from "react";
 import { useEffect, useState } from "react";
@@ -118,7 +119,7 @@ const RosterGroup: React.FC<{
               : "cursor-pointer"
           }
         >
-          {roster.title.asText()}
+          {toApTitleCase(roster.title.asText())}
         </Sidebar.Item>
       ))}
     </Sidebar.Collapse>

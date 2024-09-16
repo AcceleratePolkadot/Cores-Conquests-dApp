@@ -1,10 +1,10 @@
+import { MembersList } from "@/components/Members";
 import { RostersList } from "@/components/Rosters";
+import RosterDetail from "@/components/Rosters/RosterDetail";
 import { useRosters } from "@/contexts/Rosters";
+import { toApTitleCase } from "@/helpers/typography";
 import { Card } from "flowbite-react";
 import type React from "react";
-
-import { MembersList } from "@/components/Members";
-import RosterDetail from "@/components/Rosters/RosterDetail";
 
 const RostersContent: React.FC = () => {
   const { activeRoster } = useRosters();
@@ -25,7 +25,7 @@ const RostersContent: React.FC = () => {
           <>
             <div className="col-span-full border-gray-200 border-b pb-2 dark:border-gray-700">
               <h1 className="font-semibold text-2xl text-gray-900 dark:text-white">
-                {activeRoster.title.asText()}
+                {toApTitleCase(activeRoster.title.asText())}
               </h1>
             </div>
 

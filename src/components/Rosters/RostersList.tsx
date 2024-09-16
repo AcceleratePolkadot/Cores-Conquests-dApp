@@ -1,14 +1,14 @@
 import { Polkicon, Rosticon } from "@/components/identicons";
 import { useAccounts } from "@/contexts/Accounts";
+import { useNominations } from "@/contexts/Nominations";
+import { useRosters } from "@/contexts/Rosters";
 import type { Roster as BaseRoster } from "@/contexts/Rosters/types";
+import { toApTitleCase } from "@/helpers/typography";
 import { Button, Sidebar, Table } from "flowbite-react";
 import type React from "react";
 import { useEffect, useState } from "react";
 import { HiChevronDown } from "react-icons/hi";
 import { MdHorizontalRule } from "react-icons/md";
-
-import { useNominations } from "@/contexts/Nominations";
-import { useRosters } from "@/contexts/Rosters";
 
 type RosterRelationship = "founder" | "member" | "approved_for" | "pending_for";
 
@@ -86,7 +86,7 @@ const RostersList: React.FC = () => {
                       <Rosticon rosterId={roster.id} className="h-10 w-10" />
                       <div className="font-normal text-gray-500 text-sm dark:text-gray-400">
                         <div className="font-semibold text-base text-gray-900 dark:text-white">
-                          {roster.title.asText()}
+                          {toApTitleCase(roster.title.asText())}
                         </div>
                         <div className="font-normal text-gray-500 text-xs dark:text-gray-400">
                           {roster.id.asHex()}
