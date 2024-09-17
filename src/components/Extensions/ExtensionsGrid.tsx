@@ -1,34 +1,26 @@
-import { useWebExtensions } from "@/contexts/WebExtensions";
+import { useInjectedExtensions } from "@/contexts/InjectedExtensions";
 import type React from "react";
 
 import type { ExtensionsGridItemProps } from "./types";
 
 const ExtensionsGrid: React.FC = () => {
-  const { installedWebExtensions } = useWebExtensions();
+  const { extensions } = useInjectedExtensions();
 
   return (
     <ul className="flex items-center justify-center space-x-8">
-      {installedWebExtensions.map((webExtension) => {
-        return <ExtensionsGridItem key={webExtension.id} extension={webExtension} />;
+      {Object.values(extensions).map((extension) => {
+        return <ExtensionsGridItem key={extension.id} extension={extension} />;
       })}
     </ul>
   );
 };
 
 export const ExtensionsGridItem = ({ extension }: ExtensionsGridItemProps) => {
-  const {
-    webExtensionCanConnect,
-    webExtensionConnected,
-    webExtensionIcon,
-    connectWebExtension,
-    disconnectWebExtension,
-  } = useWebExtensions();
+  const { extensionConnected, connectExtension, disconnectExtension } = useInjectedExtensions();
 
   const { id, title, website } = extension;
 
-  const canConnect = webExtensionCanConnect(id);
-  const connected = webExtensionConnected(id);
-  const Icon = webExtensionIcon(id);
+  const connected = extensionConnected(id);
 
   const websiteText = typeof website === "string" ? website : website.text;
   const websiteUrl = typeof website === "string" ? website : website.url;
@@ -36,13 +28,9 @@ export const ExtensionsGridItem = ({ extension }: ExtensionsGridItemProps) => {
   // Handle connect and disconnect from extension.
   const handleToggleConnection = async () => {
     if (!connected) {
-      if (canConnect) {
-        await connectWebExtension(id);
-      } else {
-        alert("Unable to connect to the extension.");
-      }
+      await connectExtension(id);
     } else {
-      disconnectWebExtension(id);
+      disconnectExtension(id);
     }
   };
 
@@ -54,7 +42,7 @@ export const ExtensionsGridItem = ({ extension }: ExtensionsGridItemProps) => {
       <div className="flex flex-1 flex-col p-8">
         <div className="mx-auto h-32 w-32 flex-shrink-0 rounded-full">
           <button type="button" onClick={handleToggleConnection}>
-            <Icon />
+            <extension.icon />
           </button>
         </div>
         <h3 className="mt-6 font-medium text-sm">{title}</h3>

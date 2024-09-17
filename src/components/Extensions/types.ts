@@ -1,11 +1,11 @@
-import type { ExtensionArrayListItem } from "@w3ux/extension-assets/util";
+import type { Extension } from "@/contexts/InjectedExtensions/types";
 
 export interface ExtensionsDropdownItemProps {
-  extension: ExtensionArrayListItem;
+  extension: Extension;
   index: number;
   installedExtensionsLength: number;
 }
 
 export interface ExtensionsGridItemProps {
-  extension: ExtensionArrayListItem;
+  extension: Extension;
 }

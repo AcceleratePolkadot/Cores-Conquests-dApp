@@ -1,16 +1,15 @@
 import { Polkicon } from "@/components/identicons";
 import { useAccounts } from "@/contexts/Accounts";
-import type { ImportedAccount } from "@w3ux/react-connect-kit/types";
+import type { Account } from "@/contexts/Accounts/types";
 import clsx from "clsx";
 import { Dropdown } from "flowbite-react";
 import type React from "react";
 import { FaUserSlash } from "react-icons/fa6";
 
 const AccountsDropdown: React.FC = () => {
-  const { getAccounts, activeAccount, setActiveAccount } = useAccounts();
-  const accounts = getAccounts();
+  const { accounts, activeAccount, setActiveAccount } = useAccounts();
 
-  const handleAccountChange = (account: ImportedAccount) => {
+  const handleAccountChange = (account: Account) => {
     setActiveAccount(account);
   };
 
@@ -69,8 +68,13 @@ const AccountsDropdown: React.FC = () => {
               </span>
 
               <div className="min-w-0 flex-auto">
-                <div className="flex items-center space-x-3">
-                  <h3 className="font-semibold text-sm">{account.name}</h3>
+                <div className="flex items-center space-x-2">
+                  <div className="flex flex-none">{account.name}</div>
+                  <div className="flex flex-none">
+                    <span className="h-3 w-3">
+                      <account.extension.icon />
+                    </span>
+                  </div>
                 </div>
                 <p className="truncate text-gray-400 text-xs">{account.address}</p>
               </div>

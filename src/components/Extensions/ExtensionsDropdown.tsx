@@ -1,14 +1,14 @@
-import { useWebExtensions } from "@/contexts/WebExtensions";
+import { useInjectedExtensions } from "@/contexts/InjectedExtensions";
 import clsx from "clsx";
 import { Dropdown, Tooltip } from "flowbite-react";
 import type React from "react";
-import { FaCircleMinus, FaCirclePlus, FaCircleXmark } from "react-icons/fa6";
+import { FaCircleMinus, FaCirclePlus } from "react-icons/fa6";
 import { HiViewGrid } from "react-icons/hi";
 import { HiMiniWallet } from "react-icons/hi2";
 import type { ExtensionsDropdownItemProps } from "./types";
 
 const ExtensionsDropdown: React.FC = () => {
-  const { installedWebExtensions } = useWebExtensions();
+  const { extensions } = useInjectedExtensions();
 
   return (
     <Dropdown
@@ -29,13 +29,13 @@ const ExtensionsDropdown: React.FC = () => {
         </span>
       </Dropdown.Header>
 
-      {installedWebExtensions.map((webExtension, index) => {
+      {Object.entries(extensions).map(([key, value], index) => {
         return (
           <ExtensionsDropdownItem
-            key={webExtension.id}
-            extension={webExtension}
+            key={key}
+            extension={value}
             index={index}
-            installedExtensionsLength={installedWebExtensions.length}
+            installedExtensionsLength={Object.keys(extensions).length}
           />
         );
       })}
@@ -43,39 +43,20 @@ const ExtensionsDropdown: React.FC = () => {
   );
 };
 
-export const ExtensionStatusIcon = ({ status }: { status: string }) => {
-  let icon: React.ReactNode;
-
-  switch (status) {
-    case "connected":
-      icon = (
-        <Tooltip content="Connected" placement="right" animation="duration-500">
-          <span className="text-green-500">
-            <FaCirclePlus />
-          </span>
-        </Tooltip>
-      );
-      break;
-    case "not_authenticated":
-      icon = (
-        <Tooltip content="Not Authenticated" placement="right" animation="duration-500">
-          <span className="text-gray-600">
-            <FaCircleXmark />
-          </span>
-        </Tooltip>
-      );
-      break;
-    default:
-      icon = (
-        <Tooltip content="Disconnected" placement="right" animation="duration-500">
-          <span className="text-red-700">
-            <FaCircleMinus />
-          </span>
-        </Tooltip>
-      );
-  }
-
-  return icon;
+export const ExtensionStatusIcon = ({ connected }: { connected: boolean }) => {
+  return connected ? (
+    <Tooltip content="Connected" placement="right" animation="duration-500">
+      <span className="text-green-500">
+        <FaCirclePlus />
+      </span>
+    </Tooltip>
+  ) : (
+    <Tooltip content="Disconnected" placement="right" animation="duration-500">
+      <span className="text-red-700">
+        <FaCircleMinus />
+      </span>
+    </Tooltip>
+  );
 };
 
 export const ExtensionsDropdownItem = ({
@@ -83,21 +64,10 @@ export const ExtensionsDropdownItem = ({
   index,
   installedExtensionsLength,
 }: ExtensionsDropdownItemProps) => {
-  const {
-    webExtensionStatus,
-    webExtensionCanConnect,
-    webExtensionConnected,
-    webExtensionIcon,
-    connectWebExtension,
-    disconnectWebExtension,
-  } = useWebExtensions();
+  const { extensionConnected, connectExtension, disconnectExtension } = useInjectedExtensions();
 
   const { id, title, website } = extension;
-
-  const canConnect = webExtensionCanConnect(id);
-  const connected = webExtensionConnected(id);
-  const status = webExtensionStatus(id);
-  const Icon = webExtensionIcon(id);
+  const connected = extensionConnected(id);
 
   const websiteText = typeof website === "string" ? website : website.text;
   const websiteUrl = typeof website === "string" ? website : website.url;
@@ -105,13 +75,9 @@ export const ExtensionsDropdownItem = ({
   // Handle connect and disconnect from extension.
   const handleToggleConnection = async () => {
     if (!connected) {
-      if (canConnect) {
-        await connectWebExtension(id);
-      } else {
-        alert("Unable to connect to the extension.");
-      }
+      await connectExtension(id);
     } else {
-      disconnectWebExtension(id);
+      disconnectExtension(id);
     }
   };
 
@@ -125,13 +91,13 @@ export const ExtensionsDropdownItem = ({
     >
       <div className="flex w-full items-center space-x-4">
         <div className="h-12 w-12 flex-none">
-          <Icon />
+          <extension.icon />
         </div>
 
         <div className="flex-auto content-left">
           <div className="flex items-center space-x-3">
             <p className="font-semibold text-sm leading-6">{title}</p>
-            <ExtensionStatusIcon status={status} />
+            <ExtensionStatusIcon connected={connected} />
           </div>
 
           <p className="mt-1 text-left text-xs">

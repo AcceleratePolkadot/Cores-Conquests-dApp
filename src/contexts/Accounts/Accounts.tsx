@@ -1,9 +1,9 @@
-import { useExtensionAccounts } from "@w3ux/react-connect-kit";
-import type { ImportedAccount } from "@w3ux/react-connect-kit/types";
+import { useInjectedExtensions } from "@/contexts/InjectedExtensions";
+import { ExtensionIcons } from "@w3ux/extension-assets/util";
 import type { ReactNode } from "react";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { defaultAccountsContext } from "./defaults";
-import type { AccountsContextInterface } from "./types";
+import type { Account, AccountsContextInterface } from "./types";
 
 export const AccountsContext = createContext<AccountsContextInterface>(defaultAccountsContext);
 
@@ -14,21 +14,39 @@ export const AccountsProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const [activeAccount, setActiveAccount] = useState<ImportedAccount | undefined>(undefined);
-  const { getExtensionAccounts } = useExtensionAccounts();
+  const { connectedExtensions } = useInjectedExtensions();
+  const [activeAccount, setActiveAccount] = useState<Account | undefined>(undefined);
+  const [accounts, setAccounts] = useState<Account[]>([]);
 
-  const getAccounts = () => getExtensionAccounts(42);
-  const getAccount = (address: string) => getAccounts().find((a) => a.address === address);
-  const accountHasSigner = (address: string) => getAccount(address)?.source !== "external";
+  const getAccount = (address: string) => accounts.find((a) => a.address === address);
+
+  useEffect(() => {
+    let connectedExtensionsAccounts: Account[] = [];
+    for (const extension of Object.values(connectedExtensions)) {
+      connectedExtensionsAccounts = connectedExtensionsAccounts.concat(
+        extension.getAccounts().map((a) => ({
+          ...a,
+          extension: { name: extension.name, icon: ExtensionIcons[extension.name] },
+        })),
+      );
+    }
+    setAccounts(connectedExtensionsAccounts);
+  }, [connectedExtensions]);
+
+  useEffect(() => {
+    // When accounts updates ensure the active account is still in the list
+    if (activeAccount && !accounts.some((a) => a.address === activeAccount.address)) {
+      setActiveAccount(undefined);
+    }
+  }, [activeAccount, accounts]);
 
   return (
     <AccountsContext.Provider
       value={{
         activeAccount,
         setActiveAccount,
-        getAccounts,
+        accounts,
         getAccount,
-        accountHasSigner,
       }}
     >
       {children}

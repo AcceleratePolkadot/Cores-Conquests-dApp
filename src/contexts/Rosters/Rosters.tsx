@@ -1,4 +1,5 @@
 import { useAccounts } from "@/contexts/Accounts";
+import type { AccountId } from "@/contexts/Accounts/types";
 import { useBlocApiClient } from "@/contexts/BlocApiClient";
 import type React from "react";
 import {
@@ -10,7 +11,8 @@ import {
   useRef,
   useState,
 } from "react";
-import type { AccountId, EventSubscriptions, Roster, RosterId, RostersContextType } from "./types";
+import type { EventSubscriptions, Roster, RosterId, RostersContextType } from "./types";
+
 const RostersContext = createContext<RostersContextType | undefined>(undefined);
 
 export const useRosters = () => {

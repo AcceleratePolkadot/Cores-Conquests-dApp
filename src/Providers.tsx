@@ -2,10 +2,10 @@ import { AccountsProvider } from "@/contexts/Accounts";
 import { BalancesProvider } from "@/contexts/Balances";
 import { BlocApiClientProvider } from "@/contexts/BlocApiClient";
 import { ChainPropertiesProvider } from "@/contexts/ChainProperties";
+import { InjectedExtensionsProvider } from "@/contexts/InjectedExtensions";
 import { NominationsProvider } from "@/contexts/Nominations";
 import { NotificationsProvider } from "@/contexts/Notifications";
 import { RostersProvider } from "@/contexts/Rosters";
-import { WebExtensionsProvider } from "@/contexts/WebExtensions";
 import { ExtensionAccountsProvider, ExtensionsProvider } from "@w3ux/react-connect-kit";
 import { SnackbarProvider } from "notistack";
 import type React from "react";
@@ -20,7 +20,7 @@ const Providers: React.FC<ProvidersProps> = ({ children }) => {
       <NotificationsProvider>
         <ExtensionsProvider>
           <ExtensionAccountsProvider network="bloc" dappName="Cores and Conquests">
-            <WebExtensionsProvider>
+            <InjectedExtensionsProvider>
               <AccountsProvider>
                 <BlocApiClientProvider>
                   <ChainPropertiesProvider>
@@ -32,7 +32,7 @@ const Providers: React.FC<ProvidersProps> = ({ children }) => {
                   </ChainPropertiesProvider>
                 </BlocApiClientProvider>
               </AccountsProvider>
-            </WebExtensionsProvider>
+            </InjectedExtensionsProvider>
           </ExtensionAccountsProvider>
         </ExtensionsProvider>
       </NotificationsProvider>

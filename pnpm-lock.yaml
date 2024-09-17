@@ -33,6 +33,9 @@ importers:
       '@w3ux/react-polkicon':
         specifier: ^1.2.0
         version: 1.2.0(@polkadot/util-crypto@13.0.2(@polkadot/util@13.0.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@w3ux/types':
+        specifier: ^0.2.0
+        version: 0.2.0
       '@w3ux/utils':
         specifier: ^0.4.0
         version: 0.4.0(@polkadot/util-crypto@13.0.2(@polkadot/util@13.0.2))
@@ -1259,6 +1262,9 @@ packages:
 
   '@w3ux/react-polkicon@1.2.0':
     resolution: {integrity: sha512-xi2dtCPj+l8qnORroOBG/pjomfhrznwKPUYZblLLb6QCUC3diL/CjEbUUSA04Zp9mUKXTW3uc5E0l+ZCe8XQsQ==}
+
+  '@w3ux/types@0.2.0':
+    resolution: {integrity: sha512-QpfASWVcsnBPPqw2iiU/65GsjJVcT7AsQuA/eJq+0mbSMID/fWdHRmt4PcKKYs3v7rBuVsNi0PgXEvmsPBs9nQ==}
 
   '@w3ux/utils@0.4.0':
     resolution: {integrity: sha512-3KDEhqs+i4en24qKh3y5GJClaIvDJfNUp3IHloxIHa+3+27cdZHlkDY4WNsImLX2EKJrTmGMDn6C6z99Ojk1HQ==}
@@ -4602,6 +4608,8 @@ snapshots:
       - '@polkadot/util-crypto'
       - react
       - react-dom
+
+  '@w3ux/types@0.2.0': {}
 
   '@w3ux/utils@0.4.0(@polkadot/util-crypto@13.0.2(@polkadot/util@13.0.2))':
     dependencies:

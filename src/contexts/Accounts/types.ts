@@ -1,6 +1,14 @@
-import type { ImportedAccount } from "@w3ux/react-connect-kit/types";
+import type { ExtensionIcon } from "@w3ux/extension-assets/util";
 import type { SS58String } from "polkadot-api";
+import type { InjectedPolkadotAccount } from "polkadot-api/pjs-signer";
+import type { ExtensionName } from "../InjectedExtensions/types";
 
+export type Account = InjectedPolkadotAccount & {
+  extension: {
+    name: ExtensionName;
+    icon: ExtensionIcon;
+  };
+};
 export type AccountId = SS58String;
 
 export type SystemAccount = {
@@ -17,9 +25,8 @@ export type SystemAccount = {
 };
 
 export interface AccountsContextInterface {
-  activeAccount: ImportedAccount | undefined;
-  setActiveAccount: (account: ImportedAccount | undefined) => void;
-  getAccounts: () => ImportedAccount[];
-  getAccount: (address: string) => ImportedAccount | undefined;
-  accountHasSigner: (address: string) => boolean;
+  activeAccount: Account | undefined;
+  setActiveAccount: (account: Account | undefined) => void;
+  accounts: Account[];
+  getAccount: (address: string) => Account | undefined;
 }
