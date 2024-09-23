@@ -1,7 +1,7 @@
 import { useBlocApiClient } from "@/contexts/BlocApiClient";
 import type React from "react";
 import { type ReactNode, createContext, useContext, useEffect, useRef, useState } from "react";
-import type { BlocksContextType } from "./types";
+import type { BlockNumber, BlocksContextType } from "./types";
 
 const BlocksContext = createContext<BlocksContextType | undefined>(undefined);
 
@@ -15,10 +15,10 @@ export const useBlocks = () => {
 
 export const BlocksProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { blocApi } = useBlocApiClient();
-  const currentBlockRef = useRef<number>(0);
+  const currentBlockRef = useRef<BlockNumber>(0);
   const lastChangedAt = useRef<number>(Date.now());
   const [producingTimelyBlocks, setProducingTimelyBlocks] = useState<boolean>(true);
-  const [currentBlock, setCurrentBlock] = useState<number>(0);
+  const [currentBlock, setCurrentBlock] = useState<BlockNumber>(0);
   const timeSinceLastBlock = useRef<number>(0);
 
   useEffect(() => {
