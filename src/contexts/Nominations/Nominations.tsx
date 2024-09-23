@@ -68,7 +68,7 @@ export const NominationsProvider: React.FC<{ children: ReactNode }> = ({ childre
   };
 
   const toRoster = (rosterId: RosterId) => {
-    return nominations.filter((nomination) => nomination.roster === rosterId);
+    return nominations.filter((nomination) => nomination.roster.asHex() === rosterId.asHex());
   };
 
   const forNominee = (nominee: AccountId) => {
