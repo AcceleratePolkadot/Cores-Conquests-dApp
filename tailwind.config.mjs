@@ -20,6 +20,9 @@ export default {
           900: "#1e3a8a",
         },
       },
+      fontSize: {
+        xxs: "0.6rem",
+      },
     },
     fontFamily: {
       sans: [
