@@ -6,11 +6,12 @@ import { ChainPropertiesProvider } from "@/contexts/ChainProperties";
 import { InjectedExtensionsProvider } from "@/contexts/InjectedExtensions";
 import { NominationsProvider } from "@/contexts/Nominations";
 import { NotificationsProvider } from "@/contexts/Notifications";
+import { PalletsConstantsProvider } from "@/contexts/PalletsConstants";
 import { RostersProvider } from "@/contexts/Rosters";
+import type { BlocConstants } from "@polkadot-api/descriptors";
 import { ExtensionAccountsProvider, ExtensionsProvider } from "@w3ux/react-connect-kit";
 import { SnackbarProvider } from "notistack";
 import type React from "react";
-import { RosterConstantsProvider } from "./contexts/RosterConstants";
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -25,7 +26,38 @@ const Providers: React.FC<ProvidersProps> = ({ children }) => {
             <InjectedExtensionsProvider>
               <AccountsProvider>
                 <BlocApiClientProvider>
-                  <RosterConstantsProvider>
+                  <PalletsConstantsProvider
+                    palletConstantsList={{
+                      ["Roster" as keyof BlocConstants]: [
+                        "PalletId",
+                        "NewRosterDeposit",
+                        "TitleMaxLength",
+                        "MembersMax",
+                        "NewNominationDeposit",
+                        "MembershipDues",
+                        "NominationVotesMax",
+                        "NominationVotingPeriod",
+                        "QuorumModifier",
+                        "QuorumMin",
+                        "NominationsPerRosterMax",
+                        "ConcludedNominationsMax",
+                        "NewExpulsionProposalDeposit",
+                        "ExpulsionProposalReparations",
+                        "ExpulsionProposalAwaitingSecondPeriod",
+                        "ExpulsionProposalVotingPeriod",
+                        "ExpulsionProposalsPerRosterMax",
+                        "ExpulsionProposalSecondThreshold",
+                        "SecondsMax",
+                        "ExpulsionReasonMaxLength",
+                        "ExpulsionReasonMinLength",
+                        "ExpulsionProposalVotesMax",
+                        "ConcludedExpulsionProposalsMax",
+                        "ExpulsionProposalLockoutPeriod",
+                        "ExpulsionProposalSuperMajority",
+                        "ExpulsionProposalQuorum",
+                      ],
+                    }}
+                  >
                     <BlocksProvider>
                       <ChainPropertiesProvider>
                         <BalancesProvider>
@@ -35,7 +67,7 @@ const Providers: React.FC<ProvidersProps> = ({ children }) => {
                         </BalancesProvider>
                       </ChainPropertiesProvider>
                     </BlocksProvider>
-                  </RosterConstantsProvider>
+                  </PalletsConstantsProvider>
                 </BlocApiClientProvider>
               </AccountsProvider>
             </InjectedExtensionsProvider>

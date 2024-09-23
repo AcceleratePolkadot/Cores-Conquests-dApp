@@ -3,11 +3,10 @@ import SearchFilters from "@/components/SearchFilters";
 import Table from "@/components/Table";
 import TruncatedHash from "@/components/TruncatedHash";
 import { Polkicon } from "@/components/identicons";
-import { useAccounts } from "@/contexts/Accounts";
 import { useBlocks } from "@/contexts/Blocks";
 import { useNominations } from "@/contexts/Nominations";
 import type { Nomination } from "@/contexts/Nominations/types";
-import { useRosterConstants } from "@/contexts/RosterConstants";
+import { usePalletsConstants } from "@/contexts/PalletsConstants";
 import { useRosters } from "@/contexts/Rosters";
 import { Card, Table as FlowbiteTable } from "flowbite-react";
 import type React from "react";
@@ -16,10 +15,10 @@ import { MdOutlineHowToVote } from "react-icons/md";
 
 const NominationsList: React.FC = () => {
   const { activeRoster } = useRosters();
-  const { getAccount } = useAccounts();
   const { currentBlock } = useBlocks();
   const { toRoster } = useNominations();
-  const { rosterConstants } = useRosterConstants();
+  const { palletsConstants } = usePalletsConstants();
+  const rosterConstants = palletsConstants.Roster ?? {};
   const [nominations, setNominations] = useState<Nomination[]>([]);
   const [filteredNominations, setFilterNominations] = useState<Nomination[]>([]);
   const [currentItems, setCurrentItems] = useState<Nomination[]>([]);
@@ -96,81 +95,83 @@ const NominationsList: React.FC = () => {
                 </Table.Head>
 
                 <Table.Body>
-                  {currentItems.map((nomination) => (
-                    <FlowbiteTable.Row key={nomination.nominee}>
-                      <th scope="row" className="max-w-28 overflow-hidden text-ellipsis">
-                        <TruncatedHash hash={nomination.nominee} />
-                      </th>
-                      <FlowbiteTable.Cell>
-                        <TruncatedHash hash={nomination.nominator} />
-                      </FlowbiteTable.Cell>
-                      <FlowbiteTable.Cell>{nomination.nominated_on}</FlowbiteTable.Cell>
-                      <FlowbiteTable.Cell>
-                        <div className="-space-x-2 flex">
-                          {nomination.votes
-                            .filter((vote) => vote.vote.type === "Aye")
-                            .map((vote) => (
-                              <div
-                                key={vote.voter}
-                                className="h-6 w-6 rounded-full bg-gray-50 ring-2 ring-white dark:bg-gray-600 dark:ring-gray-400"
-                              >
-                                <Polkicon address={vote.voter} size={24} copy={true} />
-                              </div>
-                            ))}
-                        </div>
-                      </FlowbiteTable.Cell>
-                      <FlowbiteTable.Cell>
-                        <div className="-space-x-2 flex">
-                          {nomination.votes
-                            .filter((vote) => vote.vote.type === "Nay")
-                            .map((vote) => (
-                              <div
-                                key={vote.voter}
-                                className="h-6 w-6 rounded-full bg-gray-50 ring-2 ring-white dark:bg-gray-600 dark:ring-gray-400"
-                              >
-                                <Polkicon address={vote.voter} size={24} copy={true} />
-                              </div>
-                            ))}
-                        </div>
-                      </FlowbiteTable.Cell>
-                      <FlowbiteTable.Cell>
-                        {"NominationVotingPeriod" in rosterConstants && (
-                          <PeriodProgress
-                            periodStart={nomination.nominated_on}
-                            periodDuration={rosterConstants.NominationVotingPeriod as number}
-                            currentBlock={currentBlock}
-                            theme={{
-                              base: "w-full overflow-hidden",
-                              label:
-                                "mx-2 mb-1 flex justify-between space-x-2 text-xxs text-gray-600 dark:text-gray-300 uppercase",
-                            }}
-                            color={(period) =>
-                              period.percentPassed <= 50
-                                ? "lime"
-                                : period.percentPassed <= 75
-                                  ? "yellow"
-                                  : period.percentPassed === 100
-                                    ? "gray"
-                                    : "red"
-                            }
-                            labelText
-                            labelProgress={({ percentPassed }) => percentPassed !== 100}
-                            textLabel={({ percentPassed }) =>
-                              percentPassed === 100 ? "voting has ended" : "period passed:"
-                            }
-                            textLabelPosition="outside"
-                            progressLabelPosition="outside"
-                            customTooltip={({ percentPassed }) => (
-                              <>{progressTooltipContent(percentPassed, nomination)}</>
-                            )}
-                          />
-                        )}
-                      </FlowbiteTable.Cell>
-                      <FlowbiteTable.Cell>
-                        <MdOutlineHowToVote />
-                      </FlowbiteTable.Cell>
-                    </FlowbiteTable.Row>
-                  ))}
+                  {currentItems
+                    .sort((a, b) => a.nominated_on - b.nominated_on)
+                    .map((nomination) => (
+                      <FlowbiteTable.Row key={nomination.nominee}>
+                        <th scope="row" className="max-w-28 overflow-hidden text-ellipsis">
+                          <TruncatedHash hash={nomination.nominee} />
+                        </th>
+                        <FlowbiteTable.Cell>
+                          <TruncatedHash hash={nomination.nominator} />
+                        </FlowbiteTable.Cell>
+                        <FlowbiteTable.Cell>{nomination.nominated_on}</FlowbiteTable.Cell>
+                        <FlowbiteTable.Cell>
+                          <div className="-space-x-2 flex">
+                            {nomination.votes
+                              .filter((vote) => vote.vote.type === "Aye")
+                              .map((vote) => (
+                                <div
+                                  key={vote.voter}
+                                  className="h-6 w-6 rounded-full bg-gray-50 ring-2 ring-white dark:bg-gray-600 dark:ring-gray-400"
+                                >
+                                  <Polkicon address={vote.voter} size={24} copy={true} />
+                                </div>
+                              ))}
+                          </div>
+                        </FlowbiteTable.Cell>
+                        <FlowbiteTable.Cell>
+                          <div className="-space-x-2 flex">
+                            {nomination.votes
+                              .filter((vote) => vote.vote.type === "Nay")
+                              .map((vote) => (
+                                <div
+                                  key={vote.voter}
+                                  className="h-6 w-6 rounded-full bg-gray-50 ring-2 ring-white dark:bg-gray-600 dark:ring-gray-400"
+                                >
+                                  <Polkicon address={vote.voter} size={24} copy={true} />
+                                </div>
+                              ))}
+                          </div>
+                        </FlowbiteTable.Cell>
+                        <FlowbiteTable.Cell>
+                          {"NominationVotingPeriod" in rosterConstants && (
+                            <PeriodProgress
+                              periodStart={nomination.nominated_on}
+                              periodDuration={rosterConstants.NominationVotingPeriod as number}
+                              currentBlock={currentBlock}
+                              theme={{
+                                base: "w-full overflow-hidden",
+                                label:
+                                  "mx-2 mb-1 flex justify-between space-x-2 text-xxs text-gray-600 dark:text-gray-300 uppercase",
+                              }}
+                              color={(period) =>
+                                period.percentPassed <= 50
+                                  ? "lime"
+                                  : period.percentPassed <= 75
+                                    ? "yellow"
+                                    : period.percentPassed === 100
+                                      ? "gray"
+                                      : "red"
+                              }
+                              labelText
+                              labelProgress={({ percentPassed }) => percentPassed !== 100}
+                              textLabel={({ percentPassed }) =>
+                                percentPassed === 100 ? "voting has ended" : "period passed:"
+                              }
+                              textLabelPosition="outside"
+                              progressLabelPosition="outside"
+                              customTooltip={({ percentPassed }) => (
+                                <>{progressTooltipContent(percentPassed, nomination)}</>
+                              )}
+                            />
+                          )}
+                        </FlowbiteTable.Cell>
+                        <FlowbiteTable.Cell>
+                          <MdOutlineHowToVote />
+                        </FlowbiteTable.Cell>
+                      </FlowbiteTable.Row>
+                    ))}
                 </Table.Body>
               </Table>
             </div>
