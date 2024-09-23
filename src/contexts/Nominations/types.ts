@@ -42,4 +42,5 @@ export interface NominationsContextType {
   pendingForNominee: (nominee: AccountId) => Nomination[];
   nominationEventSubscriptions: EventSubscriptions;
   refreshNominations: () => Promise<void>;
+  nominationVotingPeriod: number | undefined;
 }
