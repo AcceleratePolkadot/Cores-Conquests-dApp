@@ -38,7 +38,8 @@ const NominationsList: React.FC = () => {
       searchValue !== ""
         ? nominations.filter(
             (nomination) =>
-              nomination.nominee === searchValue || nomination.nominator === searchValue,
+              nomination.nominee.includes(searchValue) ||
+              nomination.nominator.includes(searchValue),
           )
         : nominations;
 
