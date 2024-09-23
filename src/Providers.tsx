@@ -10,6 +10,7 @@ import { RostersProvider } from "@/contexts/Rosters";
 import { ExtensionAccountsProvider, ExtensionsProvider } from "@w3ux/react-connect-kit";
 import { SnackbarProvider } from "notistack";
 import type React from "react";
+import { RosterConstantsProvider } from "./contexts/RosterConstants";
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -24,15 +25,17 @@ const Providers: React.FC<ProvidersProps> = ({ children }) => {
             <InjectedExtensionsProvider>
               <AccountsProvider>
                 <BlocApiClientProvider>
-                  <BlocksProvider>
-                    <ChainPropertiesProvider>
-                      <BalancesProvider>
-                        <RostersProvider>
-                          <NominationsProvider>{children}</NominationsProvider>
-                        </RostersProvider>
-                      </BalancesProvider>
-                    </ChainPropertiesProvider>
-                  </BlocksProvider>
+                  <RosterConstantsProvider>
+                    <BlocksProvider>
+                      <ChainPropertiesProvider>
+                        <BalancesProvider>
+                          <RostersProvider>
+                            <NominationsProvider>{children}</NominationsProvider>
+                          </RostersProvider>
+                        </BalancesProvider>
+                      </ChainPropertiesProvider>
+                    </BlocksProvider>
+                  </RosterConstantsProvider>
                 </BlocApiClientProvider>
               </AccountsProvider>
             </InjectedExtensionsProvider>

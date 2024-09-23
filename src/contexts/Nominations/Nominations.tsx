@@ -20,9 +20,6 @@ export const NominationsProvider: React.FC<{ children: ReactNode }> = ({ childre
   const { blocApi } = useBlocApiClient();
   const { refreshRosters } = useRosters();
   const [nominations, setNominations] = useState<Nomination[]>([]);
-  const [nominationVotingPeriod, setNominationVotingPeriod] = useState<number | undefined>(
-    undefined,
-  );
 
   const nominationEventSubscriptions: EventSubscriptions = useMemo(
     () => ({
@@ -52,19 +49,11 @@ export const NominationsProvider: React.FC<{ children: ReactNode }> = ({ childre
 
   useEffect(() => {
     refreshNominations();
-    getNominationVotingPeriod();
   }, []);
 
   const refreshNominations = async () => {
     const allNominations = await blocApi.query.Roster.Nominations.getEntries();
     setNominations(allNominations.map((nomination) => nomination.value));
-  };
-
-  const getNominationVotingPeriod = async () => {
-    console.log("Getting voting period");
-    const votingPeriod = await blocApi.constants.Roster.NominationVotingPeriod();
-    console.log("Voting period:", votingPeriod);
-    setNominationVotingPeriod(votingPeriod);
   };
 
   const toRoster = (rosterId: RosterId) => {
@@ -98,7 +87,6 @@ export const NominationsProvider: React.FC<{ children: ReactNode }> = ({ childre
         pendingForNominee,
         nominationEventSubscriptions,
         refreshNominations,
-        nominationVotingPeriod,
       }}
     >
       {children}

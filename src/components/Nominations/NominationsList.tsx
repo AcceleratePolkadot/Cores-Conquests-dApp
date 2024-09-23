@@ -7,6 +7,7 @@ import { useAccounts } from "@/contexts/Accounts";
 import { useBlocks } from "@/contexts/Blocks";
 import { useNominations } from "@/contexts/Nominations";
 import type { Nomination } from "@/contexts/Nominations/types";
+import { useRosterConstants } from "@/contexts/RosterConstants";
 import { useRosters } from "@/contexts/Rosters";
 import { Card, Table as FlowbiteTable } from "flowbite-react";
 import type React from "react";
@@ -17,7 +18,8 @@ const NominationsList: React.FC = () => {
   const { activeRoster } = useRosters();
   const { getAccount } = useAccounts();
   const { currentBlock } = useBlocks();
-  const { toRoster, nominationVotingPeriod } = useNominations();
+  const { toRoster } = useNominations();
+  const { rosterConstants } = useRosterConstants();
   const [nominations, setNominations] = useState<Nomination[]>([]);
   const [filteredNominations, setFilterNominations] = useState<Nomination[]>([]);
   const [currentItems, setCurrentItems] = useState<Nomination[]>([]);
@@ -132,10 +134,10 @@ const NominationsList: React.FC = () => {
                         </div>
                       </FlowbiteTable.Cell>
                       <FlowbiteTable.Cell>
-                        {nominationVotingPeriod && (
+                        {"NominationVotingPeriod" in rosterConstants && (
                           <PeriodProgress
                             periodStart={nomination.nominated_on}
-                            periodDuration={nominationVotingPeriod}
+                            periodDuration={rosterConstants.NominationVotingPeriod as number}
                             currentBlock={currentBlock}
                             theme={{
                               base: "w-full overflow-hidden",
@@ -147,7 +149,9 @@ const NominationsList: React.FC = () => {
                                 ? "lime"
                                 : period.percentPassed <= 75
                                   ? "yellow"
-                                  : "red"
+                                  : period.percentPassed === 100
+                                    ? "gray"
+                                    : "red"
                             }
                             labelText
                             labelProgress={({ percentPassed }) => percentPassed !== 100}
