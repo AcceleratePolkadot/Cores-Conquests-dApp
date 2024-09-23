@@ -1,4 +1,5 @@
 import { MembersList } from "@/components/Members";
+import { NominationsList } from "@/components/Nominations";
 import { RostersList } from "@/components/Rosters";
 import RosterDetail from "@/components/Rosters/RosterDetail";
 import { useRosters } from "@/contexts/Rosters";
@@ -32,17 +33,16 @@ const RostersContent: React.FC = () => {
             <div className="col-span-full xl:col-span-2 2xl:col-span-1">
               <div className="space-y-2 xl:space-y-4 2xl:space-y-6">
                 <RosterDetail />
-                <Card>
-                  <h3 className="mb-1 font-bold text-2xl text-gray-900 dark:text-white">
-                    Nominations
-                  </h3>
-                </Card>
               </div>
             </div>
 
-            <div className="col-span-full xl:col-span-3 2xl:col-span-3">
+            <div className="col-span-full space-y-2 xl:col-span-3 xl:space-y-4 2xl:col-span-3 2xl:space-y-6">
               <Card>
                 <MembersList />
+              </Card>
+
+              <Card>
+                <NominationsList />
               </Card>
             </div>
 
