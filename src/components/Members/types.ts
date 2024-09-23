@@ -1,3 +1,3 @@
-import type { ImportedAccount } from "@w3ux/react-connect-kit/types";
+import type { Account } from "@/contexts/Accounts/types";
 
-export type Member = ImportedAccount;
+export type Member = Account;

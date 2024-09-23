@@ -1,5 +1,3 @@
-"use client";
-
 import SearchFilters from "@/components/SearchFilters";
 import Table from "@/components/Table";
 import TruncatedHash from "@/components/TruncatedHash";
