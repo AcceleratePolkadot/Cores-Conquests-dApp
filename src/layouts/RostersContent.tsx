@@ -1,3 +1,4 @@
+import { ExpulsionProposalsList } from "@/components/ExpulsionProposals";
 import { MembersList } from "@/components/Members";
 import { NominationsList } from "@/components/Nominations";
 import { RostersList } from "@/components/Rosters";
@@ -48,9 +49,7 @@ const RostersContent: React.FC = () => {
 
             <div className="col-span-full">
               <Card>
-                <h3 className="mb-1 font-bold text-2xl text-gray-900 dark:text-white">
-                  Expulsion Proposals
-                </h3>
+                <ExpulsionProposalsList />
               </Card>
             </div>
           </>

@@ -37,6 +37,8 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@jonasdoesthings/react-activity-rings": "^1.1.2",
+    "@nivo/bar": "^0.87.0",
     "@polkadot-api/descriptors": "file:.papi/descriptors",
     "@polkadot/api": "12.4.2",
     "@polkadot/util": "^13.0.2",
