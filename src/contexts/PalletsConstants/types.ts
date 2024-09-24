@@ -13,4 +13,5 @@ export type PalletsConstantsList = DeepPartial<
 
 export interface PalletsConstantsContextType {
   palletsConstants: PalletsConstants;
+  constants: (pallet: keyof BlocConstants) => DeepPartial<BlocConstants[keyof BlocConstants]>;
 }

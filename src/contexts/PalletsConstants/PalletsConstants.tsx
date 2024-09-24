@@ -44,10 +44,15 @@ export const PalletsConstantsProvider: React.FC<{
     setPalletsConstants(constantValues);
   };
 
+  const constants = (pallet: keyof BlocConstants) => {
+    return palletsConstants[pallet] ?? {};
+  };
+
   return (
     <PalletsConstantsContext.Provider
       value={{
         palletsConstants,
+        constants,
       }}
     >
       {children}

@@ -1,19 +1,22 @@
+import { NominationAdd } from "@/components/Nominations";
 import TruncatedHash from "@/components/TruncatedHash";
 import { Polkicon, Rosticon } from "@/components/identicons";
 import { toApTitleCase } from "@/helpers/typography";
 import { Button, Card, Tooltip } from "flowbite-react";
 import type { FC } from "react";
 import { FaCheck } from "react-icons/fa";
-import { FaCirclePlus } from "react-icons/fa6";
 import { GiCrossedBones, GiHeartPlus } from "react-icons/gi";
 
 import { useAccounts } from "@/contexts/Accounts";
+import { usePalletsConstants } from "@/contexts/PalletsConstants";
 import { useRosters } from "@/contexts/Rosters";
 
 const RosterDetail: FC = () => {
   const formatter = new Intl.NumberFormat("en-US");
   const { activeRoster } = useRosters();
   const { activeAccount } = useAccounts();
+  const { constants } = usePalletsConstants();
+  const rosterConstants = constants("Roster");
 
   const onDeactivateRoster = () => {
     console.log("Deactivate Roster");
@@ -21,6 +24,15 @@ const RosterDetail: FC = () => {
 
   const onActivateRoster = () => {
     console.log("Activate Roster");
+  };
+
+  const canAddNomination = () => {
+    return !(
+      !activeRoster ||
+      ("MembersMax" in rosterConstants &&
+        rosterConstants.MembersMax &&
+        activeRoster.members.length >= rosterConstants.MembersMax)
+    );
   };
 
   return (
@@ -33,11 +45,7 @@ const RosterDetail: FC = () => {
             {toApTitleCase(activeRoster.title.asText())}
           </h2>
           <div className="relative ml-auto">
-            <Tooltip content="Add Nomination" placement="right">
-              <Button gradientDuoTone="pinkToOrange" size="xs">
-                <FaCirclePlus />
-              </Button>
-            </Tooltip>
+            <NominationAdd />
           </div>
         </div>
         <dl className="-my-3 divide-y divide-gray-200 py-1 text-sm leading-6 dark:divide-gray-700">
