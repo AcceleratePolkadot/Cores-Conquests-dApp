@@ -24,7 +24,7 @@ const TableComponent = <T,>({
   ...props
 }: PropsWithChildren & TableProps & TablePaginationProps<T>) => (
   <>
-    <div className="overflow-x-auto">
+    <div className="overflow-x-visible">
       <FlowbiteTable theme={customTheme} {...props}>
         {children}
       </FlowbiteTable>
