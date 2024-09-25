@@ -65,6 +65,20 @@ const flowbiteTheme: CustomFlowbiteTheme = {
         "group flex w-full items-center rounded-lg p-2 text-base font-medium text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700",
     },
   },
+  tabs: {
+    tablist: {
+      tabitem: {
+        base: "flex items-center justify-center rounded-t-lg p-4 text-sm font-medium first:ml-0 disabled:cursor-not-allowed disabled:text-gray-400 disabled:dark:text-gray-500",
+        variant: {
+          underline: {
+            active: {
+              on: "active rounded-t-lg border-b-2 border-slate-600 text-slate-600 dark:border-slate-500 dark:text-slate-500",
+            },
+          },
+        },
+      },
+    },
+  },
   textarea: {
     base: "block w-full text-sm p-4 rounded-lg border disabled:cursor-not-allowed disabled:opacity-50",
   },

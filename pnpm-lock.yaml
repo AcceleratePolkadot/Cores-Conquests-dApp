@@ -30,6 +30,9 @@ importers:
       '@polkadot/util':
         specifier: ^13.0.2
         version: 13.0.2
+      '@types/pluralize':
+        specifier: ^0.0.33
+        version: 0.0.33
       '@w3ux/extension-assets':
         specifier: ^0.3.1
         version: 0.3.1(react@18.3.1)
@@ -57,6 +60,9 @@ importers:
       notistack:
         specifier: ^3.0.1
         version: 3.0.1(csstype@3.1.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      pluralize:
+        specifier: ^8.0.0
+        version: 8.0.0
       polkadot-api:
         specifier: ^1.2.1
         version: 1.2.1(@swc/core@1.7.26)(jiti@1.21.6)(postcss@8.4.45)(rxjs@7.8.1)(smoldot@2.0.22)(yaml@2.5.1)
@@ -1320,6 +1326,9 @@ packages:
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
+
+  '@types/pluralize@0.0.33':
+    resolution: {integrity: sha512-JOqsl+ZoCpP4e8TDke9W79FDcSgPAR0l6pixx2JHkhnRjvShyYiAYw2LVsnA7K08Y6DeOnaU6ujmENO4os/cYg==}
 
   '@types/prop-types@15.7.12':
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
@@ -2749,6 +2758,10 @@ packages:
 
   pkg-types@1.2.0:
     resolution: {integrity: sha512-+ifYuSSqOQ8CqP4MbZA5hDpb97n3E8SVWdJe+Wms9kj745lmd3b7EZJiqvmLwAlmRfjrI7Hi5z3kdBJ93lFNPA==}
+
+  pluralize@8.0.0:
+    resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}
+    engines: {node: '>=4'}
 
   polkadot-api@1.2.1:
     resolution: {integrity: sha512-8fuc87sai3gZhzwVyCtySR5kKuo0td/PM+XIOkVL1/owutaD69W3V0+w9I5Gm4PCBifpry5yh3kaGvW8N1XQwg==}
@@ -4859,6 +4872,8 @@ snapshots:
 
   '@types/normalize-package-data@2.4.4': {}
 
+  '@types/pluralize@0.0.33': {}
+
   '@types/prop-types@15.7.12': {}
 
   '@types/react-dom@18.3.0':
@@ -6338,6 +6353,8 @@ snapshots:
       confbox: 0.1.7
       mlly: 1.7.1
       pathe: 1.1.2
+
+  pluralize@8.0.0: {}
 
   polkadot-api@1.2.1(@swc/core@1.7.26)(jiti@1.21.6)(postcss@8.4.45)(rxjs@7.8.1)(smoldot@2.0.22)(yaml@2.5.1):
     dependencies:

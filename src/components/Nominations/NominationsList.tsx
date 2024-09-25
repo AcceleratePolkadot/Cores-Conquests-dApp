@@ -1,3 +1,4 @@
+import { NominationVote } from "@/components/Nominations";
 import PeriodProgress from "@/components/PeriodProgress";
 import SearchFilters from "@/components/SearchFilters";
 import Table from "@/components/Table";
@@ -11,7 +12,6 @@ import { useRosters } from "@/contexts/Rosters";
 import { Card, Table as FlowbiteTable } from "flowbite-react";
 import type React from "react";
 import { useEffect, useState } from "react";
-import { MdOutlineHowToVote } from "react-icons/md";
 
 const NominationsList: React.FC = () => {
   const { activeRoster } = useRosters();
@@ -172,7 +172,7 @@ const NominationsList: React.FC = () => {
                             )}
                           </FlowbiteTable.Cell>
                           <FlowbiteTable.Cell>
-                            <MdOutlineHowToVote />
+                            <NominationVote nomination={nomination} />
                           </FlowbiteTable.Cell>
                         </FlowbiteTable.Row>
                       ))}
