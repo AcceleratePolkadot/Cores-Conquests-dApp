@@ -1,3 +1,4 @@
+import { ExpulsionProposalAdd } from "@/components/ExpulsionProposals";
 import SearchFilters from "@/components/SearchFilters";
 import Table from "@/components/Table";
 import TruncatedHash from "@/components/TruncatedHash";
@@ -11,7 +12,6 @@ import useBalanceFormatter from "@/hooks/useBalanceFormatter";
 import { Card, Table as FlowbiteTable } from "flowbite-react";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import { FaTrashCan } from "react-icons/fa6";
 
 import type { Member } from "./types";
 
@@ -124,7 +124,7 @@ const MembersList: React.FC = () => {
                         </div>
                       </FlowbiteTable.Cell>
                       <FlowbiteTable.Cell>
-                        <FaTrashCan />
+                        <ExpulsionProposalAdd subject={member.address} />
                       </FlowbiteTable.Cell>
                     </FlowbiteTable.Row>
                   ))}

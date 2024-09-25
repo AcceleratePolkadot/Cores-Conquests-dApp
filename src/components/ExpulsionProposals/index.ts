@@ -1,3 +1,4 @@
+import ExpulsionProposalAdd from "./ExpulsionProposalAdd";
 import ExpulsionProposalsList from "./ExpulsionProposalsList";
 
-export { ExpulsionProposalsList };
+export { ExpulsionProposalAdd, ExpulsionProposalsList };
