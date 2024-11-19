@@ -172,8 +172,28 @@ const ExpulsionProposalAddModal: React.FC<ExpulsionProposalAddModalProps> = ({
   }, [reason]);
 
   const onSubmit = (data: { reason: string }) => {
-    console.log(data.reason);
-    handleClose();
+    if (activeAccount && activeRoster) {
+      const tx = blocApi.tx.Roster.expulsion_proposal_new({
+        subject,
+        reason: Binary.fromText(data.reason),
+        roster_id: activeRoster.id,
+      });
+      tx.signSubmitAndWatch(activeAccount.polkadotSigner).subscribe({
+        next: (result) => {
+          console.log("Next Handler");
+          console.log(result);
+        },
+        error: (error) => {
+          console.error("Error Handler");
+          console.error(error);
+        },
+        complete: () => {
+          console.log("Complete Handler");
+          console.log("Expulsion proposal added");
+        },
+      });
+      handleClose();
+    }
   };
 
   const handleClose = () => {
