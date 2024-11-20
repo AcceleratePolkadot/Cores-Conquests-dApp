@@ -4,6 +4,7 @@ import { StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 
 import { App } from "@/App";
+import FlowbiteThemeWrapper from "@/components/FlowbiteThemeWrapper";
 
 import "./index.css";
 
@@ -20,7 +21,9 @@ if (import.meta.env.MODE === "test") {
           <ReactiveDotProvider config={reactiveDotConfig}>
             <ChainProvider chainId="bloc">
               <Suspense fallback={<div>Loading...</div>}>
-                <App />
+                <FlowbiteThemeWrapper>
+                  <App />
+                </FlowbiteThemeWrapper>
               </Suspense>
             </ChainProvider>
           </ReactiveDotProvider>
@@ -33,7 +36,9 @@ if (import.meta.env.MODE === "test") {
       <ReactiveDotProvider config={reactiveDotConfig}>
         <ChainProvider chainId="bloc">
           <Suspense fallback={<div>Loading...</div>}>
-            <App />
+            <FlowbiteThemeWrapper>
+              <App />
+            </FlowbiteThemeWrapper>
           </Suspense>
         </ChainProvider>
       </ReactiveDotProvider>
