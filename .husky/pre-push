@@ -1,1 +1,1 @@
-pnpm run lint:changed
+bun run check:changed && bun run test && bun run build

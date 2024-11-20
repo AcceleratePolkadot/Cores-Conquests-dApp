@@ -41,3 +41,8 @@ coverage
 
 # PWA dev files
 /dev-dist
+
+# tsc -b files
+*.tsbuildinfo
+vite.config.d.ts
+vite.config.js
