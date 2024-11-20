@@ -41,6 +41,9 @@
     "bun": "^1.1.x"
   },
   "dependencies": {
+    "@polkadot-api/descriptors": "file:.papi/descriptors",
+    "@reactive-dot/react": "^0.26.2",
+    "polkadot-api": "^1.7.6",
     "react": "^18.x",
     "react-dom": "^18.x"
   },

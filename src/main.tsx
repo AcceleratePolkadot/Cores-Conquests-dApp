@@ -1,4 +1,6 @@
-import { StrictMode } from "react";
+import reactiveDotConfig from "@/config/reactive-dot";
+import { ChainProvider, ReactiveDotProvider } from "@reactive-dot/react";
+import { StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 
 import { App } from "@/App";
@@ -15,14 +17,26 @@ if (import.meta.env.MODE === "test") {
     .then(() => {
       root.render(
         <StrictMode>
-          <App />
+          <ReactiveDotProvider config={reactiveDotConfig}>
+            <ChainProvider chainId="bloc">
+              <Suspense fallback={<div>Loading...</div>}>
+                <App />
+              </Suspense>
+            </ChainProvider>
+          </ReactiveDotProvider>
         </StrictMode>,
       );
     });
 } else {
   root.render(
     <StrictMode>
-      <App />
+      <ReactiveDotProvider config={reactiveDotConfig}>
+        <ChainProvider chainId="bloc">
+          <Suspense fallback={<div>Loading...</div>}>
+            <App />
+          </Suspense>
+        </ChainProvider>
+      </ReactiveDotProvider>
     </StrictMode>,
   );
 }

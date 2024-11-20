@@ -1,0 +1,10 @@
+{
+  "version": 0,
+  "descriptorPath": ".papi/descriptors",
+  "entries": {
+    "bloc": {
+      "wsUrl": "ws://127.0.0.1:9001",
+      "metadata": ".papi/metadata/bloc.scale"
+    }
+  }
+}
