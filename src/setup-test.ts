@@ -1,15 +1,15 @@
-import '@testing-library/jest-dom'
+import "@testing-library/jest-dom";
 
-import { server } from '@/__mocks__/server'
+import { server } from "@/__mocks__/server";
 
 beforeAll(() => {
-  server.listen({ onUnhandledRequest: 'error' })
-})
+  server.listen({ onUnhandledRequest: "error" });
+});
 
 afterEach(() => {
-  server.resetHandlers()
-})
+  server.resetHandlers();
+});
 
 afterAll(() => {
-  server.close()
-})
+  server.close();
+});

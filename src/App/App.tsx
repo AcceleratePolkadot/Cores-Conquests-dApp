@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useState } from "react";
 
-import './App.css'
-import reactLogo from './react.svg'
+import "./App.css";
+import reactLogo from "./react.svg";
 
 const App = () => {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   return (
     <div className="App">
@@ -21,14 +21,16 @@ const App = () => {
       </div>
       <h1>Vite + React/TS = EruptionJS</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
+        <button type="button" onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
       </div>
       <p className="read-the-docs">Click on the Vite, React and Eruption logos to learn more</p>
     </div>
-  )
-}
+  );
+};
 
-export { App }
+export { App };
