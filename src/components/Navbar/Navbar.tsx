@@ -1,6 +1,7 @@
 import { DarkThemeToggle, Navbar as FlowbiteNavbar } from "flowbite-react";
 import type { FC } from "react";
-
+import NavbarAccounts from "./NavbarAccounts";
+import NavbarWallets from "./NavbarWallets";
 const Navbar: FC = () => {
   return (
     <FlowbiteNavbar fluid>
@@ -20,6 +21,8 @@ const Navbar: FC = () => {
           </div>
           <div className="flex items-center lg:gap-3">
             <div className="flex items-center">
+              <NavbarWallets />
+              <NavbarAccounts />
               <DarkThemeToggle />
             </div>
           </div>
