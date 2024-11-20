@@ -43,6 +43,7 @@
   "dependencies": {
     "@polkadot-api/descriptors": "file:.papi/descriptors",
     "@reactive-dot/react": "^0.26.2",
+    "flowbite-react": "^0.10.2",
     "polkadot-api": "^1.7.6",
     "react": "^18.x",
     "react-dom": "^18.x"
