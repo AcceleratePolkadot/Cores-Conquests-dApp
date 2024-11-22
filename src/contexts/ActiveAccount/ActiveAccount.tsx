@@ -10,7 +10,13 @@ export const ActiveAccountContext = createContext<ActiveAccountContextInterface>
   defaultActiveAccountContext,
 );
 
-export const useActiveAccount = () => useContext(ActiveAccountContext);
+export const useActiveAccount = () => {
+  const context = useContext(ActiveAccountContext);
+  if (!context) {
+    throw new Error("useActiveAccount must be used within a ActiveAccountProvider");
+  }
+  return context;
+};
 
 export const ActiveAccountProvider = ({
   children,
