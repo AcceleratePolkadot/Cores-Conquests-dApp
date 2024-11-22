@@ -1,21 +1,25 @@
 import { useActiveAccount } from "@/contexts/ActiveAccount";
+import { useNominations } from "@/contexts/Nominations";
 import type { Roster } from "@/contexts/Rosters/types";
 import { toApTitleCase } from "@/utils/typography";
 import { Sidebar } from "flowbite-react";
 import type React from "react";
 import { useEffect, useState } from "react";
-import { BsFillRocketTakeoffFill } from "react-icons/bs";
-import { FaRegIdBadge } from "react-icons/fa";
+import { BsFillRocketTakeoffFill, BsHourglassSplit } from "react-icons/bs";
+import { FaRegIdBadge, FaUserCheck } from "react-icons/fa";
 import { HiChevronDown } from "react-icons/hi";
 import { MdHorizontalRule } from "react-icons/md";
 
 import { useRosters } from "@/contexts/Rosters";
 
 const SidebarRosters: React.FC = () => {
-  const { foundedBy, memberOf, activeRoster, setActiveRoster } = useRosters();
+  const { foundedBy, memberOf, activeRoster, setActiveRoster, getRoster } = useRosters();
+  const { approvedForNominee, pendingForNominee } = useNominations();
   const { activeAccount } = useActiveAccount();
   const [foundedRosters, setFoundedRosters] = useState<Roster[]>([]);
   const [joinedRosters, setJoinedRosters] = useState<Roster[]>([]);
+  const [approvedForRosters, setApprovedForRosters] = useState<Roster[]>([]);
+  const [pendingForRosters, setPendingForRosters] = useState<Roster[]>([]);
 
   useEffect(() => {
     if (activeAccount) {
@@ -23,11 +27,23 @@ const SidebarRosters: React.FC = () => {
       setJoinedRosters(
         memberOf(activeAccount).filter((roster) => !foundedBy(activeAccount).includes(roster)),
       );
+      setApprovedForRosters(
+        approvedForNominee(activeAccount)
+          .map((nomination) => getRoster(nomination.roster))
+          .filter((roster) => roster !== undefined),
+      );
+      setPendingForRosters(
+        pendingForNominee(activeAccount)
+          .map((nomination) => getRoster(nomination.roster))
+          .filter((roster) => roster !== undefined),
+      );
     } else {
       setFoundedRosters([]);
       setJoinedRosters([]);
+      setApprovedForRosters([]);
+      setPendingForRosters([]);
     }
-  }, [activeAccount, foundedBy, memberOf]);
+  }, [activeAccount, foundedBy, memberOf, approvedForNominee, pendingForNominee, getRoster]);
 
   const handleRosterClick = (roster: Roster) => {
     setActiveRoster(roster);
@@ -52,6 +68,20 @@ const SidebarRosters: React.FC = () => {
           label="Joined"
           icon={FaRegIdBadge}
           rosters={joinedRosters}
+          activeRoster={activeRoster}
+          handleRosterClick={handleRosterClick}
+        />
+        <RosterGroup
+          label="Approved"
+          icon={FaUserCheck}
+          rosters={approvedForRosters}
+          activeRoster={activeRoster}
+          handleRosterClick={handleRosterClick}
+        />
+        <RosterGroup
+          label="Pending"
+          icon={BsHourglassSplit}
+          rosters={pendingForRosters}
           activeRoster={activeRoster}
           handleRosterClick={handleRosterClick}
         />

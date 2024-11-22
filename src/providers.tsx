@@ -1,4 +1,5 @@
 import { ActiveAccountProvider } from "@/contexts/ActiveAccount";
+import { NominationsProvider } from "@/contexts/Nominations";
 import { RostersProvider } from "@/contexts/Rosters";
 import type React from "react";
 import { Suspense } from "react";
@@ -11,7 +12,9 @@ const Providers: React.FC<ProvidersProps> = ({ children }) => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <ActiveAccountProvider>
-        <RostersProvider>{children}</RostersProvider>
+        <RostersProvider>
+          <NominationsProvider>{children}</NominationsProvider>
+        </RostersProvider>
       </ActiveAccountProvider>
     </Suspense>
   );
