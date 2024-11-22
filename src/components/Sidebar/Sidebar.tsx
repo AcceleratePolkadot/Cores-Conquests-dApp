@@ -1,5 +1,6 @@
 import { Sidebar as FlowbiteSidebar } from "flowbite-react";
 import type { FC } from "react";
+import SidebarRosters from "./SidebarRosters";
 
 const Sidebar: FC = () => {
   return (
@@ -7,11 +8,7 @@ const Sidebar: FC = () => {
       <div className="flex h-full flex-col justify-between py-2">
         <div>
           <FlowbiteSidebar.Items>
-            <FlowbiteSidebar.ItemGroup>
-              <FlowbiteSidebar.Item className="pointer-events-none p-0 text-base uppercase [&>*:first-child]:px-0">
-                <span className="text-gray-500">Sidebar</span>
-              </FlowbiteSidebar.Item>
-            </FlowbiteSidebar.ItemGroup>
+            <SidebarRosters />
           </FlowbiteSidebar.Items>
         </div>
       </div>
