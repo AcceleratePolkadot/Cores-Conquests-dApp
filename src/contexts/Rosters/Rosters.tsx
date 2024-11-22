@@ -21,7 +21,7 @@ export const RostersProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [activeRoster, setActiveRoster] = useState<Roster | undefined>(undefined);
 
   const [_rosters, refreshRosters] = useLazyLoadQueryWithRefresh((builder) =>
-    builder.readStorages("Roster", "Rosters", []),
+    builder.readStorageEntries("Roster", "Rosters", []),
   );
 
   const [rosters, setRosters] = useState<Roster[]>([]);
@@ -29,7 +29,14 @@ export const RostersProvider: React.FC<{ children: ReactNode }> = ({ children })
   const currentActiveAccount = useRef(activeAccount);
 
   useEffect(() => {
-    setRosters(_rosters.filter((roster) => roster !== undefined));
+    const refresh = setInterval(() => {
+      refreshRosters();
+    }, 10000);
+    return () => clearInterval(refresh);
+  }, [refreshRosters]);
+
+  useEffect(() => {
+    setRosters(_rosters.map((roster) => roster.value));
   }, [_rosters]);
 
   useEffect(() => {
