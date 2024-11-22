@@ -1,4 +1,5 @@
 import reactiveDotConfig from "@/config/reactive-dot";
+import { ActiveAccountProvider } from "@/contexts/ActiveAccount";
 import { ChainProvider, ReactiveDotProvider } from "@reactive-dot/react";
 import { StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
@@ -21,9 +22,11 @@ if (import.meta.env.MODE === "test") {
           <ReactiveDotProvider config={reactiveDotConfig}>
             <ChainProvider chainId="bloc">
               <Suspense fallback={<div>Loading...</div>}>
-                <FlowbiteThemeWrapper>
-                  <App />
-                </FlowbiteThemeWrapper>
+                <ActiveAccountProvider>
+                  <FlowbiteThemeWrapper>
+                    <App />
+                  </FlowbiteThemeWrapper>
+                </ActiveAccountProvider>
               </Suspense>
             </ChainProvider>
           </ReactiveDotProvider>
@@ -36,9 +39,11 @@ if (import.meta.env.MODE === "test") {
       <ReactiveDotProvider config={reactiveDotConfig}>
         <ChainProvider chainId="bloc">
           <Suspense fallback={<div>Loading...</div>}>
-            <FlowbiteThemeWrapper>
-              <App />
-            </FlowbiteThemeWrapper>
+            <ActiveAccountProvider>
+              <FlowbiteThemeWrapper>
+                <App />
+              </FlowbiteThemeWrapper>
+            </ActiveAccountProvider>
           </Suspense>
         </ChainProvider>
       </ReactiveDotProvider>
