@@ -1,16 +1,24 @@
-import ContentPane from "@/components/ContentPane";
-import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
+import { StrictMode } from "react";
+
+import FlowbiteThemeWrapper from "@/components/FlowbiteThemeWrapper";
+import reactiveDotConfig from "@/config/reactive-dot";
+import Home from "@/pages/Home";
+import Providers from "@/providers";
+import { ChainProvider, ReactiveDotProvider } from "@reactive-dot/react";
 
 const App = () => {
   return (
-    <div className="App">
-      <Navbar />
-      <div className="flex items-start pt-16">
-        <Sidebar />
-        <ContentPane />
-      </div>
-    </div>
+    <StrictMode>
+      <FlowbiteThemeWrapper>
+        <ReactiveDotProvider config={reactiveDotConfig}>
+          <ChainProvider chainId="bloc">
+            <Providers>
+              <Home />
+            </Providers>
+          </ChainProvider>
+        </ReactiveDotProvider>
+      </FlowbiteThemeWrapper>
+    </StrictMode>
   );
 };
 

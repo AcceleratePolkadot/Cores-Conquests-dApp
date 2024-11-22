@@ -1,11 +1,6 @@
-import reactiveDotConfig from "@/config/reactive-dot";
-import { ActiveAccountProvider } from "@/contexts/ActiveAccount";
-import { ChainProvider, ReactiveDotProvider } from "@reactive-dot/react";
-import { StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 
 import { App } from "@/App";
-import FlowbiteThemeWrapper from "@/components/FlowbiteThemeWrapper";
 
 import "./index.css";
 
@@ -17,38 +12,10 @@ if (import.meta.env.MODE === "test") {
       worker.start();
     })
     .then(() => {
-      root.render(
-        <StrictMode>
-          <ReactiveDotProvider config={reactiveDotConfig}>
-            <ChainProvider chainId="bloc">
-              <Suspense fallback={<div>Loading...</div>}>
-                <ActiveAccountProvider>
-                  <FlowbiteThemeWrapper>
-                    <App />
-                  </FlowbiteThemeWrapper>
-                </ActiveAccountProvider>
-              </Suspense>
-            </ChainProvider>
-          </ReactiveDotProvider>
-        </StrictMode>,
-      );
+      root.render(<App />);
     });
 } else {
-  root.render(
-    <StrictMode>
-      <ReactiveDotProvider config={reactiveDotConfig}>
-        <ChainProvider chainId="bloc">
-          <Suspense fallback={<div>Loading...</div>}>
-            <ActiveAccountProvider>
-              <FlowbiteThemeWrapper>
-                <App />
-              </FlowbiteThemeWrapper>
-            </ActiveAccountProvider>
-          </Suspense>
-        </ChainProvider>
-      </ReactiveDotProvider>
-    </StrictMode>,
-  );
+  root.render(<App />);
 }
 
 // Uncomment if you want to see the Lighthouse report in the console
