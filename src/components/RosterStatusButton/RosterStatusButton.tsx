@@ -1,6 +1,7 @@
 import { Button } from "flowbite-react";
 import type React from "react";
 
+import { useRosters } from "@/contexts/Rosters/Rosters";
 import type { Roster } from "@/contexts/Rosters/types";
 import type { WalletAccount } from "@reactive-dot/core/wallets.js";
 
@@ -14,12 +15,13 @@ interface RosterStatusButtonProps {
 }
 
 export const RosterStatusButton: React.FC<RosterStatusButtonProps> = ({ roster, account }) => {
-  const [deactivateRosterState, deactivateRoster] = useMutation(
+  const { refreshRosters } = useRosters();
+  const [_, deactivateRoster] = useMutation(
     (tx) => tx.Roster.roster_deactivate({ roster_id: roster.id }),
     { signer: account.polkadotSigner },
   );
 
-  const [activateRosterState, activateRoster] = useMutation(
+  const [__, activateRoster] = useMutation(
     (tx) => tx.Roster.roster_activate({ roster_id: roster.id }),
     { signer: account.polkadotSigner },
   );
@@ -42,6 +44,7 @@ export const RosterStatusButton: React.FC<RosterStatusButtonProps> = ({ roster, 
         } else {
           console.error("Transaction failed", { id: event.id });
         }
+        refreshRosters();
         break;
       default:
         console.log("Transaction pending", { id: event.id });

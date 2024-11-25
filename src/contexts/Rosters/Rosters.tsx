@@ -46,6 +46,18 @@ export const RostersProvider: React.FC<{ children: ReactNode }> = ({ children })
   }, [_rosters]);
 
   useEffect(() => {
+    // If Rosters change we might need to update the active roster
+    if (activeRoster) {
+      const roster = rosters.find((roster) => roster.id.asHex() === activeRoster.id.asHex());
+      if (!roster) {
+        setActiveRoster(undefined);
+      } else if (!isEqual([roster], [activeRoster])) {
+        setActiveRoster(roster);
+      }
+    }
+  }, [rosters, activeRoster]);
+
+  useEffect(() => {
     // Reset active roster if the active account changes
     if (!activeAccount || activeAccount.address !== currentActiveAccount.current?.address) {
       setActiveRoster(undefined);
