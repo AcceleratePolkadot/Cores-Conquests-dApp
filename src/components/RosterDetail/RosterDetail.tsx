@@ -1,7 +1,7 @@
-import { Button, Card, Tooltip } from "flowbite-react";
+import { Card, Tooltip } from "flowbite-react";
 import type { FC } from "react";
 import { FaCheck } from "react-icons/fa";
-import { GiCrossedBones, GiHeartPlus } from "react-icons/gi";
+import { GiCrossedBones } from "react-icons/gi";
 
 import Rosticon from "@/components/Rosticon";
 import TruncatedHash from "@/components/TruncatedHash";
@@ -10,18 +10,12 @@ import { useRosters } from "@/contexts/Rosters";
 import { toApTitleCase } from "@/utils/typography";
 import { Polkicon } from "@w3ux/react-polkicon";
 
+import RosterStatusButton from "@/components/RosterStatusButton";
+
 const RosterDetail: FC = () => {
   const formatter = new Intl.NumberFormat("en-US");
   const { activeRoster } = useRosters();
   const { activeAccount } = useActiveAccount();
-
-  const onDeactivateRoster = () => {
-    console.log("Deactivate Roster");
-  };
-
-  const onActivateRoster = () => {
-    console.log("Activate Roster");
-  };
 
   return (
     activeRoster && (
@@ -73,20 +67,8 @@ const RosterDetail: FC = () => {
             </dd>
           </div>
         </dl>
-        {activeRoster.founder === activeAccount?.address && (
-          <div className="flex justify-center space-x-4 p-6">
-            {activeRoster.status.type === "Active" ? (
-              <Button onClick={onDeactivateRoster} size="lg" gradientMonochrome="failure">
-                <GiCrossedBones className="mr-2 h-6 w-6" /> Deactivate
-              </Button>
-            ) : (
-              <>
-                <Button onClick={onActivateRoster} size="lg" gradientMonochrome="success">
-                  <GiHeartPlus className="mr-2 h-4 w-4" /> Re-Activate
-                </Button>
-              </>
-            )}
-          </div>
+        {activeRoster && activeAccount && (
+          <RosterStatusButton roster={activeRoster} account={activeAccount} />
         )}
       </Card>
     )
