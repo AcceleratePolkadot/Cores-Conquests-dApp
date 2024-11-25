@@ -5,6 +5,7 @@ import type React from "react";
 import { type ReactNode, createContext, useContext, useEffect, useRef, useState } from "react";
 import { defaultRostersContext } from "./defaults";
 import type { Roster, RosterId, RostersContextType } from "./types";
+import { isEqual } from "./utils";
 
 const RostersContext = createContext<RostersContextType>(defaultRostersContext);
 
@@ -27,6 +28,7 @@ export const RostersProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [rosters, setRosters] = useState<Roster[]>([]);
 
   const currentActiveAccount = useRef(activeAccount);
+  const currentRosters = useRef<Roster[]>([]);
 
   useEffect(() => {
     const refresh = setInterval(() => {
@@ -36,7 +38,11 @@ export const RostersProvider: React.FC<{ children: ReactNode }> = ({ children })
   }, [refreshRosters]);
 
   useEffect(() => {
-    setRosters(_rosters.map((roster) => roster.value));
+    const $rosters = _rosters.map((roster) => roster.value);
+    if (!isEqual($rosters, currentRosters.current)) {
+      currentRosters.current = $rosters;
+      setRosters($rosters);
+    }
   }, [_rosters]);
 
   useEffect(() => {
