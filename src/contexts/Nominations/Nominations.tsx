@@ -6,6 +6,7 @@ import type React from "react";
 import { type ReactNode, createContext, useContext, useEffect, useRef, useState } from "react";
 import { defaultNominationsContext } from "./defaults";
 import type { Nomination, NominationsContextType } from "./types";
+import { isEqual } from "./utils";
 
 const NominationsContext = createContext<NominationsContextType>(defaultNominationsContext);
 
@@ -34,7 +35,11 @@ export const NominationsProvider: React.FC<{ children: ReactNode }> = ({ childre
   }, [refreshNominations]);
 
   useEffect(() => {
-    setNominations(_nominations.map((nomination) => nomination.value));
+    const $nominations = _nominations.map((nomination) => nomination.value);
+    if (!isEqual($nominations, currentNominations.current)) {
+      currentNominations.current = $nominations;
+      setNominations($nominations);
+    }
   }, [_nominations]);
 
   useEffect(() => {
