@@ -42,16 +42,19 @@
   },
   "dependencies": {
     "@polkadot-api/descriptors": "file:.papi/descriptors",
+    "@polkadot/util": "^13.2.3",
     "@reactive-dot/react": "^0.26.2",
     "@w3ux/extension-assets": "^1.0.0-beta.1",
     "@w3ux/react-polkicon": "^2.0.1-alpha.0",
     "@w3ux/utils": "^1.1.1-beta.11",
+    "bignumber.js": "^9.1.2",
     "clsx": "^2.1.1",
     "flowbite-react": "^0.10.2",
     "lodash": "^4.17.21",
     "polkadot-api": "^1.7.6",
     "react": "^18.x",
-    "react-dom": "^18.x"
+    "react-dom": "^18.x",
+    "react-paginate": "^8.2.0"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
