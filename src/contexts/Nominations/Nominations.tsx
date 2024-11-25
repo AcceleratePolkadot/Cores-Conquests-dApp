@@ -1,6 +1,6 @@
+import type { Address } from "@/contexts/ActiveAccount/types";
 import { useRosters } from "@/contexts/Rosters";
 import type { RosterId } from "@/contexts/Rosters/types";
-import type { WalletAccount } from "@reactive-dot/core/wallets.js";
 import { useLazyLoadQueryWithRefresh } from "@reactive-dot/react";
 import type React from "react";
 import { type ReactNode, createContext, useContext, useEffect, useRef, useState } from "react";
@@ -54,19 +54,19 @@ export const NominationsProvider: React.FC<{ children: ReactNode }> = ({ childre
     return nominations.filter((nomination) => nomination.roster.asHex() === rosterId.asHex());
   };
 
-  const forNominee = (nominee: WalletAccount) => {
-    return nominations.filter((nomination) => nomination.nominee === nominee.address);
+  const forNominee = (nominee: Address) => {
+    return nominations.filter((nomination) => nomination.nominee === nominee);
   };
 
-  const byNominator = (nominator: WalletAccount) => {
-    return nominations.filter((nomination) => nomination.nominator === nominator.address);
+  const byNominator = (nominator: Address) => {
+    return nominations.filter((nomination) => nomination.nominator === nominator);
   };
 
-  const approvedForNominee = (nominee: WalletAccount) => {
+  const approvedForNominee = (nominee: Address) => {
     return forNominee(nominee).filter((nomination) => nomination.status.type === "Approved");
   };
 
-  const pendingForNominee = (nominee: WalletAccount) => {
+  const pendingForNominee = (nominee: Address) => {
     return forNominee(nominee).filter((nomination) => nomination.status.type === "Pending");
   };
 
