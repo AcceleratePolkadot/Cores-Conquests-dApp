@@ -1,3 +1,4 @@
+import NominationAdd from "@/components/NominationAdd";
 import SearchFilters from "@/components/SearchFilters";
 import Table from "@/components/Table";
 import TruncatedHash from "@/components/TruncatedHash";
@@ -57,6 +58,7 @@ const MembersList: React.FC = () => {
                     <h5 className="mb-2 font-bold text-3xl text-gray-900 dark:text-white">
                       Current Members
                     </h5>
+                    <NominationAdd />
                   </div>
                 </div>
                 <SearchFilters
