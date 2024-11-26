@@ -6,8 +6,11 @@ import type { Roster } from "@/contexts/Rosters/types";
 import type { WalletAccount } from "@reactive-dot/core/wallets.js";
 
 import { MutationError, idle, pending } from "@reactive-dot/core";
-import { useMutation, useMutationEffect } from "@reactive-dot/react";
+import { useMutation } from "@reactive-dot/react";
+import { useEffect } from "react";
 import { GiCrossedBones, GiHeartPlus } from "react-icons/gi";
+
+import type { TxEvent } from "polkadot-api";
 
 interface RosterStatusButtonProps {
   roster: Roster;
@@ -16,40 +19,26 @@ interface RosterStatusButtonProps {
 
 export const RosterStatusButton: React.FC<RosterStatusButtonProps> = ({ roster, account }) => {
   const { refreshRosters } = useRosters();
-  const [_, deactivateRoster] = useMutation(
+  const [deactivateRosterState, deactivateRoster] = useMutation(
     (tx) => tx.Roster.roster_deactivate({ roster_id: roster.id }),
     { signer: account.polkadotSigner },
   );
-
-  const [__, activateRoster] = useMutation(
+  const [activateRosterState, activateRoster] = useMutation(
     (tx) => tx.Roster.roster_activate({ roster_id: roster.id }),
     { signer: account.polkadotSigner },
   );
 
-  useMutationEffect((event) => {
-    if (event.value === pending) {
-      console.log("Submitting transaction", { id: event.id });
-      return;
-    }
-
-    if (event.value instanceof MutationError) {
-      console.error("Failed to submit transaction", { id: event.id });
-      return;
-    }
-
-    switch (event.value.type) {
-      case "finalized":
-        if (event.value.ok) {
-          console.log("Transaction succeeded", { id: event.id });
-        } else {
-          console.error("Transaction failed", { id: event.id });
-        }
+  useEffect(() => {
+    for (const state of [deactivateRosterState, activateRosterState]) {
+      if (
+        state !== pending &&
+        state !== idle &&
+        (state instanceof MutationError || (state as TxEvent).type === "finalized")
+      ) {
         refreshRosters();
-        break;
-      default:
-        console.log("Transaction pending", { id: event.id });
+      }
     }
-  });
+  }, [deactivateRosterState, activateRosterState, refreshRosters]);
 
   const onDeactivateRoster = () => {
     deactivateRoster();
