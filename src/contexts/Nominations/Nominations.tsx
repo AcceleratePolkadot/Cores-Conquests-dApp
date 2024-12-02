@@ -3,7 +3,15 @@ import { useRosters } from "@/contexts/Rosters";
 import type { RosterId } from "@/contexts/Rosters/types";
 import { useLazyLoadQueryWithRefresh } from "@reactive-dot/react";
 import type React from "react";
-import { type ReactNode, createContext, useContext, useEffect, useRef, useState } from "react";
+import {
+  type ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { defaultNominationsContext } from "./defaults";
 import type { Nomination, NominationsContextType } from "./types";
 import { isEqual } from "./utils";
@@ -50,25 +58,40 @@ export const NominationsProvider: React.FC<{ children: ReactNode }> = ({ childre
     }
   }, [nominations, refreshRosters]);
 
-  const toRoster = (rosterId: RosterId) => {
-    return nominations.filter((nomination) => nomination.roster.asHex() === rosterId.asHex());
-  };
+  const toRoster = useCallback(
+    (rosterId: RosterId) => {
+      return nominations.filter((nomination) => nomination.roster.asHex() === rosterId.asHex());
+    },
+    [nominations],
+  );
 
-  const forNominee = (nominee: Address) => {
-    return nominations.filter((nomination) => nomination.nominee === nominee);
-  };
+  const forNominee = useCallback(
+    (nominee: Address) => {
+      return nominations.filter((nomination) => nomination.nominee === nominee);
+    },
+    [nominations],
+  );
 
-  const byNominator = (nominator: Address) => {
-    return nominations.filter((nomination) => nomination.nominator === nominator);
-  };
+  const byNominator = useCallback(
+    (nominator: Address) => {
+      return nominations.filter((nomination) => nomination.nominator === nominator);
+    },
+    [nominations],
+  );
 
-  const approvedForNominee = (nominee: Address) => {
-    return forNominee(nominee).filter((nomination) => nomination.status.type === "Approved");
-  };
+  const approvedForNominee = useCallback(
+    (nominee: Address) => {
+      return forNominee(nominee).filter((nomination) => nomination.status.type === "Approved");
+    },
+    [forNominee],
+  );
 
-  const pendingForNominee = (nominee: Address) => {
-    return forNominee(nominee).filter((nomination) => nomination.status.type === "Pending");
-  };
+  const pendingForNominee = useCallback(
+    (nominee: Address) => {
+      return forNominee(nominee).filter((nomination) => nomination.status.type === "Pending");
+    },
+    [forNominee],
+  );
 
   return (
     <NominationsContext.Provider

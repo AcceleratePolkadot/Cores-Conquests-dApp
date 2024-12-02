@@ -2,7 +2,15 @@ import { useActiveAccount } from "@/contexts/ActiveAccount";
 import type { WalletAccount } from "@reactive-dot/core/wallets.js";
 import { useLazyLoadQueryWithRefresh } from "@reactive-dot/react";
 import type React from "react";
-import { type ReactNode, createContext, useContext, useEffect, useRef, useState } from "react";
+import {
+  type ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { defaultRostersContext } from "./defaults";
 import type { Roster, RosterId, RostersContextType } from "./types";
 import { isEqual } from "./utils";
@@ -65,17 +73,26 @@ export const RostersProvider: React.FC<{ children: ReactNode }> = ({ children })
     }
   }, [activeAccount]);
 
-  const getRoster = (rosterId: RosterId) => {
-    return rosters.find((roster) => roster.id.asHex() === rosterId.asHex());
-  };
+  const getRoster = useCallback(
+    (rosterId: RosterId) => {
+      return rosters.find((roster) => roster.id.asHex() === rosterId.asHex());
+    },
+    [rosters],
+  );
 
-  const foundedBy = (account: WalletAccount) => {
-    return rosters.filter((roster) => roster.founder === account.address);
-  };
+  const foundedBy = useCallback(
+    (account: WalletAccount) => {
+      return rosters.filter((roster) => roster.founder === account.address);
+    },
+    [rosters],
+  );
 
-  const memberOf = (account: WalletAccount) => {
-    return rosters.filter((roster) => roster.members.includes(account.address));
-  };
+  const memberOf = useCallback(
+    (account: WalletAccount) => {
+      return rosters.filter((roster) => roster.members.includes(account.address));
+    },
+    [rosters],
+  );
 
   return (
     <RostersContext.Provider
