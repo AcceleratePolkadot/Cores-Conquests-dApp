@@ -34,13 +34,15 @@ const MembersList: React.FC = () => {
     if (searchValue !== "") {
       const foundViaAddress = _filteredMembers.filter((member) => member.includes(searchValue));
       const foundViaNominating = _filteredMembers.filter((member) =>
-        byNominator(member).some((nomination) => nomination.nominee === searchValue),
+        byNominator(member)
+          .filter((nomination) => nomination.roster === activeRoster?.id)
+          .some((nomination) => nomination.nominee === searchValue),
       );
       _filteredMembers = [...new Set([...foundViaAddress, ...foundViaNominating])];
     }
 
     setFilterMembers(_filteredMembers);
-  }, [members, searchValue, byNominator]);
+  }, [members, searchValue, byNominator, activeRoster]);
 
   const clearFilters = () => {
     setSearchValue("");
@@ -89,14 +91,16 @@ const MembersList: React.FC = () => {
                       <MemberBalanceCells address={member} />
                       <FlowbiteTable.Cell>
                         <div className="-space-x-2 flex">
-                          {byNominator(member).map((nomination) => (
-                            <div
-                              key={nomination.nominee}
-                              className="h-6 w-6 rounded-full bg-gray-50 ring-2 ring-white dark:bg-gray-600 dark:ring-gray-400"
-                            >
-                              <Polkicon address={nomination.nominee} />
-                            </div>
-                          ))}
+                          {byNominator(member)
+                            .filter((nomination) => nomination.roster === activeRoster.id)
+                            .map((nomination) => (
+                              <div
+                                key={nomination.nominee}
+                                className="h-6 w-6 rounded-full bg-gray-50 ring-2 ring-white dark:bg-gray-600 dark:ring-gray-400"
+                              >
+                                <Polkicon address={nomination.nominee} />
+                              </div>
+                            ))}
                         </div>
                       </FlowbiteTable.Cell>
                       <FlowbiteTable.Cell>...</FlowbiteTable.Cell>
