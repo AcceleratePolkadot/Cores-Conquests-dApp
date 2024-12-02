@@ -28,12 +28,12 @@ const SidebarRosters: React.FC = () => {
         memberOf(activeAccount).filter((roster) => !foundedBy(activeAccount).includes(roster)),
       );
       setApprovedForRosters(
-        approvedForNominee(activeAccount)
+        approvedForNominee(activeAccount.address)
           .map((nomination) => getRoster(nomination.roster))
           .filter((roster) => roster !== undefined),
       );
       setPendingForRosters(
-        pendingForNominee(activeAccount)
+        pendingForNominee(activeAccount.address)
           .map((nomination) => getRoster(nomination.roster))
           .filter((roster) => roster !== undefined),
       );
@@ -101,7 +101,7 @@ const RosterGroup: React.FC<{
     <Sidebar.Collapse
       icon={icon}
       label={label}
-      open={activeRoster && rosters.some((roster) => roster === activeRoster)}
+      open={activeRoster && rosters.some((roster) => roster.id.asHex() === activeRoster.id.asHex())}
       disabled={rosters.length === 0}
       chevronIcon={rosters.length > 0 ? HiChevronDown : MdHorizontalRule}
       className={rosters.length === 0 ? "opacity-30 disabled:pointer-events-none" : ""}
@@ -109,7 +109,7 @@ const RosterGroup: React.FC<{
       {rosters.map((roster) => (
         <Sidebar.Item
           key={roster.id.asHex()}
-          active={roster === activeRoster}
+          active={roster.id.asHex() === activeRoster?.id.asHex()}
           onClick={() => handleRosterClick(roster)}
           className={
             roster === activeRoster
