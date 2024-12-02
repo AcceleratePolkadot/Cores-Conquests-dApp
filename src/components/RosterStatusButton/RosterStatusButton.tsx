@@ -7,7 +7,7 @@ import type { WalletAccount } from "@reactive-dot/core/wallets.js";
 
 import { MutationError, idle, pending } from "@reactive-dot/core";
 import { useMutation } from "@reactive-dot/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { GiCrossedBones, GiHeartPlus } from "react-icons/gi";
 
 import type { TxEvent } from "polkadot-api";
@@ -19,6 +19,7 @@ interface RosterStatusButtonProps {
 
 export const RosterStatusButton: React.FC<RosterStatusButtonProps> = ({ roster, account }) => {
   const { refreshRosters } = useRosters();
+  const [working, setWorking] = useState<boolean>(false);
   const [deactivateRosterState, deactivateRoster] = useMutation(
     (tx) => tx.Roster.roster_deactivate({ roster_id: roster.id }),
     { signer: account.polkadotSigner },
@@ -29,23 +30,32 @@ export const RosterStatusButton: React.FC<RosterStatusButtonProps> = ({ roster, 
   );
 
   useEffect(() => {
-    for (const state of [deactivateRosterState, activateRosterState]) {
-      if (
-        state !== pending &&
-        state !== idle &&
-        (state instanceof MutationError || (state as TxEvent).type === "finalized")
-      ) {
-        refreshRosters();
+    if (working) {
+      for (const state of [deactivateRosterState, activateRosterState]) {
+        if (
+          state !== pending &&
+          state !== idle &&
+          (state instanceof MutationError || (state as TxEvent).type === "finalized")
+        ) {
+          refreshRosters();
+          setWorking(false);
+        }
       }
     }
-  }, [deactivateRosterState, activateRosterState, refreshRosters]);
+  }, [deactivateRosterState, activateRosterState, refreshRosters, working]);
 
   const onDeactivateRoster = () => {
-    deactivateRoster();
+    if (!working) {
+      setWorking(true);
+      deactivateRoster();
+    }
   };
 
   const onActivateRoster = () => {
-    activateRoster();
+    if (!working) {
+      setWorking(true);
+      activateRoster();
+    }
   };
 
   return (
@@ -53,12 +63,22 @@ export const RosterStatusButton: React.FC<RosterStatusButtonProps> = ({ roster, 
       {roster.founder === account?.address && (
         <div className="flex justify-center space-x-4 p-6">
           {roster.status.type === "Active" ? (
-            <Button onClick={onDeactivateRoster} size="lg" gradientMonochrome="failure">
+            <Button
+              onClick={onDeactivateRoster}
+              size="lg"
+              gradientMonochrome="failure"
+              disabled={working}
+            >
               <GiCrossedBones className="mr-2 h-6 w-6" /> Deactivate
             </Button>
           ) : (
             <>
-              <Button onClick={onActivateRoster} size="lg" gradientMonochrome="success">
+              <Button
+                onClick={onActivateRoster}
+                size="lg"
+                gradientMonochrome="success"
+                disabled={working}
+              >
                 <GiHeartPlus className="mr-2 h-4 w-4" /> Re-Activate
               </Button>
             </>
