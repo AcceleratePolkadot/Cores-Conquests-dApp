@@ -33,3 +33,9 @@ export const toApTitleCase = (str: string): string => {
     })
     .join("");
 };
+
+export const fromSnakeCase = (str: string): string => {
+  return String(str)
+    .replace(/_+/g, " ")
+    .replace(/([a-z])([A-Z])/g, (_, a, b) => `${a} ${b}`);
+};
