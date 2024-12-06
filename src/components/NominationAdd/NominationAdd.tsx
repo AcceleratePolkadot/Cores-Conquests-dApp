@@ -1,19 +1,18 @@
+import { useActiveAccount } from "@/contexts/ActiveAccount";
+import { useNotifications } from "@/contexts/Notifications";
+import type { NotificationKey, StatusNotification } from "@/contexts/Notifications/types";
+import { useRosters } from "@/contexts/Rosters";
+import { MutationError, idle, pending } from "@reactive-dot/core";
+import { useLazyLoadQuery, useMutation } from "@reactive-dot/react";
 import { isValidAddress } from "@w3ux/utils";
 import { Button, Modal, Tooltip } from "flowbite-react";
+import _ from "lodash";
+import type { OptionsObject } from "notistack";
+import type { TxEvent } from "polkadot-api";
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaCirclePlus } from "react-icons/fa6";
-
-import { useActiveAccount } from "@/contexts/ActiveAccount";
-import { useRosters } from "@/contexts/Rosters";
-
-import { MutationError, idle, pending } from "@reactive-dot/core";
-
-import _ from "lodash";
-
-import { useLazyLoadQuery, useMutation } from "@reactive-dot/react";
-
 import type {
   NominationAddButtonProps,
   NominationAddConfirmationProps,
@@ -63,24 +62,14 @@ const NominationAddModal: React.FC<NominationAddModalProps> = ({ isOpen, onClose
   const { activeAccount } = useActiveAccount();
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [nominee, setNominee] = useState<string>("");
+  const [dismissible, setDismissible] = useState<boolean>(true);
 
   const txReady = activeAccount && activeRoster && isValidAddress(nominee);
 
-  const onFormSubmit = (data: { nominee: string }) => {
+  const onFormSubmit = () => {
     if (!submitting && txReady) {
-      console.log("Submitting nomination", data);
       setSubmitting(true);
     }
-  };
-
-  const onSuccess = () => {
-    console.log("Nomination submitted successfully");
-    handleClose();
-  };
-
-  const onError = () => {
-    console.error("Failed to submit nomination");
-    handleClose();
   };
 
   const handleClose = () => {
@@ -89,16 +78,18 @@ const NominationAddModal: React.FC<NominationAddModalProps> = ({ isOpen, onClose
   };
 
   return (
-    <Modal show={isOpen} onClose={handleClose} dismissible>
-      <Modal.Header>Add Nomination</Modal.Header>
+    <Modal show={isOpen} onClose={handleClose} dismissible={dismissible}>
+      <Modal.Header className={!dismissible ? "[&>button]:hidden" : undefined}>
+        Add Nomination
+      </Modal.Header>
       <Modal.Body>
         {submitting && txReady ? (
           <NominationAddConfirmation
             nominee={nominee}
             rosterId={activeRoster.id}
             activeAccount={activeAccount}
-            onSuccess={onSuccess}
-            onError={onError}
+            onComplete={handleClose}
+            setDismissible={setDismissible}
           />
         ) : (
           <NominationAddForm setNominee={setNominee} onFormSubmit={onFormSubmit} />
@@ -161,31 +152,99 @@ const NominationAddConfirmation: React.FC<NominationAddConfirmationProps> = ({
   nominee,
   rosterId,
   activeAccount,
-  onSuccess,
-  onError,
+  onComplete,
+  setDismissible,
 }) => {
+  const { showStatusNotification, updateStatusNotification } = useNotifications();
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [nominationStatusKey, setNominationStatusKey] = useState<NotificationKey | undefined>(
+    undefined,
+  );
   const [nominationState, submitNomination] = useMutation(
     (tx) => tx.Roster.nomination_new({ nominee, roster_id: rosterId }),
     { signer: activeAccount.polkadotSigner },
   );
 
+  const mutationState = useRef<StatusNotification["status"]>(idle);
+
+  const options = {
+    additional: [
+      {
+        label: "Nomination",
+        rows: [
+          {
+            label: "Roster ID",
+            value: rosterId.asHex(),
+          },
+          {
+            label: "Nominator",
+            value: activeAccount.address,
+          },
+          {
+            label: "Nominee",
+            value: nominee,
+          },
+        ],
+      },
+    ],
+  } as OptionsObject<"mutationPending">;
+
   useEffect(() => {
-    if (nominationState instanceof MutationError) {
-      onError();
-    } else if (
-      nominationState !== pending &&
-      nominationState !== idle &&
-      nominationState.type === "finalized"
-    ) {
-      if (nominationState.ok) {
-        onSuccess();
-      } else {
-        onError();
+    const statusIsEqual = (a: StatusNotification["status"], b: StatusNotification["status"]) => {
+      if (a === b) return true;
+      if (a instanceof MutationError && b instanceof MutationError) return true;
+      if (
+        (a as TxEvent).type !== undefined &&
+        (b as TxEvent).type !== undefined &&
+        (a as TxEvent).type === (b as TxEvent).type
+      )
+        return true;
+      return false;
+    };
+
+    if (submitting) {
+      if (nominationStatusKey && !statusIsEqual(mutationState.current, nominationState)) {
+        mutationState.current = nominationState;
+        updateStatusNotification(nominationStatusKey, nominationState);
       }
-    } else {
-      console.log("Nomination State", nominationState);
+      if (
+        nominationState !== pending &&
+        nominationState !== idle &&
+        (nominationState instanceof MutationError ||
+          (nominationState as TxEvent).type === "finalized")
+      ) {
+        setSubmitting(false);
+        setNominationStatusKey(undefined);
+        onComplete();
+      }
     }
-  }, [nominationState, onSuccess, onError]);
+  }, [nominationState, submitting, nominationStatusKey, updateStatusNotification, onComplete]);
+
+  useEffect(() => {
+    setDismissible(!submitting);
+  }, [submitting, setDismissible]);
+
+  const handleSubmitNomination = () => {
+    setSubmitting(true);
+    submitNomination();
+
+    const statusKey = showStatusNotification({
+      status: nominationState,
+      pending: {
+        message: "Submitting Nomination",
+        options,
+      },
+      success: {
+        message: "Nomination submitted!",
+        options,
+      },
+      failure: {
+        message: "Nomination submission failed!",
+        options,
+      },
+    });
+    setNominationStatusKey(statusKey);
+  };
 
   return (
     <>
@@ -195,7 +254,12 @@ const NominationAddConfirmation: React.FC<NominationAddConfirmationProps> = ({
         </h2>
       </div>
       <div className="flex justify-end">
-        <Button type="button" gradientDuoTone="cyanToBlue" onClick={() => submitNomination()}>
+        <Button
+          type="button"
+          gradientDuoTone="cyanToBlue"
+          onClick={() => handleSubmitNomination()}
+          disabled={submitting}
+        >
           Confirm
         </Button>
       </div>

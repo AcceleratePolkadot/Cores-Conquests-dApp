@@ -19,6 +19,6 @@ export interface NominationAddConfirmationProps {
   nominee: string;
   rosterId: RosterId;
   activeAccount: WalletAccount;
-  onSuccess: () => void;
-  onError: () => void;
+  onComplete: () => void;
+  setDismissible: (dismissible: boolean) => void;
 }
