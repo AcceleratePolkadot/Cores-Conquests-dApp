@@ -1,6 +1,14 @@
+import {
+  MutationFailureNotification,
+  MutationPendingNotification,
+  MutationStatusChangedNotification,
+  MutationSuccessNotification,
+} from "@/components/Notifications";
 import { ActiveAccountProvider } from "@/contexts/ActiveAccount";
 import { NominationsProvider } from "@/contexts/Nominations";
+import { NotificationsProvider } from "@/contexts/Notifications";
 import { RostersProvider } from "@/contexts/Rosters";
+import { SnackbarProvider } from "notistack";
 import type React from "react";
 import { Suspense } from "react";
 
@@ -10,13 +18,24 @@ interface ProvidersProps {
 
 const Providers: React.FC<ProvidersProps> = ({ children }) => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <ActiveAccountProvider>
-        <RostersProvider>
-          <NominationsProvider>{children}</NominationsProvider>
-        </RostersProvider>
-      </ActiveAccountProvider>
-    </Suspense>
+    <SnackbarProvider
+      Components={{
+        mutationPending: MutationPendingNotification,
+        mutationFailure: MutationFailureNotification,
+        mutationSuccess: MutationSuccessNotification,
+        mutationStatusChanged: MutationStatusChangedNotification,
+      }}
+    >
+      <Suspense fallback={<div>Loading...</div>}>
+        <NotificationsProvider>
+          <ActiveAccountProvider>
+            <RostersProvider>
+              <NominationsProvider>{children}</NominationsProvider>
+            </RostersProvider>
+          </ActiveAccountProvider>
+        </NotificationsProvider>
+      </Suspense>
+    </SnackbarProvider>
   );
 };
 
