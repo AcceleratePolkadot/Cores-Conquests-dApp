@@ -1,9 +1,10 @@
-import { useThemeMode } from "flowbite-react";
 import type React from "react";
 import { useEffect, useState } from "react";
-import { generateIdenteapot } from "./identeapots";
 
 import clsx from "clsx";
+import { useThemeMode } from "flowbite-react";
+
+import { generateIdenteapot } from "./identeapots";
 
 import type { RosterId } from "@/contexts/Rosters/types";
 import type { RosticonProps } from "./types";

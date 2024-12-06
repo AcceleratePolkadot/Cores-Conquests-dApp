@@ -1,17 +1,13 @@
-import { Tooltip } from "flowbite-react";
-import type { TxFinalized } from "polkadot-api";
 import type React from "react";
+
+import { Tooltip } from "flowbite-react";
+
 import { GiSkullCrack } from "react-icons/gi";
 import { PiStackFill } from "react-icons/pi";
+
 import Divider from "./Divider";
 
-interface ErrorDetailsProps {
-  error?: {
-    message?: string;
-    stack?: string;
-  };
-  dispatchError?: TxFinalized["dispatchError"];
-}
+import type { ErrorDetailsProps } from "./types";
 
 const ErrorDetails: React.FC<ErrorDetailsProps> = ({ error, dispatchError }) => {
   if (!error && !dispatchError) return null;

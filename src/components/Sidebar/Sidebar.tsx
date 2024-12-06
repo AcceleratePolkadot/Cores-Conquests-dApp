@@ -1,5 +1,7 @@
-import { Sidebar as FlowbiteSidebar } from "flowbite-react";
 import type { FC } from "react";
+
+import { Sidebar as FlowbiteSidebar } from "flowbite-react";
+
 import SidebarRosters from "./SidebarRosters";
 
 const Sidebar: FC = () => {

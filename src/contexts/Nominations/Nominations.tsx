@@ -1,7 +1,3 @@
-import type { Address } from "@/contexts/ActiveAccount/types";
-import { useRosters } from "@/contexts/Rosters";
-import type { RosterId } from "@/contexts/Rosters/types";
-import { useLazyLoadQueryWithRefresh } from "@reactive-dot/react";
 import type React from "react";
 import {
   type ReactNode,
@@ -12,9 +8,17 @@ import {
   useRef,
   useState,
 } from "react";
+
+import { useLazyLoadQueryWithRefresh } from "@reactive-dot/react";
+
+import type { Address } from "@/contexts/ActiveAccount/types";
+import { useRosters } from "@/contexts/Rosters";
+import type { RosterId } from "@/contexts/Rosters/types";
+
+import { isEqual } from "./utils";
+
 import { defaultNominationsContext } from "./defaults";
 import type { Nomination, NominationsContextType } from "./types";
-import { isEqual } from "./utils";
 
 const NominationsContext = createContext<NominationsContextType>(defaultNominationsContext);
 

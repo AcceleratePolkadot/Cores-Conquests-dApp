@@ -1,6 +1,8 @@
-import { fromSnakeCase, toApTitleCase } from "@/utils/typography";
-import { Tooltip } from "flowbite-react";
 import type { FC, PropsWithChildren } from "react";
+
+import { Tooltip } from "flowbite-react";
+
+import { fromSnakeCase, toApTitleCase } from "@/utils/typography";
 
 import type {
   InfoValueOnly,

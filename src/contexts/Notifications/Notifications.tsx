@@ -1,3 +1,6 @@
+import type React from "react";
+import { type ReactNode, createContext, useContext, useEffect, useState } from "react";
+
 import { MutationError, idle, pending } from "@reactive-dot/core";
 import _ from "lodash";
 import { useSnackbar } from "notistack";
@@ -9,17 +12,17 @@ import type {
   TxInBestBlocksFound,
   TxInBestBlocksNotFound,
 } from "polkadot-api";
-import type React from "react";
-import { type ReactNode, createContext, useContext, useEffect, useState } from "react";
+
 import { MdError } from "react-icons/md";
+
+import { defaultNotificationsContext, defaultOptions } from "./defaults";
+
 import type {
   Notification,
   NotificationKey,
   NotificationsContextType,
   StatusNotification,
 } from "./types";
-
-import { defaultNotificationsContext, defaultOptions } from "./defaults";
 
 const NotificationsContext = createContext<NotificationsContextType>(defaultNotificationsContext);
 

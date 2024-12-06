@@ -1,7 +1,9 @@
+import React from "react";
+
+import type { CustomContentProps } from "notistack";
+
 import Base from "@/components/Notifications/Base";
 import type { NotificationContentProps } from "@/components/Notifications/Content/types";
-import type { CustomContentProps } from "notistack";
-import React from "react";
 
 const MutationPendingNotification = React.forwardRef<
   HTMLDivElement,

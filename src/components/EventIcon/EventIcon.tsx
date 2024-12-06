@@ -1,3 +1,8 @@
+import { useEffect, useState } from "react";
+
+import { bloc } from "@polkadot-api/descriptors";
+import _ from "lodash";
+
 import { BsFillCollectionFill } from "react-icons/bs";
 import { FaMailBulk } from "react-icons/fa";
 import { FaMoneyBillTransfer, FaPeopleGroup, FaRegCircleDot } from "react-icons/fa6";
@@ -7,16 +12,10 @@ import { GoPasskeyFill } from "react-icons/go";
 import { IoWallet } from "react-icons/io5";
 import { IoLinkSharp } from "react-icons/io5";
 import { LiaNetworkWiredSolid } from "react-icons/lia";
+import { LuHeartHandshake } from "react-icons/lu";
 import { RiStackedView } from "react-icons/ri";
 import { RiShieldUserFill } from "react-icons/ri";
 import { SiParitysubstrate } from "react-icons/si";
-
-import { bloc } from "@polkadot-api/descriptors";
-import { useEffect, useState } from "react";
-
-import { LuHeartHandshake } from "react-icons/lu";
-
-import _ from "lodash";
 
 interface EventIconProps {
   eventName: string;

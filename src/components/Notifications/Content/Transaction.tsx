@@ -1,11 +1,11 @@
 import type React from "react";
+
 import { PiHashFill } from "react-icons/pi";
+
 import Divider from "./Divider";
 import Row from "./Row";
 
-interface TransactionProps {
-  txHash?: string;
-}
+import type { TransactionProps } from "./types";
 
 const Transaction: React.FC<TransactionProps> = ({ txHash }) => {
   if (!txHash) return null;

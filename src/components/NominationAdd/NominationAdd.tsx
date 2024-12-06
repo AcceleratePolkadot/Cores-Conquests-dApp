@@ -1,7 +1,6 @@
-import { useActiveAccount } from "@/contexts/ActiveAccount";
-import { useNotifications } from "@/contexts/Notifications";
-import type { NotificationKey, StatusNotification } from "@/contexts/Notifications/types";
-import { useRosters } from "@/contexts/Rosters";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
+
 import { MutationError, idle, pending } from "@reactive-dot/core";
 import { useLazyLoadQuery, useMutation } from "@reactive-dot/react";
 import { isValidAddress } from "@w3ux/utils";
@@ -9,10 +8,15 @@ import { Button, Modal, Tooltip } from "flowbite-react";
 import _ from "lodash";
 import type { OptionsObject } from "notistack";
 import type { TxEvent } from "polkadot-api";
-import type React from "react";
-import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+
 import { FaCirclePlus } from "react-icons/fa6";
+
+import { useActiveAccount } from "@/contexts/ActiveAccount";
+import { useNotifications } from "@/contexts/Notifications";
+import type { NotificationKey, StatusNotification } from "@/contexts/Notifications/types";
+import { useRosters } from "@/contexts/Rosters";
+
 import type {
   NominationAddButtonProps,
   NominationAddConfirmationProps,

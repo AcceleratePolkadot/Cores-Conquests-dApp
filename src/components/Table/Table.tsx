@@ -1,5 +1,3 @@
-"use client";
-
 import type { FC, PropsWithChildren } from "react";
 
 import type { TableBodyProps, TableHeadProps, TableProps } from "flowbite-react";

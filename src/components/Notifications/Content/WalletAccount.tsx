@@ -1,12 +1,12 @@
-import type { WalletAccount as WalletAccountType } from "@reactive-dot/core/wallets.js";
-import { Tooltip } from "flowbite-react";
 import type React from "react";
+
 import { PiHashFill, PiSignatureFill } from "react-icons/pi";
+
+import { Tooltip } from "flowbite-react";
+
 import Divider from "./Divider";
 
-interface WalletAccountProps {
-  account?: WalletAccountType;
-}
+import type { WalletAccountProps } from "./types";
 
 const WalletAccount: React.FC<WalletAccountProps> = ({ account }) => {
   if (!account) return null;

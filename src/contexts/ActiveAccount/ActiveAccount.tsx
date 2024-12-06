@@ -1,7 +1,9 @@
-import type { WalletAccount } from "@reactive-dot/core/wallets.js";
-import { useAccounts } from "@reactive-dot/react";
 import type { ReactNode } from "react";
 import { createContext, useContext, useEffect, useState } from "react";
+
+import type { WalletAccount } from "@reactive-dot/core/wallets.js";
+import { useAccounts } from "@reactive-dot/react";
+
 import { defaultActiveAccountContext } from "./defaults";
 
 import type { ActiveAccountContextInterface } from "./types";

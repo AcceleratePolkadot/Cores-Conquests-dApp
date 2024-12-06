@@ -1,6 +1,3 @@
-import { useActiveAccount } from "@/contexts/ActiveAccount";
-import type { WalletAccount } from "@reactive-dot/core/wallets.js";
-import { useLazyLoadQueryWithRefresh } from "@reactive-dot/react";
 import type React from "react";
 import {
   type ReactNode,
@@ -11,9 +8,17 @@ import {
   useRef,
   useState,
 } from "react";
-import { defaultRostersContext } from "./defaults";
-import type { Roster, RosterId, RostersContextType } from "./types";
+
+import type { WalletAccount } from "@reactive-dot/core/wallets.js";
+import { useLazyLoadQueryWithRefresh } from "@reactive-dot/react";
+
+import { useActiveAccount } from "@/contexts/ActiveAccount";
+
 import { isEqual } from "./utils";
+
+import { defaultRostersContext } from "./defaults";
+
+import type { Roster, RosterId, RostersContextType } from "./types";
 
 const RostersContext = createContext<RostersContextType>(defaultRostersContext);
 

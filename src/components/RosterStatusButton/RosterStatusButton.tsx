@@ -1,23 +1,21 @@
-import { Button } from "flowbite-react";
+import { useEffect, useState } from "react";
 import type React from "react";
 
-import { useRosters } from "@/contexts/Rosters/Rosters";
-import type { Roster } from "@/contexts/Rosters/types";
-import type { WalletAccount } from "@reactive-dot/core/wallets.js";
-
 import { MutationError, idle, pending } from "@reactive-dot/core";
+import type { WalletAccount } from "@reactive-dot/core/wallets.js";
 import { useMutation } from "@reactive-dot/react";
-import { useEffect, useState } from "react";
-import { GiCrossedBones, GiHeartPlus } from "react-icons/gi";
-
-import { useNotifications } from "@/contexts/Notifications";
-
-import type { NotificationKey } from "@/contexts/Notifications/types";
+import { Button } from "flowbite-react";
 import type { OptionsObject } from "notistack";
 import type { TxEvent } from "polkadot-api";
-import { MdTitle } from "react-icons/md";
 
 import { FaKey } from "react-icons/fa6";
+import { GiCrossedBones, GiHeartPlus } from "react-icons/gi";
+import { MdTitle } from "react-icons/md";
+
+import { useNotifications } from "@/contexts/Notifications";
+import type { NotificationKey } from "@/contexts/Notifications/types";
+import { useRosters } from "@/contexts/Rosters/Rosters";
+import type { Roster } from "@/contexts/Rosters/types";
 
 interface RosterStatusButtonProps {
   roster: Roster;

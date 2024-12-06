@@ -1,6 +1,8 @@
 import type React from "react";
+
 import Divider from "./Divider";
 import Row from "./Row";
+
 import type { NotificationAdditionalInformationGroup } from "./types";
 
 interface AdditionalProps {

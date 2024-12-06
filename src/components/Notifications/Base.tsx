@@ -1,14 +1,16 @@
-import NotificationContent from "@/components/Notifications/Content";
-import type { NotificationContentProps } from "@/components/Notifications/Content/types";
+import React, { useState } from "react";
+
 import clsx from "clsx";
 import { Accordion } from "flowbite-react";
-import { SnackbarContent } from "notistack";
+import { SnackbarContent, useSnackbar } from "notistack";
 import type { CustomContentProps } from "notistack";
-import { useSnackbar } from "notistack";
-import React, { useState } from "react";
+import DotLoader from "react-spinners/DotLoader";
+
 import { FaEye } from "react-icons/fa6";
 import { IoCloseSharp } from "react-icons/io5";
-import DotLoader from "react-spinners/DotLoader";
+
+import NotificationContent from "@/components/Notifications/Content";
+import type { NotificationContentProps } from "@/components/Notifications/Content/types";
 
 type BaseProps = {
   type: "pending" | "success" | "failure" | "status-changed";

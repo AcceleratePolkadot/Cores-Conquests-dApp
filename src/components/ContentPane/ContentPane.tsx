@@ -1,10 +1,13 @@
 import type React from "react";
 
+import { Card } from "flowbite-react";
+
+import { useRosters } from "@/contexts/Rosters";
+
+import { toApTitleCase } from "@/utils/typography";
+
 import MembersList from "@/components/MembersList";
 import RosterDetail from "@/components/RosterDetail";
-import { useRosters } from "@/contexts/Rosters";
-import { toApTitleCase } from "@/utils/typography";
-import { Card } from "flowbite-react";
 
 const ContentPane: React.FC = () => {
   const { activeRoster } = useRosters();

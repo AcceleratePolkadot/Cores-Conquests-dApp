@@ -1,17 +1,22 @@
-import NominationAdd from "@/components/NominationAdd";
-import SearchFilters from "@/components/SearchFilters";
-import Table from "@/components/Table";
-import TruncatedHash from "@/components/TruncatedHash";
-import type { Address } from "@/contexts/ActiveAccount/types";
-import { useNominations } from "@/contexts/Nominations";
-import { useRosters } from "@/contexts/Rosters";
-import useBalanceFormatter from "@/hooks/useBalanceFormatter";
+import type React from "react";
+import { useEffect, useState } from "react";
+
 import { useLazyLoadQuery } from "@reactive-dot/react";
 import { Polkicon } from "@w3ux/react-polkicon";
 import { BigNumber } from "bignumber.js";
 import { Card, Table as FlowbiteTable } from "flowbite-react";
-import type React from "react";
-import { useEffect, useState } from "react";
+
+import useBalanceFormatter from "@/hooks/useBalanceFormatter";
+
+import type { Address } from "@/contexts/ActiveAccount/types";
+import { useNominations } from "@/contexts/Nominations";
+import { useRosters } from "@/contexts/Rosters";
+
+import NominationAdd from "@/components/NominationAdd";
+import SearchFilters from "@/components/SearchFilters";
+import Table from "@/components/Table";
+import TruncatedHash from "@/components/TruncatedHash";
+
 import type { Member } from "./types";
 
 const MembersList: React.FC = () => {

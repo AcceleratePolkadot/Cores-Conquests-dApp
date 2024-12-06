@@ -3,6 +3,30 @@ import type { TxFinalized } from "polkadot-api";
 
 import type { BlockInfo, SystemEvent } from "@polkadot-api/observable-client";
 
+export interface BlockProps {
+  block?: BlockInfo;
+}
+
+export interface ErrorDetailsProps {
+  error?: {
+    message?: string;
+    stack?: string;
+  };
+  dispatchError?: TxFinalized["dispatchError"];
+}
+
+export interface EventsProps {
+  events?: SystemEvent["event"][];
+}
+
+export interface TransactionProps {
+  txHash?: string;
+}
+
+export interface WalletAccountProps {
+  account?: WalletAccount;
+}
+
 export type InfoWithIcon = {
   icon: JSX.Element;
   value: string;

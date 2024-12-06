@@ -1,16 +1,19 @@
-import { useActiveAccount } from "@/contexts/ActiveAccount";
-import { useNominations } from "@/contexts/Nominations";
-import type { Roster } from "@/contexts/Rosters/types";
-import { toApTitleCase } from "@/utils/typography";
-import { Sidebar } from "flowbite-react";
 import type React from "react";
 import { useEffect, useState } from "react";
+
+import { Sidebar } from "flowbite-react";
+
 import { BsFillRocketTakeoffFill, BsHourglassSplit } from "react-icons/bs";
 import { FaRegIdBadge, FaUserCheck } from "react-icons/fa";
 import { HiChevronDown } from "react-icons/hi";
 import { MdHorizontalRule } from "react-icons/md";
 
+import { useActiveAccount } from "@/contexts/ActiveAccount";
+import { useNominations } from "@/contexts/Nominations";
 import { useRosters } from "@/contexts/Rosters";
+import type { Roster } from "@/contexts/Rosters/types";
+
+import { toApTitleCase } from "@/utils/typography";
 
 const SidebarRosters: React.FC = () => {
   const { foundedBy, memberOf, activeRoster, setActiveRoster, getRoster } = useRosters();

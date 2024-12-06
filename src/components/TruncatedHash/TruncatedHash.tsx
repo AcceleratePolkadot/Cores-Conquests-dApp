@@ -1,8 +1,8 @@
-import clsx from "clsx";
 import type React from "react";
 import { useEffect, useState } from "react";
 
 import { ellipsisFn, removeHexPrefix } from "@w3ux/utils";
+import clsx from "clsx";
 
 interface TruncatedHashProps {
   hash: string;

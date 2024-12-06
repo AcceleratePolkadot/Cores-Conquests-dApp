@@ -1,19 +1,16 @@
-import { fromCamelCase, toApTitleCase } from "@/utils/typography";
+import { useEffect, useState } from "react";
 import type React from "react";
-import { useEffect } from "react";
+
+import type { SystemEvent } from "@polkadot-api/observable-client";
+import _ from "lodash";
+
+import { fromCamelCase, toApTitleCase } from "@/utils/typography";
+
+import EventIcon from "@/components/EventIcon";
 import Divider from "./Divider";
 import Row from "./Row";
 
-import EventIcon from "@/components/EventIcon";
-
-import _ from "lodash";
-
-import type { SystemEvent } from "@polkadot-api/observable-client";
-import { useState } from "react";
-
-interface EventsProps {
-  events?: SystemEvent["event"][];
-}
+import type { EventsProps } from "./types";
 
 const Events: React.FC<EventsProps> = ({ events }) => {
   const [cleanedEvents, setCleanedEvents] = useState<SystemEvent["event"][]>([]);

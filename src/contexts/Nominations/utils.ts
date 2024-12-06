@@ -1,4 +1,5 @@
 import _ from "lodash";
+
 import type { Nomination } from "./types";
 
 // can't just use lodash isEqual because it uses strict equality on functions

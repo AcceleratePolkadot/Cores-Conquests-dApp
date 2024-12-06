@@ -1,16 +1,19 @@
-import { Card, Tooltip } from "flowbite-react";
 import type { FC } from "react";
+
+import { Polkicon } from "@w3ux/react-polkicon";
+import { Card, Tooltip } from "flowbite-react";
+
 import { FaCheck } from "react-icons/fa";
 import { GiCrossedBones } from "react-icons/gi";
 
-import Rosticon from "@/components/Rosticon";
-import TruncatedHash from "@/components/TruncatedHash";
 import { useActiveAccount } from "@/contexts/ActiveAccount";
 import { useRosters } from "@/contexts/Rosters";
+
 import { toApTitleCase } from "@/utils/typography";
-import { Polkicon } from "@w3ux/react-polkicon";
 
 import RosterStatusButton from "@/components/RosterStatusButton";
+import Rosticon from "@/components/Rosticon";
+import TruncatedHash from "@/components/TruncatedHash";
 
 const RosterDetail: FC = () => {
   const formatter = new Intl.NumberFormat("en-US");

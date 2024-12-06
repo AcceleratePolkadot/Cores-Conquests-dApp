@@ -1,7 +1,8 @@
+import { useCallback } from "react";
+
 import { formatBalance } from "@polkadot/util";
 import { useChainSpecData } from "@reactive-dot/react";
 import type { BigNumber } from "bignumber.js";
-import { useCallback } from "react";
 
 const useBalanceFormatter = (withSi = true, forceUnit = undefined) => {
   const chainSpecData = useChainSpecData();

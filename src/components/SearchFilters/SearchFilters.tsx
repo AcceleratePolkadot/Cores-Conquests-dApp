@@ -1,9 +1,8 @@
-"use client";
-
 import type { FC, PropsWithChildren, ReactElement } from "react";
-import { FaRegTrashAlt } from "react-icons/fa";
 
 import { Dropdown } from "flowbite-react";
+
+import { FaRegTrashAlt } from "react-icons/fa";
 
 type SearchProps = {
   searchValue: string;

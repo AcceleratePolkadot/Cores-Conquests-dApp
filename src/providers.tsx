@@ -1,16 +1,19 @@
+import type React from "react";
+import { Suspense } from "react";
+
+import { SnackbarProvider } from "notistack";
+
+import { ActiveAccountProvider } from "@/contexts/ActiveAccount";
+import { NominationsProvider } from "@/contexts/Nominations";
+import { NotificationsProvider } from "@/contexts/Notifications";
+import { RostersProvider } from "@/contexts/Rosters";
+
 import {
   MutationFailureNotification,
   MutationPendingNotification,
   MutationStatusChangedNotification,
   MutationSuccessNotification,
 } from "@/components/Notifications";
-import { ActiveAccountProvider } from "@/contexts/ActiveAccount";
-import { NominationsProvider } from "@/contexts/Nominations";
-import { NotificationsProvider } from "@/contexts/Notifications";
-import { RostersProvider } from "@/contexts/Rosters";
-import { SnackbarProvider } from "notistack";
-import type React from "react";
-import { Suspense } from "react";
 
 interface ProvidersProps {
   children: React.ReactNode;

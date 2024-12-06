@@ -1,6 +1,5 @@
-"use client";
-
 import { useEffect, useState } from "react";
+
 import ReactPaginate from "react-paginate";
 
 export interface TablePaginationProps<T> {
