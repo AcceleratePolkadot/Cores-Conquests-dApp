@@ -10,7 +10,14 @@ import { useMutation } from "@reactive-dot/react";
 import { useEffect, useState } from "react";
 import { GiCrossedBones, GiHeartPlus } from "react-icons/gi";
 
+import { useNotifications } from "@/contexts/Notifications";
+
+import type { NotificationKey } from "@/contexts/Notifications/types";
+import type { OptionsObject } from "notistack";
 import type { TxEvent } from "polkadot-api";
+import { MdTitle } from "react-icons/md";
+
+import { FaKey } from "react-icons/fa6";
 
 interface RosterStatusButtonProps {
   roster: Roster;
@@ -19,9 +26,21 @@ interface RosterStatusButtonProps {
 
 export const RosterStatusButton: React.FC<RosterStatusButtonProps> = ({ roster, account }) => {
   const { refreshRosters } = useRosters();
-  const [working, setWorking] = useState<boolean>(false);
+  const { showStatusNotification, updateStatusNotification } = useNotifications();
+  const [deactivateRosterWorking, setDeactivateRosterWorking] = useState<boolean>(false);
+  const [activateRosterWorking, setActivateRosterWorking] = useState<boolean>(false);
+  const [deactivateRosterStatusKey, setDeactivateRosterStatusKey] = useState<
+    NotificationKey | undefined
+  >(undefined);
+  const [activateRosterStatusKey, setActivateRosterStatusKey] = useState<
+    NotificationKey | undefined
+  >(undefined);
+
   const [deactivateRosterState, deactivateRoster] = useMutation(
-    (tx) => tx.Roster.roster_deactivate({ roster_id: roster.id }),
+    (tx) =>
+      tx.Roster.roster_deactivate({
+        roster_id: roster.id,
+      }),
     { signer: account.polkadotSigner },
   );
   const [activateRosterState, activateRoster] = useMutation(
@@ -29,32 +48,120 @@ export const RosterStatusButton: React.FC<RosterStatusButtonProps> = ({ roster, 
     { signer: account.polkadotSigner },
   );
 
+  const options = {
+    account: account,
+    additional: [
+      {
+        label: "Roster",
+        rows: [
+          {
+            icon: <FaKey title="Roster ID" />,
+            value: roster.id.asHex(),
+            tooltip: "Roster ID",
+          },
+          {
+            icon: <MdTitle title="Roster Name" />,
+            value: roster.title.asText(),
+            copy: false,
+            tooltip: "Roster Name",
+          },
+        ],
+      },
+    ],
+  } as OptionsObject<"mutationPending">;
+
   useEffect(() => {
-    if (working) {
-      for (const state of [deactivateRosterState, activateRosterState]) {
-        if (
-          state !== pending &&
-          state !== idle &&
-          (state instanceof MutationError || (state as TxEvent).type === "finalized")
-        ) {
-          refreshRosters();
-          setWorking(false);
+    if (deactivateRosterWorking) {
+      if (
+        deactivateRosterState !== pending &&
+        deactivateRosterState !== idle &&
+        (deactivateRosterState instanceof MutationError ||
+          (deactivateRosterState as TxEvent).type === "finalized")
+      ) {
+        refreshRosters();
+        setDeactivateRosterWorking(false);
+        if (deactivateRosterStatusKey) {
+          updateStatusNotification(deactivateRosterStatusKey, deactivateRosterState);
+          setDeactivateRosterStatusKey(undefined);
         }
       }
     }
-  }, [deactivateRosterState, activateRosterState, refreshRosters, working]);
+  }, [
+    deactivateRosterState,
+    refreshRosters,
+    deactivateRosterWorking,
+    deactivateRosterStatusKey,
+    updateStatusNotification,
+  ]);
+
+  useEffect(() => {
+    if (activateRosterWorking) {
+      if (
+        activateRosterState !== pending &&
+        activateRosterState !== idle &&
+        (activateRosterState instanceof MutationError ||
+          (activateRosterState as TxEvent).type === "finalized")
+      ) {
+        refreshRosters();
+        setActivateRosterWorking(false);
+        if (activateRosterStatusKey) {
+          updateStatusNotification(activateRosterStatusKey, activateRosterState);
+          setActivateRosterStatusKey(undefined);
+        }
+      }
+    }
+  }, [
+    activateRosterState,
+    refreshRosters,
+    activateRosterWorking,
+    activateRosterStatusKey,
+    updateStatusNotification,
+  ]);
 
   const onDeactivateRoster = () => {
-    if (!working) {
-      setWorking(true);
+    if (!deactivateRosterWorking) {
       deactivateRoster();
+      setDeactivateRosterWorking(true);
+      const statusKey = showStatusNotification({
+        status: deactivateRosterState,
+        pending: {
+          message: "Deactivating Roster",
+          options,
+        },
+        success: {
+          message: "Roster deactivated!",
+          options,
+        },
+        failure: {
+          message: "Roster deactivation failed!",
+          options,
+        },
+      });
+      setDeactivateRosterStatusKey(statusKey);
     }
   };
 
   const onActivateRoster = () => {
-    if (!working) {
-      setWorking(true);
+    if (!activateRosterWorking) {
       activateRoster();
+      setActivateRosterWorking(true);
+
+      const statusKey = showStatusNotification({
+        status: activateRosterState,
+        pending: {
+          message: "Activating Roster",
+          options,
+        },
+        success: {
+          message: "Roster activated!",
+          options,
+        },
+        failure: {
+          message: "Roster activation failed!",
+          options,
+        },
+      });
+      setActivateRosterStatusKey(statusKey);
     }
   };
 
@@ -67,7 +174,7 @@ export const RosterStatusButton: React.FC<RosterStatusButtonProps> = ({ roster, 
               onClick={onDeactivateRoster}
               size="lg"
               gradientMonochrome="failure"
-              disabled={working}
+              disabled={deactivateRosterWorking || activateRosterWorking}
             >
               <GiCrossedBones className="mr-2 h-6 w-6" /> Deactivate
             </Button>
@@ -77,7 +184,7 @@ export const RosterStatusButton: React.FC<RosterStatusButtonProps> = ({ roster, 
                 onClick={onActivateRoster}
                 size="lg"
                 gradientMonochrome="success"
-                disabled={working}
+                disabled={deactivateRosterWorking || activateRosterWorking}
               >
                 <GiHeartPlus className="mr-2 h-4 w-4" /> Re-Activate
               </Button>
