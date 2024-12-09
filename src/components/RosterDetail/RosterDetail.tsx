@@ -39,8 +39,8 @@ const RosterDetail: FC = () => {
           </div>
           <div className="flex justify-between gap-x-4 py-3">
             <dt className="text-nowrap dark:text-white">Founder:</dt>
-            <dd className="flex justify-center overflow-hidden text-ellipsis text-gray-700 dark:text-gray-300">
-              <Polkicon address={activeRoster.founder} />
+            <dd className="flex justify-center text-ellipsis text-gray-700 dark:text-gray-300">
+              <Polkicon address={activeRoster.founder} transform="grow-6" background="none" />
             </dd>
           </div>
           <div className="flex justify-between gap-x-4 py-3">
