@@ -13,7 +13,7 @@ const ContentPane: React.FC = () => {
   const { activeRoster } = useRosters();
 
   return (
-    <main className="relative ml-64 min-h-[calc(100vh-64px)] w-full overflow-y-auto bg-gray-50 p-4 dark:bg-gray-900">
+    <main className="relative min-h-[calc(100vh-64px)] w-full overflow-y-auto bg-gray-50 p-4 dark:bg-gray-900">
       <div className="grid grid-cols-1 gap-2 p-2 xl:grid-cols-5 xl:gap-4 xl:p-4 2xl:grid-cols-4 2xl:gap-6 2xl:p-6 dark:bg-gray-900">
         {activeRoster && (
           <>

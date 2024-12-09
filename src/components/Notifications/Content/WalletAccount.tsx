@@ -13,7 +13,7 @@ const WalletAccount: React.FC<WalletAccountProps> = ({ account }) => {
 
   return (
     <>
-      <div className="space-y-1 dark:bg-inherit">
+      <div className="space-y-1 bg-inherit">
         <Divider label="Account" />
 
         <div className="flex items-center gap-2">

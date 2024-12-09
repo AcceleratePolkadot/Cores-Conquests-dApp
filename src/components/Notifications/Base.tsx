@@ -32,25 +32,36 @@ const Base = React.forwardRef<
   };
 
   const titleBgs = {
-    pending: "dark:bg-slate-600",
-    success: "dark:bg-green-600",
-    failure: "dark:bg-red-600",
-    "status-changed": "dark:bg-violet-600",
+    pending:
+      "text-white bg-slate-600 hover:bg-slate-600 hover:dark:bg-slate-600 dark:bg-slate-600 dark:text-white",
+    success:
+      "text-white bg-green-600 hover:bg-green-600 hover:dark:bg-green-600 dark:bg-green-600 dark:text-white",
+    failure:
+      "text-white bg-red-600 hover:bg-red-600 dark:bg-red-600 hover:dark:bg-red-600 dark:text-white",
+    "status-changed":
+      "text-white bg-violet-600 hover:bg-violet-600 hover:dark:bg-violet-600 dark:bg-violet-600 dark:text-white",
   };
 
   const contentBgs = {
-    pending: "dark:bg-slate-500",
-    success: "dark:bg-green-800",
-    failure: "dark:bg-red-800",
-    "status-changed": "dark:bg-violet-800",
+    pending:
+      "text-white bg-slate-500 hover:bg-slate-500 hover:dark:bg-slate-500 dark:bg-slate-500 dark:text-white",
+    success:
+      "text-white bg-green-500 hover:bg-green-500 hover:dark:bg-green-500 dark:bg-green-500 dark:text-white",
+    failure:
+      "text-white bg-red-500 hover:bg-red-500 hover:dark:bg-red-500 dark:bg-red-500 dark:text-white",
+    "status-changed":
+      "text-white bg-violet-500 hover:bg-violet-500 hover:dark:bg-violet-500 dark:bg-violet-500 dark:text-white",
   };
 
   return (
     <SnackbarContent ref={ref} role="alert">
-      <Accordion collapseAll className={clsx(titleBgs[type])}>
+      <Accordion
+        collapseAll
+        className="divide-none rounded-none border-none [&>button]:first:rounded-t-none [&>button]:last:rounded-b-none"
+      >
         <Accordion.Panel>
           <Accordion.Title
-            className={clsx(titleBgs[type], "dark:text-gray-200", {
+            className={clsx("focus:ring-0", titleBgs[type], {
               "[&>svg]:rotate-0": closing,
             })}
           >
@@ -72,7 +83,7 @@ const Base = React.forwardRef<
           </Accordion.Title>
           <Accordion.Content
             className={clsx(
-              "scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent max-h-[50vh] space-y-4 overflow-y-scroll text-sm",
+              "scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent max-h-[50vh] space-y-4 overflow-y-scroll text-sm first:rounded-t-none last:rounded-b-none",
               contentBgs[type],
               {
                 hidden: closing,

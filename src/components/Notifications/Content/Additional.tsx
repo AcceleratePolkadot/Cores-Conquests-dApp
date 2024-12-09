@@ -15,8 +15,8 @@ const Additional: React.FC<AdditionalProps> = ({ additional }) => {
   return (
     <>
       {additional.map((group) => (
-        <div key={group.label} className="dark:bg-inherit">
-          <div className="space-y-1 dark:bg-inherit">
+        <div key={group.label} className="bg-inherit">
+          <div className="space-y-1 bg-inherit">
             <Divider label={group.label} />
             {group.rows.map((row, index) => (
               <Row key={`${row.value}-${index}`} {...row} />

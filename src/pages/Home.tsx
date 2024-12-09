@@ -1,13 +1,11 @@
 import ContentPane from "@/components/ContentPane";
 import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
 
 const Home = () => {
   return (
-    <div className="App">
+    <div>
       <Navbar />
-      <div className="flex items-start pt-16">
-        <Sidebar />
+      <div className="flex items-start">
         <ContentPane />
       </div>
     </div>

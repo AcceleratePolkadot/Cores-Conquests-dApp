@@ -1,14 +1,19 @@
-import { useActiveAccount } from "@/contexts/ActiveAccount";
+import type React from "react";
+
 import type { WalletAccount } from "@reactive-dot/core/wallets.js";
 import { useAccounts } from "@reactive-dot/react";
 import { getExtensionIcon } from "@w3ux/extension-assets/util";
 import { Polkicon } from "@w3ux/react-polkicon";
 import clsx from "clsx";
 import { Dropdown } from "flowbite-react";
-import type React from "react";
+
 import { FaUserSlash } from "react-icons/fa6";
 
-const NavbarAccounts: React.FC = () => {
+import { useActiveAccount } from "@/contexts/ActiveAccount";
+
+import { dropdownTheme } from "./theme";
+
+const AccountsDropdown: React.FC = () => {
   const accounts = useAccounts();
   const { activeAccount, setActiveAccount } = useActiveAccount();
 
@@ -21,35 +26,21 @@ const NavbarAccounts: React.FC = () => {
   };
 
   return (
-    <Dropdown
-      arrowIcon={false}
-      inline
-      label={
-        activeAccount ? (
-          <span className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-            <span className="sr-only">{activeAccount.name}</span>
-            <Polkicon address={activeAccount.address} />
-          </span>
-        ) : (
-          <span className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-            <span className="sr-only">No account selected</span>
-            <FaUserSlash className="h-5 w-5 text-gray-500 dark:text-gray-400 " />
-          </span>
-        )
-      }
-    >
+    <Dropdown arrowIcon={false} inline label={<ActiveAccountLabel />} theme={dropdownTheme}>
       {activeAccount && (
         <Dropdown.Header>
-          <div className="flex min-w-0 gap-x-4">
-            <span className="flex-none">
-              <Polkicon address={activeAccount.address} />
+          <div className="flex min-w-0 gap-x-5">
+            <span className="flex-none content-center">
+              <Polkicon address={activeAccount.address} background="none" transform="grow-10" />
             </span>
 
             <div className="min-w-0 flex-auto">
               <div className="flex items-center space-x-3">
-                <h3 className="font-semibold text-sm">{activeAccount.name}</h3>
+                <h3>{activeAccount.name}</h3>
               </div>
-              <p className="mt-1 truncate text-gray-400 text-xs">{activeAccount.address}</p>
+              <p className="mt-1 truncate text-gray-700 text-xs dark:text-slate-300">
+                {activeAccount.address}
+              </p>
             </div>
           </div>
         </Dropdown.Header>
@@ -65,9 +56,9 @@ const NavbarAccounts: React.FC = () => {
               "rounded-t-lg": !activeAccount && index === 0,
             })}
           >
-            <div className="flex min-w-0 gap-x-4">
-              <span className="flex-none">
-                <Polkicon address={account.address} />
+            <div className="flex gap-x-4">
+              <span className="flex-none content-center">
+                <Polkicon address={account.address} background="none" transform="grow-10" />
               </span>
 
               <div className="min-w-0 flex-auto">
@@ -86,7 +77,10 @@ const NavbarAccounts: React.FC = () => {
       {activeAccount && (
         <>
           <Dropdown.Divider />
-          <Dropdown.Item onClick={handleDeselectAccount} className="justify-center rounded-b-lg">
+          <Dropdown.Item
+            onClick={handleDeselectAccount}
+            className="justify-center rounded-b-lg text-xs uppercase"
+          >
             Deselect account
           </Dropdown.Item>
         </>
@@ -106,4 +100,23 @@ const NavbarAccountIcon: React.FC<{ account: WalletAccount }> = ({ account }) =>
   ) : undefined;
 };
 
-export default NavbarAccounts;
+const ActiveAccountLabel: React.FC = () => {
+  const { activeAccount } = useActiveAccount();
+
+  return (
+    <div className="items-center rounded-lg p-2 hover:bg-slate-200 dark:hover:bg-gray-700">
+      {activeAccount ? (
+        <div className="flex space-x-4">
+          <div className="flex-none items-center">
+            <Polkicon address={activeAccount.address} background="none" transform="grow-3" />
+          </div>
+          <div className="font-semibold text-base">{activeAccount.name}</div>
+        </div>
+      ) : (
+        <FaUserSlash className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+      )}
+    </div>
+  );
+};
+
+export default AccountsDropdown;

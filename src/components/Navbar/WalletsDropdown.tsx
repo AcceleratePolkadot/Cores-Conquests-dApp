@@ -7,7 +7,6 @@ import {
 import { Dropdown, Tooltip } from "flowbite-react";
 import type React from "react";
 import { FaCircleMinus, FaCirclePlus } from "react-icons/fa6";
-import { HiViewGrid } from "react-icons/hi";
 import { HiMiniWallet } from "react-icons/hi2";
 
 import { extensions } from "@w3ux/extension-assets";
@@ -16,32 +15,50 @@ import clsx from "clsx";
 
 import type { NavbarWalletsItemProps } from "./types";
 
-const NavbarWallets: React.FC = () => {
-  const wallets = useWallets();
+import useDelayedRender from "@/hooks/useDelayedRender";
+import { dropdownTheme } from "./theme";
 
-  return (
+const WalletsDropdown: React.FC = () => {
+  const delayedRender = useDelayedRender(100);
+
+  return delayedRender(() => (
     <Dropdown
       arrowIcon={false}
       dismissOnClick={false}
       inline
       label={
-        <span className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+        <span className="rounded-lg p-2 hover:bg-slate-200 dark:hover:bg-gray-700">
           <span className="sr-only">Wallets</span>
-          <HiViewGrid className="text-2xl text-gray-500 dark:text-gray-400" />
+          <HiMiniWallet className="text-2xl text-gray-500 dark:text-gray-400" />
         </span>
       }
+      theme={dropdownTheme}
     >
       <Dropdown.Header className="text-center">
         <span className="inline-flex items-baseline">
-          <HiMiniWallet className="mx-2 h-5 w-5 self-center rounded-full" />
-          <span className="font-semibold text-lg">Wallets</span>
+          <span className="font-semibold">Wallets</span>
         </span>
       </Dropdown.Header>
 
-      {wallets.map((wallet, index, allWallets) => (
-        <NavbarWalletsItem key={wallet.id} wallet={wallet} index={index} allWallets={allWallets} />
-      ))}
+      <WalletsDropdownItems />
     </Dropdown>
+  ));
+};
+
+const WalletsDropdownItems: React.FC = () => {
+  const wallets = useWallets();
+
+  return (
+    <>
+      {wallets.map((wallet, index, allWallets) => (
+        <WalletsDropdownItem
+          key={wallet.id}
+          wallet={wallet}
+          index={index}
+          allWallets={allWallets}
+        />
+      ))}
+    </>
   );
 };
 
@@ -61,7 +78,7 @@ export const WalletStatusIcon = ({ connected }: { connected: boolean }) => {
   );
 };
 
-export const NavbarWalletsItem = ({ wallet, index, allWallets }: NavbarWalletsItemProps) => {
+export const WalletsDropdownItem = ({ wallet, index, allWallets }: NavbarWalletsItemProps) => {
   const connectedWallets = useConnectedWallets();
 
   const [_, connectWallet] = useWalletConnector();
@@ -108,4 +125,4 @@ export const NavbarWalletsItem = ({ wallet, index, allWallets }: NavbarWalletsIt
   );
 };
 
-export default NavbarWallets;
+export default WalletsDropdown;
