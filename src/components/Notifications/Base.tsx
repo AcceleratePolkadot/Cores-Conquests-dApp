@@ -61,7 +61,7 @@ const Base = React.forwardRef<
       >
         <Accordion.Panel>
           <Accordion.Title
-            className={clsx("focus:ring-0", titleBgs[type], {
+            className={clsx("min-w-72 focus:ring-0", titleBgs[type], {
               "[&>svg]:rotate-0": closing,
             })}
           >
