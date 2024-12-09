@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 
 import { BsFillRocketTakeoffFill, BsHourglassSplit } from "react-icons/bs";
 import { FaRegIdBadge, FaUserCheck } from "react-icons/fa";
-import { HiOutlineViewGrid } from "react-icons/hi";
 import { MdGroups2 } from "react-icons/md";
 
+import RosterAddButton from "@/components/RosterAdd/RosterAdd";
 import { useActiveAccount } from "@/contexts/ActiveAccount";
 import { useNominations } from "@/contexts/Nominations";
 import { useRosters } from "@/contexts/Rosters";
@@ -55,7 +55,6 @@ const RostersDrawer: React.FC = () => {
 
   const handleRosterClick = (roster: Roster) => {
     setActiveRoster(roster);
-    setIsOpen(false);
   };
 
   return (
@@ -86,6 +85,9 @@ const RostersDrawer: React.FC = () => {
                 activeRoster={activeRoster}
                 onRosterClick={handleRosterClick}
               />
+              <div className="flex items-center justify-center py-8 text-gray-500">
+                <RosterAddButton />
+              </div>
             </Tabs.Item>
             <Tabs.Item title="Joined" icon={FaRegIdBadge}>
               <RosterGrid
@@ -132,8 +134,9 @@ const RosterGrid: React.FC<RosterGridProps> = ({ rosters, activeRoster, onRoster
         <li
           key={roster.id.asHex()}
           className={clsx(
-            "col-span-1 divide-y divide-gray-200 rounded-lg bg-gray-50/10 shadow transition-all hover:shadow-md dark:divide-gray-700 dark:bg-gray-700/10",
-            roster.id.asHex() === activeRoster?.id.asHex() && "shadow-fuchsia-500/10 shadow-xl",
+            "col-span-1 divide-y divide-gray-200 rounded-lg bg-gray-50/10 shadow transition-all hover:shadow-fuchsia-400/10 hover:shadow-xl dark:divide-gray-700 dark:bg-gray-700/10",
+            roster.id.asHex() === activeRoster?.id.asHex() &&
+              "shadow-amber-200/40 shadow-xl hover:shadow-amber-200/40",
           )}
         >
           <button type="button" className="w-full text-left" onClick={() => onRosterClick(roster)}>
