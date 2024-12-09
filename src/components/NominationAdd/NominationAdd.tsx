@@ -33,7 +33,12 @@ const NominationAdd: React.FC = () => {
   const membersMax = useLazyLoadQuery((builder) => builder.getConstant("Roster", "MembersMax"));
 
   const canAddNomination = () => {
-    return !(!activeAccount || !activeRoster || activeRoster.members.length >= membersMax);
+    return !(
+      !activeAccount ||
+      !activeRoster ||
+      activeRoster.members.length >= membersMax ||
+      !activeRoster.members.includes(activeAccount.address)
+    );
   };
 
   const handleOpenModal = () => {
@@ -55,7 +60,7 @@ const NominationAdd: React.FC = () => {
 
 const NominationAddButton: React.FC<NominationAddButtonProps> = ({ onClick, disabled }) => {
   return (
-    <Tooltip content={disabled ? "Roster Full" : "Add Nomination"} placement="right">
+    <Tooltip content={disabled ? "Can't add nomination" : "Add Nomination"} placement="right">
       <Button gradientDuoTone="pinkToOrange" size="xs" disabled={disabled} onClick={onClick}>
         <FaCirclePlus />
       </Button>
