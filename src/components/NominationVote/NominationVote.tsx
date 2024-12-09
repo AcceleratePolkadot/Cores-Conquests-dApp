@@ -427,7 +427,7 @@ const NominationVote: React.FC<NominationVoteProps> = ({ nomination }) => {
     if (nomination.status.type === "Approved" && nomination.nominee === activeAccount.address) {
       return (
         <Tooltip content="Join" animation="duration-1000" placement="left">
-          <Button onClick={handleJoin} size="xs" color="purple">
+          <Button onClick={handleJoin} size="xs" color="purple" disabled={actionInProgress}>
             {actionInProgress ? (
               <AiOutlineLoading3Quarters className="animate-spin" />
             ) : (
@@ -441,7 +441,7 @@ const NominationVote: React.FC<NominationVoteProps> = ({ nomination }) => {
     if (nomination.status.type !== "Approved" && nomination.status.type !== "Rejected") {
       return (
         <Tooltip content="Close" animation="duration-1000" placement="left">
-          <Button onClick={handleClose} size="xs" color="warning">
+          <Button onClick={handleClose} size="xs" color="warning" disabled={actionInProgress}>
             {actionInProgress ? (
               <AiOutlineLoading3Quarters className="animate-spin" />
             ) : (
