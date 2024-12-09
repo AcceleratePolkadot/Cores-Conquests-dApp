@@ -1,6 +1,6 @@
 import { Polkicon } from "@w3ux/react-polkicon";
 import clsx from "clsx";
-import { Button, Drawer, Tabs } from "flowbite-react";
+import { Button, Drawer, Pagination, Tabs } from "flowbite-react";
 import type React from "react";
 import { useEffect, useState } from "react";
 
@@ -8,7 +8,7 @@ import { BsFillRocketTakeoffFill, BsHourglassSplit } from "react-icons/bs";
 import { FaRegIdBadge, FaUserCheck } from "react-icons/fa";
 import { MdGroups2 } from "react-icons/md";
 
-import RosterAddButton from "@/components/RosterAdd/RosterAdd";
+import RosterAdd from "@/components/RosterAdd/RosterAdd";
 import { useActiveAccount } from "@/contexts/ActiveAccount";
 import { useNominations } from "@/contexts/Nominations";
 import { useRosters } from "@/contexts/Rosters";
@@ -86,7 +86,7 @@ const RostersDrawer: React.FC = () => {
                 onRosterClick={handleRosterClick}
               />
               <div className="flex items-center justify-center py-8 text-gray-500">
-                <RosterAddButton />
+                <RosterAdd />
               </div>
             </Tabs.Item>
             <Tabs.Item title="Joined" icon={FaRegIdBadge}>
@@ -124,44 +124,68 @@ interface RosterGridProps {
 }
 
 const RosterGrid: React.FC<RosterGridProps> = ({ rosters, activeRoster, onRosterClick }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const rostersPerPage = 6;
+
   if (rosters.length === 0) {
     return <div className="py-8 text-center text-gray-500">No rosters found</div>;
   }
 
+  const indexOfLastRoster = currentPage * rostersPerPage;
+  const indexOfFirstRoster = indexOfLastRoster - rostersPerPage;
+  const currentRosters = rosters.slice(indexOfFirstRoster, indexOfLastRoster);
+  const totalPages = Math.ceil(rosters.length / rostersPerPage);
+
   return (
-    <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {rosters.map((roster) => (
-        <li
-          key={roster.id.asHex()}
-          className={clsx(
-            "col-span-1 divide-y divide-gray-200 rounded-lg bg-gray-50/10 shadow transition-all hover:shadow-fuchsia-400/10 hover:shadow-xl dark:divide-gray-700 dark:bg-gray-700/10",
-            roster.id.asHex() === activeRoster?.id.asHex() &&
-              "shadow-amber-200/40 shadow-xl hover:shadow-amber-200/40",
-          )}
-        >
-          <button type="button" className="w-full text-left" onClick={() => onRosterClick(roster)}>
-            <div className="flex w-full items-center justify-between space-x-6 p-6">
-              <div className="flex-1 truncate">
-                <div className="flex items-center space-x-3">
-                  <h3 className="truncate font-medium text-base text-gray-900 dark:text-white">
-                    {toApTitleCase(roster.title.asText())}
-                  </h3>
-                  {roster.status.type === "Active" && (
-                    <span className="inline-flex flex-shrink-0 items-center rounded-full bg-green-50 px-1.5 py-0.5 font-medium text-green-700 text-xs dark:bg-green-900 dark:text-green-200">
-                      Active
-                    </span>
-                  )}
+    <div>
+      <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {currentRosters.map((roster) => (
+          <li
+            key={roster.id.asHex()}
+            className={clsx(
+              "col-span-1 divide-y divide-gray-200 rounded-lg bg-gray-50/10 shadow transition-all hover:shadow-fuchsia-400/10 hover:shadow-xl dark:divide-gray-700 dark:bg-gray-700/10",
+              roster.id.asHex() === activeRoster?.id.asHex() &&
+                "shadow-amber-200/40 shadow-xl hover:shadow-amber-200/40",
+            )}
+          >
+            <button
+              type="button"
+              className="w-full text-left"
+              onClick={() => onRosterClick(roster)}
+            >
+              <div className="flex w-full items-center justify-between space-x-6 p-6">
+                <div className="flex-1 truncate">
+                  <div className="flex items-center space-x-3">
+                    <h3 className="truncate font-medium text-base text-gray-900 dark:text-white">
+                      {toApTitleCase(roster.title.asText())}
+                    </h3>
+                    {roster.status.type === "Active" && (
+                      <span className="inline-flex flex-shrink-0 items-center rounded-full bg-green-50 px-1.5 py-0.5 font-medium text-green-700 text-xs dark:bg-green-900 dark:text-green-200">
+                        Active
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <span className="truncate">{roster.id.asHex()}</span>
+                  </div>
                 </div>
-                <div className="flex items-center space-x-1">
-                  <span className="truncate">{roster.id.asHex()}</span>
-                </div>
+                <Rosticon rosterId={roster.id} className="h-20 w-20 flex-shrink-0" />
               </div>
-              <Rosticon rosterId={roster.id} className="h-20 w-20 flex-shrink-0" />
-            </div>
-          </button>
-        </li>
-      ))}
-    </ul>
+            </button>
+          </li>
+        ))}
+      </ul>
+      {totalPages > 1 && (
+        <div className="mt-6 flex overflow-x-auto sm:justify-center">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => setCurrentPage(page)}
+            showIcons
+          />
+        </div>
+      )}
+    </div>
   );
 };
 
