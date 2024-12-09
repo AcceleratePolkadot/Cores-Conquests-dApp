@@ -95,15 +95,19 @@ const MembersList: React.FC = () => {
                       </th>
                       <MemberBalanceCells address={member} />
                       <FlowbiteTable.Cell>
-                        <div className="-space-x-2 flex">
+                        <div className="flex flex-wrap gap-1">
                           {byNominator(member)
-                            .filter((nomination) => nomination.roster === activeRoster.id)
+                            .filter(
+                              (nomination) =>
+                                nomination.roster.asText() === activeRoster.id.asText(),
+                            )
                             .map((nomination) => (
-                              <div
-                                key={nomination.nominee}
-                                className="h-6 w-6 rounded-full bg-gray-50 ring-2 ring-white dark:bg-gray-600 dark:ring-gray-400"
-                              >
-                                <Polkicon address={nomination.nominee} />
+                              <div key={nomination.nominee}>
+                                <Polkicon
+                                  address={nomination.nominee}
+                                  transform="grow-10"
+                                  background="none"
+                                />
                               </div>
                             ))}
                         </div>
