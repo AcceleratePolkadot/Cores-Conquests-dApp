@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import { useLazyLoadQuery } from "@reactive-dot/react";
 import { Polkicon } from "@w3ux/react-polkicon";
+import clsx from "clsx";
 import { Card, Table as FlowbiteTable, Tooltip } from "flowbite-react";
 
 import { useNominations } from "@/contexts/Nominations";
@@ -10,10 +11,66 @@ import type { Nomination } from "@/contexts/Nominations/types";
 import { useRosters } from "@/contexts/Rosters";
 
 import NominationVote from "@/components/NominationVote";
-import PeriodProgress from "@/components/PeriodProgress";
+import PeriodProgress, { calculateProgress, type Periods } from "@/components/PeriodProgress";
 import SearchFilters from "@/components/SearchFilters";
 import Table from "@/components/Table";
 import TruncatedHash from "@/components/TruncatedHash";
+
+const NominationStatus: React.FC<{ nomination: Nomination; votingPeriod: Periods }> = ({
+  nomination,
+  votingPeriod,
+}) => {
+  const baseStyles = "p-2 text-xxs uppercase font-semibold rounded-full";
+
+  if (nomination.status.type === "Approved") {
+    return (
+      <span
+        className={clsx(
+          baseStyles,
+          "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+        )}
+      >
+        {nomination.status.type}
+      </span>
+    );
+  }
+
+  if (nomination.status.type === "Rejected") {
+    return (
+      <span
+        className={clsx(baseStyles, "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300")}
+      >
+        {nomination.status.type}
+      </span>
+    );
+  }
+
+  const ayeCount = nomination.votes.filter((vote) => vote.vote.type === "Aye").length;
+  const suffix = votingPeriod.periodRemaining > 0 ? "ing" : "ed";
+
+  if (ayeCount > 0 && ayeCount >= nomination.votes.length / 2) {
+    return (
+      <span
+        className={clsx(
+          baseStyles,
+          "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+        )}
+      >
+        {`Vote Pass${suffix}`}
+      </span>
+    );
+  }
+  return (
+    <span
+      className={clsx(baseStyles, "bg-amber-100 text-red-800 dark:bg-red-900 dark:text-red-300", {
+        "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300":
+          votingPeriod.periodRemaining > 0,
+      })}
+    >
+      {`Vote Fail${suffix}`}
+    </span>
+  );
+};
 
 const NominationsList: React.FC = () => {
   const { activeRoster } = useRosters();
@@ -165,15 +222,14 @@ const NominationsList: React.FC = () => {
                         />
                       </FlowbiteTable.Cell>
                       <FlowbiteTable.Cell>
-                        <span
-                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-medium text-xs ${
-                            nomination.status.type === "Approved"
-                              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-                              : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
-                          }`}
-                        >
-                          {nomination.status.type}
-                        </span>
+                        <NominationStatus
+                          nomination={nomination}
+                          votingPeriod={calculateProgress({
+                            periodStart: nomination.nominated_on,
+                            periodDuration: nominationVotingPeriod,
+                            currentBlock,
+                          })}
+                        />
                       </FlowbiteTable.Cell>
                       <FlowbiteTable.Cell>
                         <NominationVote nomination={nomination} />
