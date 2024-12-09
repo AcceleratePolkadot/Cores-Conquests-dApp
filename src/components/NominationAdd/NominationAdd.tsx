@@ -17,6 +17,8 @@ import { useNotifications } from "@/contexts/Notifications";
 import type { NotificationKey, StatusNotification } from "@/contexts/Notifications/types";
 import { useRosters } from "@/contexts/Rosters";
 
+import { comparators } from "@/utils/comparators";
+
 import type {
   NominationAddButtonProps,
   NominationAddConfirmationProps,
@@ -194,23 +196,15 @@ const NominationAddConfirmation: React.FC<NominationAddConfirmationProps> = ({
   } as OptionsObject<"mutationPending">;
 
   useEffect(() => {
-    const statusIsEqual = (a: StatusNotification["status"], b: StatusNotification["status"]) => {
-      if (a === b) return true;
-      if (a instanceof MutationError && b instanceof MutationError) return true;
-      if (
-        (a as TxEvent).type !== undefined &&
-        (b as TxEvent).type !== undefined &&
-        (a as TxEvent).type === (b as TxEvent).type
-      )
-        return true;
-      return false;
-    };
-
     if (submitting) {
-      if (nominationStatusKey && !statusIsEqual(mutationState.current, nominationState)) {
+      if (
+        nominationStatusKey &&
+        !comparators.mutationStateIsEqual(mutationState.current, nominationState)
+      ) {
         mutationState.current = nominationState;
         updateStatusNotification(nominationStatusKey, nominationState);
       }
+
       if (
         nominationState !== pending &&
         nominationState !== idle &&
