@@ -66,17 +66,8 @@ const RostersDrawer: React.FC = () => {
       >
         <MdGroups2 className="h-5 w-5" />
       </Button>
-      <Drawer open={isOpen} onClose={() => setIsOpen(false)} position="bottom">
-        <Drawer.Header title="Rosters" titleIcon={() => <MdGroups2 className="mr-2" />}>
-          <div className="flex items-center gap-2">
-            {activeAccount && (
-              <>
-                <Polkicon address={activeAccount.address} />
-                <span>{activeAccount.name}'s Rosters</span>
-              </>
-            )}
-          </div>
-        </Drawer.Header>
+      <Drawer open={isOpen} onClose={() => setIsOpen(false)} position="bottom" className="p-0">
+        <Drawer.Header titleIcon={() => <MdGroups2 className="hidden" />} />
         <Drawer.Items>
           <Tabs aria-label="Roster categories" theme={tabsTheme}>
             <Tabs.Item active title="Founded" icon={BsFillRocketTakeoffFill}>
@@ -125,7 +116,7 @@ interface RosterGridProps {
 
 const RosterGrid: React.FC<RosterGridProps> = ({ rosters, activeRoster, onRosterClick }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const rostersPerPage = 6;
+  const rostersPerPage = 3;
 
   if (rosters.length === 0) {
     return <div className="py-8 text-center text-gray-500">No rosters found</div>;
