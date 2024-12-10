@@ -4,19 +4,23 @@ import { formatBalance } from "@polkadot/util";
 import { useChainSpecData } from "@reactive-dot/react";
 import type { BigNumber } from "bignumber.js";
 
-const useBalanceFormatter = (withSi = true, forceUnit = undefined) => {
+const useBalanceFormatter = (withSi = true) => {
   const chainSpecData = useChainSpecData();
 
   const balanceFormatter = useCallback(
     (balance: BigNumber) => {
+      formatBalance.setDefaults({
+        unit: chainSpecData.properties.tokenSymbol,
+        decimals: chainSpecData.properties.tokenDecimals,
+      });
       return formatBalance(balance.toString(), {
         decimals: chainSpecData.properties.tokenDecimals,
         withSi: withSi,
-        forceUnit: forceUnit,
         withZero: false,
+        withUnit: true,
       });
     },
-    [chainSpecData, withSi, forceUnit],
+    [chainSpecData, withSi],
   );
 
   return { balanceFormatter };
