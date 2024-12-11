@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { SnackbarProvider } from "notistack";
 
 import { ActiveAccountProvider } from "@/contexts/ActiveAccount";
+import { ExpulsionProposalsProvider } from "@/contexts/ExpulsionProposals";
 import { NominationsProvider } from "@/contexts/Nominations";
 import { NotificationsProvider } from "@/contexts/Notifications";
 import { RostersProvider } from "@/contexts/Rosters";
@@ -33,7 +34,9 @@ const Providers: React.FC<ProvidersProps> = ({ children }) => {
         <NotificationsProvider>
           <ActiveAccountProvider>
             <RostersProvider>
-              <NominationsProvider>{children}</NominationsProvider>
+              <NominationsProvider>
+                <ExpulsionProposalsProvider>{children}</ExpulsionProposalsProvider>
+              </NominationsProvider>
             </RostersProvider>
           </ActiveAccountProvider>
         </NotificationsProvider>
