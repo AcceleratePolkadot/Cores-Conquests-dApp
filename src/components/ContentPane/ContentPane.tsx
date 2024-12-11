@@ -6,6 +6,7 @@ import { useRosters } from "@/contexts/Rosters";
 
 import { toApTitleCase } from "@/utils/typography";
 
+import ExpulsionProposalsList from "@/components/ExpulsionProposalsList";
 import MembersList from "@/components/MembersList";
 import NominationsList from "@/components/NominationsList";
 import RosterDetail from "@/components/RosterDetail";
@@ -39,6 +40,12 @@ const ContentPane: React.FC = () => {
             <div className="col-span-full space-y-6">
               <Card>
                 <NominationsList />
+              </Card>
+            </div>
+
+            <div className="col-span-full space-y-6">
+              <Card>
+                <ExpulsionProposalsList />
               </Card>
             </div>
           </>
