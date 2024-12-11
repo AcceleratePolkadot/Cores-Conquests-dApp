@@ -19,7 +19,15 @@ import useDelayedRender from "@/hooks/useDelayedRender";
 import { dropdownTheme } from "./theme";
 
 const WalletsDropdown: React.FC = () => {
-  const delayedRender = useDelayedRender(100);
+  const delayedRender = useDelayedRender(
+    500,
+    <div className="flex items-center">
+      <span className="cursor-not-allowed p-2 opacity-30">
+        <span className="sr-only">Waiting for Wallet extensions</span>
+        <HiMiniWallet className="text-2xl text-gray-500 dark:text-gray-400" />
+      </span>
+    </div>,
+  );
 
   return delayedRender(() => (
     <Dropdown
