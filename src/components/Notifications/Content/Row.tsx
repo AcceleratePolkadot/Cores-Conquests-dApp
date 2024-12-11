@@ -15,7 +15,7 @@ const IconRow: FC<InfoWithIcon> = ({ icon, value, tooltip }) => {
   return (
     <div className="flex items-center gap-2">
       <TooltipWrapper tooltip={tooltip}>{icon}</TooltipWrapper>
-      <span className="truncate">{String(value)}</span>
+      <span className="max-w-prose truncate">{String(value)}</span>
     </div>
   );
 };
@@ -28,7 +28,7 @@ const LabelRow: FC<InfoWithLabel> = ({ label, value, tooltip }) => {
       <TooltipWrapper tooltip={tooltip}>
         <span className="font-bold">{toApTitleCase(fromSnakeCase(label))}:</span>
       </TooltipWrapper>
-      <span className="truncate">{String(value)}</span>
+      <span className="max-w-prose truncate">{String(value)}</span>
     </div>
   );
 };
@@ -36,7 +36,7 @@ const LabelRow: FC<InfoWithLabel> = ({ label, value, tooltip }) => {
 const StringRow: FC<InfoValueOnly> = ({ value, tooltip }) => {
   return (
     <TooltipWrapper tooltip={tooltip}>
-      <span className="truncate">{String(value)}</span>
+      <span className="max-w-prose truncate">{String(value)}</span>
     </TooltipWrapper>
   );
 };
