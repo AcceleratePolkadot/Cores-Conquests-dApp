@@ -126,7 +126,7 @@ const MembersList: React.FC = () => {
 };
 
 const MemberBalanceCells: React.FC<{ address: Address }> = ({ address }) => {
-  const { balanceFormatter } = useBalanceFormatter();
+  const { formatBalance } = useBalanceFormatter();
   const systemAccount = useLazyLoadQuery((builder) =>
     builder.readStorage("System", "Account", [address]),
   );
@@ -134,13 +134,13 @@ const MemberBalanceCells: React.FC<{ address: Address }> = ({ address }) => {
   return systemAccount ? (
     <>
       <FlowbiteTable.Cell>
-        {balanceFormatter(BigNumber(systemAccount.data.free.toString()))}
+        {formatBalance(BigNumber(systemAccount.data.free.toString()))}
       </FlowbiteTable.Cell>
       <FlowbiteTable.Cell>
-        {balanceFormatter(BigNumber(systemAccount.data.reserved.toString()))}
+        {formatBalance(BigNumber(systemAccount.data.reserved.toString()))}
       </FlowbiteTable.Cell>
       <FlowbiteTable.Cell>
-        {balanceFormatter(
+        {formatBalance(
           BigNumber((systemAccount.data.free + systemAccount.data.reserved).toString()),
         )}
       </FlowbiteTable.Cell>

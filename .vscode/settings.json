@@ -49,5 +49,5 @@
 
   "eslint.format.enable": true,
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
-  "cSpell.words": ["Identeapot", "identeapots", "notistack", "Rosticon"]
+  "cSpell.words": ["Identeapot", "identeapots", "notistack", "Numericable", "Rosticon"]
 }
