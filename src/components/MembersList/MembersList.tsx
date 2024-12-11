@@ -12,6 +12,7 @@ import type { Address } from "@/contexts/ActiveAccount/types";
 import { useNominations } from "@/contexts/Nominations";
 import { useRosters } from "@/contexts/Rosters";
 
+import ExpulsionProposalAdd from "@/components/ExpulsionProposalAdd";
 import NominationAdd from "@/components/NominationAdd";
 import SearchFilters from "@/components/SearchFilters";
 import Table from "@/components/Table";
@@ -112,7 +113,9 @@ const MembersList: React.FC = () => {
                             ))}
                         </div>
                       </FlowbiteTable.Cell>
-                      <FlowbiteTable.Cell>...</FlowbiteTable.Cell>
+                      <FlowbiteTable.Cell>
+                        <ExpulsionProposalAdd subject={member} />
+                      </FlowbiteTable.Cell>
                     </FlowbiteTable.Row>
                   ))}
                 </Table.Body>
