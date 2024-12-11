@@ -45,3 +45,16 @@ export const fromCamelCase = (str: string): string => {
     .replace(/([a-z])([A-Z])/g, (_, a, b) => `${a} ${b}`)
     .replace(/([A-Z])([A-Z][a-z])/g, (_, a, b) => `${a} ${b}`);
 };
+
+export const slugify = (str: string | string[]): string => {
+  if (Array.isArray(str)) {
+    return str.map((s) => slugify(s)).join("-");
+  }
+
+  return str
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "-")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+};
