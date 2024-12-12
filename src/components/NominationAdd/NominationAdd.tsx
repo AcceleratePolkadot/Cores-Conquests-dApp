@@ -214,6 +214,10 @@ const NominationAddConfirmation: React.FC<NominationAddConfirmationProps> = ({
       notificationMessages={notificationMessages}
       onComplete={onComplete}
       setDismissible={setDismissible}
+      button={{
+        color: "success",
+        label: "Confirm Nomination?",
+      }}
     >
       <h2 className="block text-center font-normal text-base text-gray-600 dark:text-gray-400">
         Are you sure you want to nominate{" "}

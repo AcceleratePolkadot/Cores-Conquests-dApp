@@ -1,6 +1,8 @@
 import type { StatusNotification } from "@/contexts/Notifications/types";
 import type { OptionsObject } from "notistack";
 
+import type { ButtonProps } from "flowbite-react";
+
 export interface NotificationMessages {
   pending: {
     message: string;
@@ -23,5 +25,5 @@ export interface MutationConfirmationProps {
   notificationMessages: NotificationMessages;
   onComplete: () => void;
   setDismissible: (dismissible: boolean) => void;
-  buttonText?: string;
+  button?: ButtonProps;
 }

@@ -350,6 +350,10 @@ const ExpulsionProposalAddConfirmation: React.FC<ExpulsionProposalAddConfirmatio
       notificationMessages={notificationMessages}
       onComplete={onComplete}
       setDismissible={setDismissible}
+      button={{
+        color: "failure",
+        label: "Expel Member?",
+      }}
     >
       <h2 className="block text-center font-normal text-base text-gray-600 dark:text-gray-400">
         Are you sure you want to raise an Expulsion Proposal against{" "}

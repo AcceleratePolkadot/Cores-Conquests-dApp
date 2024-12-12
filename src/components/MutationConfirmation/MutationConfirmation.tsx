@@ -1,5 +1,5 @@
 import { MutationError, idle, pending } from "@reactive-dot/core";
-import { Button } from "flowbite-react";
+import { Button, Spinner } from "flowbite-react";
 import type { TxEvent } from "polkadot-api";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
@@ -8,6 +8,7 @@ import { useNotifications } from "@/contexts/Notifications";
 import type { NotificationKey, StatusNotification } from "@/contexts/Notifications/types";
 import { comparators } from "@/utils/comparators";
 
+import { buttonTheme, spinnerTheme } from "./theme";
 import type { MutationConfirmationProps } from "./types";
 
 const MutationConfirmation: React.FC<MutationConfirmationProps> = ({
@@ -17,7 +18,7 @@ const MutationConfirmation: React.FC<MutationConfirmationProps> = ({
   notificationMessages,
   onComplete,
   setDismissible,
-  buttonText = "Confirm",
+  button,
 }) => {
   const { showStatusNotification, updateStatusNotification } = useNotifications();
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -58,18 +59,29 @@ const MutationConfirmation: React.FC<MutationConfirmationProps> = ({
     setStatusKey(key);
   };
 
+  const buttonDefaults = {
+    size: "xl",
+    color: "success",
+    label: "Confirm",
+    isProcessing: submitting,
+    processingLabel: "Submitting Transaction…",
+    processingSpinner: (
+      <Spinner
+        theme={spinnerTheme}
+        size={button?.size ?? "xl"}
+        color={button?.color ?? "success"}
+      />
+    ),
+    disabled: submitting,
+    theme: buttonTheme,
+    onClick: handleSubmit,
+  };
+
   return (
     <>
       <div className="mb-4 min-h-24 space-y-2">{children}</div>
-      <div className="flex justify-end">
-        <Button
-          type="button"
-          gradientDuoTone="cyanToBlue"
-          onClick={handleSubmit}
-          disabled={submitting}
-        >
-          {buttonText}
-        </Button>
+      <div className="flex justify-center">
+        <Button type="button" {...buttonDefaults} {...button} />
       </div>
     </>
   );
