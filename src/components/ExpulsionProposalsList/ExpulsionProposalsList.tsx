@@ -241,6 +241,7 @@ const ExpulsionProposalsList: React.FC = () => {
                           <ExpulsionProposalDetails proposal={proposal} />
                         </FlowbiteTable.Cell>
                       </FlowbiteTable.Row>
+                      <FlowbiteTable.Row className="hidden" />
                     </Fragment>
                   ))}
                 </Table.Body>
