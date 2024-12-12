@@ -2,14 +2,17 @@ import type React from "react";
 import { useEffect, useState } from "react";
 
 import { useLazyLoadQuery, useMutation } from "@reactive-dot/react";
+import { Polkicon } from "@w3ux/react-polkicon";
 import { isValidAddress } from "@w3ux/utils";
 import { Button, Modal, Tooltip } from "flowbite-react";
 import _ from "lodash";
 import type { OptionsObject } from "notistack";
 import { useForm } from "react-hook-form";
 
-import { FaCirclePlus } from "react-icons/fa6";
+import { FaCirclePlus, FaPersonWalkingArrowRight } from "react-icons/fa6";
 
+import Rosticon from "@/components/Rosticon";
+import TruncatedHash from "@/components/TruncatedHash";
 import { useActiveAccount } from "@/contexts/ActiveAccount";
 import { useRosters } from "@/contexts/Rosters";
 
@@ -93,7 +96,7 @@ const NominationAddModal: React.FC<NominationAddModalProps> = ({ isOpen, onClose
         {submitting && txReady ? (
           <NominationAddConfirmation
             nominee={nominee}
-            rosterId={activeRoster.id}
+            roster={activeRoster}
             activeAccount={activeAccount}
             onComplete={handleClose}
             setDismissible={setDismissible}
@@ -157,13 +160,13 @@ const NominationAddForm: React.FC<NominationAddFormProps> = ({ setNominee, onFor
 
 const NominationAddConfirmation: React.FC<NominationAddConfirmationProps> = ({
   nominee,
-  rosterId,
+  roster,
   activeAccount,
   onComplete,
   setDismissible,
 }) => {
   const [nominationState, submitNomination] = useMutation(
-    (tx) => tx.Roster.nomination_new({ nominee, roster_id: rosterId }),
+    (tx) => tx.Roster.nomination_new({ nominee, roster_id: roster.id }),
     { signer: activeAccount.polkadotSigner },
   );
 
@@ -174,7 +177,7 @@ const NominationAddConfirmation: React.FC<NominationAddConfirmationProps> = ({
         rows: [
           {
             label: "Roster ID",
-            value: rosterId.asHex(),
+            value: roster.id.asHex(),
           },
           {
             label: "Nominator",
@@ -212,9 +215,22 @@ const NominationAddConfirmation: React.FC<NominationAddConfirmationProps> = ({
       onComplete={onComplete}
       setDismissible={setDismissible}
     >
-      <h2 className="block font-medium text-gray-700 text-sm dark:text-gray-300">
-        Nominate {nominee}?
+      <h2 className="block text-center font-normal text-base text-gray-600 dark:text-gray-400">
+        Are you sure you want to nominate{" "}
+        <TruncatedHash
+          hash={nominee}
+          copy={false}
+          className="font-semibold text-gray-900 dark:text-white"
+        />{" "}
+        to{" "}
+        <span className="font-semibold text-gray-900 dark:text-white">{roster.title.asText()}</span>
+        ?
       </h2>
+      <div className="flex items-center justify-center space-x-4 py-6 text-[100px]">
+        <Polkicon address={nominee} background="none" />
+        <FaPersonWalkingArrowRight className="animate-pulse text-gray-600 dark:text-gray-400" />
+        <Rosticon rosterId={roster.id} className="h-24 w-24" />
+      </div>
     </MutationConfirmation>
   );
 };

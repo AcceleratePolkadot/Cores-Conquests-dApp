@@ -9,6 +9,7 @@ import type { OptionsObject } from "notistack";
 import { Binary } from "polkadot-api";
 import { useForm } from "react-hook-form";
 
+import { FaRightLong, FaTrashCan } from "react-icons/fa6";
 import { GiSkullCrossedBones } from "react-icons/gi";
 import { PiTextAaFill } from "react-icons/pi";
 
@@ -26,6 +27,8 @@ import type {
 } from "./types";
 
 import MutationConfirmation from "@/components/MutationConfirmation/MutationConfirmation";
+import TruncatedHash from "@/components/TruncatedHash/TruncatedHash";
+import { Polkicon } from "@w3ux/react-polkicon";
 
 const ExpulsionProposalAdd: React.FC<ExpulsionProposalAddProps> = ({ subject }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -348,9 +351,20 @@ const ExpulsionProposalAddConfirmation: React.FC<ExpulsionProposalAddConfirmatio
       onComplete={onComplete}
       setDismissible={setDismissible}
     >
-      <h2 className="block font-medium text-gray-700 text-sm dark:text-gray-300">
-        Raise Expulsion Proposal against {subject}?
+      <h2 className="block text-center font-normal text-base text-gray-600 dark:text-gray-400">
+        Are you sure you want to raise an Expulsion Proposal against{" "}
+        <TruncatedHash
+          hash={subject}
+          copy={false}
+          className="font-semibold text-gray-900 dark:text-white"
+        />
+        ?
       </h2>
+      <div className="flex items-center justify-center space-x-4 py-6 text-[100px]">
+        <Polkicon address={subject} background="none" />
+        <FaRightLong className="text-red-800 dark:text-red-600" />
+        <FaTrashCan className="animate-pulse text-red-500 dark:text-red-700" />
+      </div>
     </MutationConfirmation>
   );
 };

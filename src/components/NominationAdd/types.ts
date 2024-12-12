@@ -1,4 +1,4 @@
-import type { RosterId } from "@/contexts/Rosters/types";
+import type { Roster } from "@/contexts/Rosters/types";
 import type { WalletAccount } from "@reactive-dot/core/wallets.js";
 
 export interface NominationAddButtonProps {
@@ -17,7 +17,7 @@ export interface NominationAddFormProps {
 
 export interface NominationAddConfirmationProps {
   nominee: string;
-  rosterId: RosterId;
+  roster: Roster;
   activeAccount: WalletAccount;
   onComplete: () => void;
   setDismissible: (dismissible: boolean) => void;
