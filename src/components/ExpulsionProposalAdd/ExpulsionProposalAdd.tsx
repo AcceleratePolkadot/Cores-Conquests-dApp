@@ -1,13 +1,11 @@
 import type React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { MutationError, idle, pending } from "@reactive-dot/core";
 import { useLazyLoadQuery, useMutation } from "@reactive-dot/react";
 import clsx from "clsx";
 import { Button, Modal, Tooltip } from "flowbite-react";
 import _ from "lodash";
 import type { OptionsObject } from "notistack";
-import type { TxEvent } from "polkadot-api";
 import { Binary } from "polkadot-api";
 import { useForm } from "react-hook-form";
 
@@ -16,11 +14,7 @@ import { PiTextAaFill } from "react-icons/pi";
 
 import { useActiveAccount } from "@/contexts/ActiveAccount";
 import { useExpulsionProposals } from "@/contexts/ExpulsionProposals";
-import { useNotifications } from "@/contexts/Notifications";
-import type { NotificationKey, StatusNotification } from "@/contexts/Notifications/types";
 import { useRosters } from "@/contexts/Rosters";
-
-import { comparators } from "@/utils/comparators";
 
 import type {
   CanAddExpulsionProposalResult,
@@ -30,6 +24,8 @@ import type {
   ExpulsionProposalAddModalProps,
   ExpulsionProposalAddProps,
 } from "./types";
+
+import MutationConfirmation from "@/components/MutationConfirmation/MutationConfirmation";
 
 const ExpulsionProposalAdd: React.FC<ExpulsionProposalAddProps> = ({ subject }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -285,7 +281,6 @@ const ExpulsionProposalAddForm: React.FC<ExpulsionProposalAddFormProps> = ({
   );
 };
 
-// Confirmation component implementation follows similar pattern to NominationAddConfirmation
 const ExpulsionProposalAddConfirmation: React.FC<ExpulsionProposalAddConfirmationProps> = ({
   reason,
   subject,
@@ -294,12 +289,6 @@ const ExpulsionProposalAddConfirmation: React.FC<ExpulsionProposalAddConfirmatio
   onComplete,
   setDismissible,
 }) => {
-  const { showStatusNotification, updateStatusNotification } = useNotifications();
-  const [submitting, setSubmitting] = useState<boolean>(false);
-  const [proposalStatusKey, setProposalStatusKey] = useState<NotificationKey | undefined>(
-    undefined,
-  );
-
   const [proposalState, submitProposal] = useMutation(
     (tx) =>
       tx.Roster.expulsion_proposal_new({
@@ -309,8 +298,6 @@ const ExpulsionProposalAddConfirmation: React.FC<ExpulsionProposalAddConfirmatio
       }),
     { signer: activeAccount.polkadotSigner },
   );
-
-  const mutationState = useRef<StatusNotification["status"]>(idle);
 
   const options = {
     additional: [
@@ -338,72 +325,33 @@ const ExpulsionProposalAddConfirmation: React.FC<ExpulsionProposalAddConfirmatio
     ],
   } as OptionsObject<"mutationPending">;
 
-  useEffect(() => {
-    if (submitting) {
-      if (
-        proposalStatusKey &&
-        !comparators.mutationStateIsEqual(mutationState.current, proposalState)
-      ) {
-        mutationState.current = proposalState;
-        updateStatusNotification(proposalStatusKey, proposalState);
-      }
-
-      if (
-        proposalState !== pending &&
-        proposalState !== idle &&
-        (proposalState instanceof MutationError || (proposalState as TxEvent).type === "finalized")
-      ) {
-        setSubmitting(false);
-        setProposalStatusKey(undefined);
-        onComplete();
-      }
-    }
-  }, [proposalState, submitting, proposalStatusKey, updateStatusNotification, onComplete]);
-
-  useEffect(() => {
-    setDismissible(!submitting);
-  }, [submitting, setDismissible]);
-
-  const handleSubmitProposal = () => {
-    setSubmitting(true);
-    submitProposal();
-
-    const statusKey = showStatusNotification({
-      status: proposalState,
-      pending: {
-        message: "Submitting Expulsion Proposal",
-        options,
-      },
-      success: {
-        message: "Expulsion Proposal submitted!",
-        options,
-      },
-      failure: {
-        message: "Expulsion Proposal submission failed!",
-        options,
-      },
-    });
-    setProposalStatusKey(statusKey);
+  const notificationMessages = {
+    pending: {
+      message: "Submitting Expulsion Proposal",
+      options,
+    },
+    success: {
+      message: "Expulsion Proposal submitted!",
+      options,
+    },
+    failure: {
+      message: "Expulsion Proposal submission failed!",
+      options,
+    },
   };
 
   return (
-    <>
-      <div className="mb-4 min-h-24 space-y-2">
-        <h2 className="block font-medium text-gray-700 text-sm dark:text-gray-300">
-          Raise Expulsion Proposal against {subject}?
-        </h2>
-      </div>
-      <div className="flex justify-end">
-        <Button
-          type="button"
-          gradientDuoTone="cyanToBlue"
-          onClick={() => handleSubmitProposal()}
-          disabled={submitting}
-        >
-          Confirm
-        </Button>
-      </div>
-    </>
+    <MutationConfirmation
+      mutationState={proposalState}
+      submitMutation={submitProposal}
+      notificationMessages={notificationMessages}
+      onComplete={onComplete}
+      setDismissible={setDismissible}
+    >
+      <h2 className="block font-medium text-gray-700 text-sm dark:text-gray-300">
+        Raise Expulsion Proposal against {subject}?
+      </h2>
+    </MutationConfirmation>
   );
 };
 

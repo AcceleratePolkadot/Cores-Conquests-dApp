@@ -1,23 +1,17 @@
 import type React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { MutationError, idle, pending } from "@reactive-dot/core";
 import { useLazyLoadQuery, useMutation } from "@reactive-dot/react";
 import { isValidAddress } from "@w3ux/utils";
 import { Button, Modal, Tooltip } from "flowbite-react";
 import _ from "lodash";
 import type { OptionsObject } from "notistack";
-import type { TxEvent } from "polkadot-api";
 import { useForm } from "react-hook-form";
 
 import { FaCirclePlus } from "react-icons/fa6";
 
 import { useActiveAccount } from "@/contexts/ActiveAccount";
-import { useNotifications } from "@/contexts/Notifications";
-import type { NotificationKey, StatusNotification } from "@/contexts/Notifications/types";
 import { useRosters } from "@/contexts/Rosters";
-
-import { comparators } from "@/utils/comparators";
 
 import type {
   NominationAddButtonProps,
@@ -25,6 +19,8 @@ import type {
   NominationAddFormProps,
   NominationAddModalProps,
 } from "./types";
+
+import MutationConfirmation from "@/components/MutationConfirmation";
 
 const NominationAdd: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -166,17 +162,10 @@ const NominationAddConfirmation: React.FC<NominationAddConfirmationProps> = ({
   onComplete,
   setDismissible,
 }) => {
-  const { showStatusNotification, updateStatusNotification } = useNotifications();
-  const [submitting, setSubmitting] = useState<boolean>(false);
-  const [nominationStatusKey, setNominationStatusKey] = useState<NotificationKey | undefined>(
-    undefined,
-  );
   const [nominationState, submitNomination] = useMutation(
     (tx) => tx.Roster.nomination_new({ nominee, roster_id: rosterId }),
     { signer: activeAccount.polkadotSigner },
   );
-
-  const mutationState = useRef<StatusNotification["status"]>(idle);
 
   const options = {
     additional: [
@@ -200,73 +189,33 @@ const NominationAddConfirmation: React.FC<NominationAddConfirmationProps> = ({
     ],
   } as OptionsObject<"mutationPending">;
 
-  useEffect(() => {
-    if (submitting) {
-      if (
-        nominationStatusKey &&
-        !comparators.mutationStateIsEqual(mutationState.current, nominationState)
-      ) {
-        mutationState.current = nominationState;
-        updateStatusNotification(nominationStatusKey, nominationState);
-      }
-
-      if (
-        nominationState !== pending &&
-        nominationState !== idle &&
-        (nominationState instanceof MutationError ||
-          (nominationState as TxEvent).type === "finalized")
-      ) {
-        setSubmitting(false);
-        setNominationStatusKey(undefined);
-        onComplete();
-      }
-    }
-  }, [nominationState, submitting, nominationStatusKey, updateStatusNotification, onComplete]);
-
-  useEffect(() => {
-    setDismissible(!submitting);
-  }, [submitting, setDismissible]);
-
-  const handleSubmitNomination = () => {
-    setSubmitting(true);
-    submitNomination();
-
-    const statusKey = showStatusNotification({
-      status: nominationState,
-      pending: {
-        message: "Submitting Nomination",
-        options,
-      },
-      success: {
-        message: "Nomination submitted!",
-        options,
-      },
-      failure: {
-        message: "Nomination submission failed!",
-        options,
-      },
-    });
-    setNominationStatusKey(statusKey);
+  const notificationMessages = {
+    pending: {
+      message: "Submitting Nomination",
+      options,
+    },
+    success: {
+      message: "Nomination submitted!",
+      options,
+    },
+    failure: {
+      message: "Nomination submission failed!",
+      options,
+    },
   };
 
   return (
-    <>
-      <div className="mb-4 min-h-24 space-y-2">
-        <h2 className="block font-medium text-gray-700 text-sm dark:text-gray-300">
-          Nominate {nominee}?
-        </h2>
-      </div>
-      <div className="flex justify-end">
-        <Button
-          type="button"
-          gradientDuoTone="cyanToBlue"
-          onClick={() => handleSubmitNomination()}
-          disabled={submitting}
-        >
-          Confirm
-        </Button>
-      </div>
-    </>
+    <MutationConfirmation
+      mutationState={nominationState}
+      submitMutation={submitNomination}
+      notificationMessages={notificationMessages}
+      onComplete={onComplete}
+      setDismissible={setDismissible}
+    >
+      <h2 className="block font-medium text-gray-700 text-sm dark:text-gray-300">
+        Nominate {nominee}?
+      </h2>
+    </MutationConfirmation>
   );
 };
 
