@@ -8,9 +8,15 @@ interface TruncatedHashProps {
   hash: string;
   chars?: number;
   copy?: boolean;
+  className?: string;
 }
 
-const TruncatedHash: React.FC<TruncatedHashProps> = ({ hash, chars = 6, copy = true }) => {
+const TruncatedHash: React.FC<TruncatedHashProps> = ({
+  hash,
+  chars = 6,
+  copy = true,
+  className,
+}) => {
   const [copySuccess, setCopySuccess] = useState(false);
 
   const truncatedHash = ellipsisFn(removeHexPrefix(hash), chars, "center");
@@ -36,12 +42,12 @@ const TruncatedHash: React.FC<TruncatedHashProps> = ({ hash, chars = 6, copy = t
         onClick={handleCopy}
         className={clsx(copySuccess ? "cursor-none" : "cursor-copy")}
       >
-        {truncatedHash}
+        <span className={className}>{truncatedHash}</span>
       </button>
     );
   }
 
-  return <>{truncatedHash}</>;
+  return <span className={className}>{truncatedHash}</span>;
 };
 
 export default TruncatedHash;
