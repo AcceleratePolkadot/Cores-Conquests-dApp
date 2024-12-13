@@ -22,6 +22,7 @@ import { slugify } from "@/utils/typography";
 
 import ExpulsionProposalDetails from "@/components/ExpulsionProposalsList/ExpulsionProposalDetails";
 import type { ExpulsionProposalStatusProps } from "./types";
+import ExpulsionProposalActions from "@/components/ExpulsionProposalActions";
 
 export const ExpulsionProposalStatus: React.FC<ExpulsionProposalStatusProps> = ({ proposal }) => {
   const baseStyles = "p-2 text-xxs uppercase font-semibold rounded-full";
@@ -171,9 +172,6 @@ const ExpulsionProposalsList: React.FC = () => {
                   <FlowbiteTable.HeadCell>Nays</FlowbiteTable.HeadCell>
                   <FlowbiteTable.HeadCell>Abstains</FlowbiteTable.HeadCell>
                   <FlowbiteTable.HeadCell>Status</FlowbiteTable.HeadCell>
-                  <FlowbiteTable.HeadCell>
-                    <span className="sr-only">Actions</span>
-                  </FlowbiteTable.HeadCell>
                 </Table.Head>
 
                 <Table.Body>
@@ -225,11 +223,10 @@ const ExpulsionProposalsList: React.FC = () => {
                         <FlowbiteTable.Cell>
                           <ExpulsionProposalStatus proposal={proposal} />
                         </FlowbiteTable.Cell>
-                        <FlowbiteTable.Cell>...</FlowbiteTable.Cell>
                       </FlowbiteTable.Row>
                       <FlowbiteTable.Row>
                         <FlowbiteTable.Cell
-                          colSpan={9}
+                          colSpan={8}
                           className={clsx(
                             "!bg-gray-50 dark:!bg-gray-700 border-white border-b dark:border-gray-700",
                             {
@@ -238,6 +235,7 @@ const ExpulsionProposalsList: React.FC = () => {
                           )}
                         >
                           <ExpulsionProposalStatusTimeline proposal={proposal} />
+                          <ExpulsionProposalActions proposal={proposal} />
                           <ExpulsionProposalDetails proposal={proposal} />
                         </FlowbiteTable.Cell>
                       </FlowbiteTable.Row>
